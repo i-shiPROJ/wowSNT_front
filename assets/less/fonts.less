@@ -1,0 +1,22 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('~/assets/fonts/Roboto/Roboto-light.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Переменные для шрифтов
+@primary-font: 'Roboto', sans-serif;
+@secondary-font: 'Arial', sans-serif;
+
+// Миксины для шрифтов (опционально)
+.font-regular() {
+  font-family: @primary-font;
+  font-weight: 400;
+}
+
+.font-bold() {
+  font-family: @primary-font;
+  font-weight: 700;
+}
