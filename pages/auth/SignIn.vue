@@ -5,10 +5,9 @@
     </template>
 
     <div>
+
       <div>
-
         <div class="el-p">
-
           <el-input v-model="login" style="width: 240px" placeholder="Логин">
             <template #prefix>
               <el-icon>

@@ -1,5 +1,5 @@
 <template>
-  <svg-icon :type="type" :path="path"></svg-icon>
+  <svg-icon :type="type" :path="path" :width="size" :height="size"></svg-icon>
 </template>
 
 <script setup>
@@ -14,6 +14,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  size: {
+    type: Number,
+    default: 24
+  }
 })
 
 </script>

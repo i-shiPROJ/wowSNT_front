@@ -1,10 +1,10 @@
 <template>
-  <div class="wow-panel" :class="getClassPanel">
-    <div class="panel tc-brown-0">
+  <div class="wow-panel" :class="getClassPanel"  @click="close()">
+    <div class="panel bg-blue_0 tc-dark-gray-8 " @click.stop>
       <div class="header">
-        <div> {{ computedTitle }} </div>
+        <div class="f-w-900"> {{ computedTitle }} </div>
         <div>
-          <el-button color="#a89984" @click="close()">
+          <el-button color="#3F4D66" @click="close()">
             <el-icon style="vertical-align: middle">
               <wow-icon type="mdi" :path="$mdi.mdiClose"></wow-icon>
             </el-icon>
@@ -12,7 +12,9 @@
           </el-button>
         </div>
       </div>
-      <div></div>
+      <div class="body">
+        <slot name="body" />
+      </div>
 
     </div>
   </div>
@@ -26,8 +28,10 @@ const emit = defineEmits();
 
 const props = defineProps({
   title: { type: String, required: true },
-  position: { type: String, default: 'left' }
+  position: { type: String, default: 'left' },
+  settings: { type: Object }
 });
+const timeAnimation = 150;
 
 const computedTitle = computed(() => {
   return props.title; // Возвращает значение свойства title
@@ -38,41 +42,37 @@ const getClassPanel = computed(() => {
   return allClasses;
 })
 
-onMounted(() => { // Замените componentDidMount на onMounted
+onMounted(() => {
   const panel = document.querySelector('.panel') as HTMLElement;
   panel.style.transform = props.position === 'left' ? 'translateX(-100%)' : 'translateX(100%)';
-  panel.style.display= 'block';
+  panel.style.display = 'block';
   open();
 
 });
 
 const open = () => {
-  // Логика для сдвига панели
-  const panel = document.querySelector('.panel') as HTMLElement; // Приведение типа к HTMLElement
-  
+  // сдвиг панели при открытии
+  const panel = document.querySelector('.panel') as HTMLElement;
   if (panel) {
     setTimeout(() => {
-      panel.style.transition = 'transform 0.3s ease';
+      panel.style.transition = `transform ${timeAnimation}ms ease`;
       panel.style.transform = props.position === 'left' ? 'translateX(0%)' : 'translateX(0%)';
     }, 1);
-
   }
 }
 
 const close = () => {
-  // Логика для закрытия компонента
-  // Например, можно использовать событие для родительского компонента
+  // Сдвиг панели при закрытии
   emit('close');
-
-  // Логика для сдвига панели
-  const panel = document.querySelector('.panel') as HTMLElement; // Приведение типа к HTMLElement
+  const panel = document.querySelector('.panel') as HTMLElement;
   if (panel) {
-    panel.style.transition = 'transform 0.3s ease';
+    panel.style.transition = `transform ${timeAnimation}ms ease`;
     panel.style.transform = props.position === 'left' ? 'translateX(-100%)' : 'translateX(100%)';
+    setTimeout(() => {
+      props.settings?.functions?.close();
+    }, timeAnimation);
   }
 }
-
-
 
 </script>
 
@@ -92,7 +92,7 @@ const close = () => {
 
 
   .panel {
-    background-color: #282828;
+    /* background-color: #282828; */
     box-shadow: 0px 0px 17px 2px black;
     width: 300px;
     height: 100%;
@@ -106,6 +106,11 @@ const close = () => {
       align-items: center;
       height: 30px;
       margin: 10px;
+    }
+
+    .body {
+      height: calc(100% - 50px);
+      padding: 10px;
     }
   }
 
