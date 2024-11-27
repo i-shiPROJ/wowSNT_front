@@ -1,4 +1,5 @@
 //https://github.com/emacsfodder/emacs-theme-darktooth
+@import 'fonts.less';
 
 /* Color Theme Swatches in RGBA */
 @retro-tech-nostalgia-80sinspired-1-rgba: rgba(242, 87, 128, 1);
@@ -41,46 +42,62 @@
 @medium_brown: #928374;
 @medium_gray: #8a8a8a;
 
-@bright_red:#FB4933;
-@bright_green:#b8bb26;
-@bright_yellow:#fabd2f;
-@bright_blue:#83a598;
-@bright_purple:#d3869b;
-@bright_aqua:#8ec07c;
-@bright_orange:#fe8019;
-@bright_cyan:#17ccd5;
+@bright_red: #fb4933;
+@bright_green: #b8bb26;
+@bright_yellow: #fabd2f;
+@bright_blue: #83a598;
+@bright_purple: #d3869b;
+@bright_aqua: #8ec07c;
+@bright_orange: #fe8019;
+@bright_cyan: #17ccd5;
 
-@faded_red:#9d0006;
-@faded_green:#79740e;
-@faded_yellow:#b57614;
-@faded_blue:#076678;
-@faded_purple:#8f3f71;
-@faded_aqua:#427b58;
-@faded_orange:#af3a03;
-@faded_cyan:#00a7af;
+@faded_red: #9d0006;
+@faded_green: #79740e;
+@faded_yellow: #b57614;
+@faded_blue: #076678;
+@faded_purple: #8f3f71;
+@faded_aqua: #427b58;
+@faded_orange: #af3a03;
+@faded_cyan: #00a7af;
 
-@muted_red:#901a1e;
-@muted_green:#556c21;
-@muted_yellow:#a87933;
-@muted_blue:#1b5c6b;
-@muted_purple:#82526e;
-@muted_aqua:#506e59;
-@muted_orange:#a24921;
-@muted_cyan:#18a7af;
+@muted_red: #901a1e;
+@muted_green: #556c21;
+@muted_yellow: #a87933;
+@muted_blue: #1b5c6b;
+@muted_purple: #82526e;
+@muted_aqua: #506e59;
+@muted_orange: #a24921;
+@muted_cyan: #18a7af;
 
-@accents_sienna_0:#dd6f48;
-@accents_sienna_1:#d7875f;
-@accents_darkLaterGray_0:#528b8b;
-@accents_darkLaterGray_1:#5f8787;
-@accents_lightBlue_0:#66999d;
-@accents_lightBlue_1:#5fafaf;
-@accents_burlyWood_0:#bbaa97;
-@accents_burlyWood_1:#afaf87;
-@accents_aquaMarine_0:#83a598;
-@accents_aquaMarine_1:#87af87;
-@accents_turquoise_0:#61acbb;
-@accents_turquoise_0:#5fafaf;
+@accents_sienna_0: #dd6f48;
+@accents_sienna_1: #d7875f;
+@accents_darkLaterGray_0: #528b8b;
+@accents_darkLaterGray_1: #5f8787;
+@accents_lightBlue_0: #66999d;
+@accents_lightBlue_1: #5fafaf;
+@accents_burlyWood_0: #bbaa97;
+@accents_burlyWood_1: #afaf87;
+@accents_aquaMarine_0: #83a598;
+@accents_aquaMarine_1: #87af87;
+@accents_turquoise_0: #61acbb;
+@accents_turquoise_0: #5fafaf;
 
+@border_0: #3d3d3e;
+
+@text-color-brown_0: #a89984;
+
+body {
+  font-family: @primary-font;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: @secondary-font;
+}
 
 .bg-dark-brown-0 {
   background-color: @dark_brown_0;
@@ -100,4 +117,12 @@
 
 .bg-dark-brown-4 {
   background-color: @dark_brown_4;
+}
+
+.border-color-0 {
+  border-color: @border_0;
+}
+
+.tc-brown-0 {
+  color: @text-color-brown_0;
 }
