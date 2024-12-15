@@ -4,33 +4,35 @@
     <!--     <div class="aside bg-dark-brown-0" >
       <admin-menu></admin-menu>
     </div> -->
-    <el-col :xs="0" :sm="4">
+    <el-col class="leftPanel" :xs="0" :sm="4">
       <div class="aside bg-blue_0 " v-if="!isMobile">
-        <div class="logo"></div>
-        <admin-menu />
+        <div class="logo fc fc-align-center fc-justify-center tc-light-gray-0">wowSNT</div>
+        <wow-tree-menu></wow-tree-menu>
+        <!-- <admin-menu /> -->
       </div>
     </el-col>
 
     <el-col :xs="24" :sm="20" class="bg-light-gray-0">
       <div class="wow-container tc-gray-0">
 
+        <div v-if="isMobile">
+          <wow-panel v-if="settingsWowPanel.show" title="Навигация" position="left" :settings="settingsWowPanel">
+            <template #body>
+              <admin-menu></admin-menu>
+            </template>
+          </wow-panel>
+        </div>
+
         <header class="header">
+
           <div v-if="isMobile">
             <div class="btn-menu" @click="toggleMenu()">
               <wow-icon type="mdi" :path="$mdi.mdiMenu" :size="40" />
             </div>
-            <!--             <el-link :underline="false">
-              
-            </el-link> -->
-            <!-- <el-button @click="toggleMenu()">Toggle Menu</el-button> -->
-            <wow-panel v-if="settingsWowPanel.show" title="Навигация" position="left" :settings="settingsWowPanel">
-              <template #body>
-                <admin-menu></admin-menu>
-              </template>
-            </wow-panel>
           </div>
 
           <div v-else></div>
+
           <div class="header-right">
             <div class="iconBlock">
               <div class="greenIndicator">
@@ -48,12 +50,28 @@
           </div>
         </header>
 
-        <main>body</main>
+        <div class="wrapper">
+          <main class="main">
+            <div class="fc fc-row fc-wrap fc-justify-space-b">
+              <wow-card v-for="(item, index) in items" :key="index" :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
+                <template #header>Header {{ item }}</template>
+                <template #body>Body {{ item }}</template>
+              </wow-card>
+            </div>
 
-        <footer>footer</footer>
-        <!--       <el-header>Header </el-header>
-      <el-main>Main</el-main>
-      <el-footer>Footer</el-footer> -->
+          </main>
+
+          <footer class="footer fc fc-row fc-justify-space-a fc-align-center">
+            <div>{{ new Date().getFullYear() }}©</div>
+            <div>i-shiPROJ</div>
+            <div>about support</div>
+            <!--           <el-row class=""  style="width: 100%;" justify="center" :align="'middle'">
+            <el-col class=" tc-dark-gray-4 f-w-900" :xs="22" :sm="7" :md="6" :lg="5" :xl="4">
+
+            </el-col>
+          </el-row> -->
+          </footer>
+        </div>
       </div>
     </el-col>
 
@@ -65,6 +83,7 @@ import { reactive, ref, onMounted, onBeforeUnmount } from 'vue';
 
 const isMobile = ref(false);
 const drawerVisible = ref(false);
+const items = 100;
 
 const toggleMenu = () => {
   settingsWowPanel.show = !settingsWowPanel.show; // Переключение состояния видимости
@@ -104,11 +123,19 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+/* for deleted after test wowbloc */
+/*  */
+
 .common-layout {
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: row;
+
+  .leftPanel {
+    box-shadow: 1px 0 20px 0 #3f4d67;
+    z-index: 2;
+  }
 
   .aside {
     height: 100%;
@@ -119,17 +146,28 @@ onBeforeUnmount(() => {
   }
 
   .wow-container {
-    /* margin: 15px; */
+    overflow-y: auto;
+    height: 100vh;
+    max-height: 100vh;
+    padding: 0 1.5rem;
+
+    @media (max-width: 768px) {
+      padding-right: 15px;
+      padding-bottom: 15px;
+      padding-left: 16px;
+    }
 
     .header {
+      position: sticky;
+      top: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      /*       border-radius: 10px; */
       padding: 5px;
       height: 60px;
-      background-color: #fff;
-      box-shadow: 0px 10px 30px 0px rgba(82, 63, 105, 0.05);
+      background-color: rgba(249, 249, 249, 0.6);
+      /* Полупрозрачный фон */
+      backdrop-filter: blur(3px);
 
       .btn-menu {
         height: 50px;
@@ -179,9 +217,25 @@ onBeforeUnmount(() => {
       }
     }
 
-    .main {}
+    .wrapper {
+      min-height: calc(100% - 73px);
+      display: flex;
+      flex-direction: column;
+      /*       overflow-y: auto; 
+      max-height: calc(100vh - 73px) */
+      ;
+    }
 
-    .footer {}
+    .main {
+      flex: 1;
+    }
+
+    .footer {
+      height: 60px;
+      width: 100%;
+    }
+
+
   }
 }
 
