@@ -8,7 +8,8 @@ export default defineNuxtConfig({
   css: [
     'element-plus/dist/index.css',
     'element-plus/theme-chalk/display.css', // для дополнительных утилит
-    '@/assets/less/global.less'
+    '@/assets/less/global.less',
+    '@/assets/less/flexclasses.less',
   ],
   vite: {
     css: {
