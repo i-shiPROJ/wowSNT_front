@@ -7,7 +7,7 @@
     <el-col class="leftPanel" :xs="0" :sm="4">
       <div class="aside bg-blue_0 " v-if="!isMobile">
         <div class="logo fc fc-align-center fc-justify-center tc-light-gray-0">wowSNT</div>
-        <wow-tree-menu></wow-tree-menu>
+        <wow-tree-menu :objectMenu="objectMenu"></wow-tree-menu>
         <!-- <admin-menu /> -->
       </div>
     </el-col>
@@ -18,7 +18,7 @@
         <div v-if="isMobile">
           <wow-panel v-if="settingsWowPanel.show" title="Навигация" position="left" :settings="settingsWowPanel">
             <template #body>
-              <admin-menu></admin-menu>
+              <wow-tree-menu :objectMenu="objectMenu"></wow-tree-menu>
             </template>
           </wow-panel>
         </div>
@@ -79,7 +79,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted, onBeforeUnmount } from 'vue';
+import { reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { v6 as uuidv6 } from 'uuid';
+import { mdiChartBar, mdiMonitorDashboard } from '@mdi/js';
 
 const isMobile = ref(false);
 const drawerVisible = ref(false);
@@ -98,10 +100,10 @@ let settingsWowPanel = reactive({
 });
 
 const checkMobile = () => {
-  isMobile.value = window.innerWidth < 768;
+  if (typeof window !== 'undefined') { // Проверка на наличие объекта window
+    isMobile.value = window.innerWidth < 768;
+  }
 };
-
-
 
 const handleClickOutside = (event: MouseEvent) => {
   const drawer = document.querySelector('.drawer');
@@ -120,6 +122,85 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', checkMobile);
   document.removeEventListener('click', handleClickOutside); // Убираем обработчик клика
 });
+
+
+
+const objectMenu = reactive(
+  [
+    {
+      type: 'labelGroup',
+      id: uuidv6(),
+      settings: {
+        name: 'Navigation',
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: uuidv6(),
+      settings: {
+        active: false,
+        name: 'DashBoard',
+        icon: mdiMonitorDashboard
+      },
+    },
+    {
+      type: 'labelGroup',
+      id: uuidv6(),
+      settings: {
+        name: 'Отчеты',
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: uuidv6(),
+      settings: {
+        active: false,
+        name: 'Месячные',
+        icon: mdiChartBar
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: uuidv6(),
+      settings: {
+        active: false,
+        name: 'Квартальные',
+        icon: mdiChartBar
+      },
+    },
+    {
+      type: 'treeNodeMenu',
+      id: uuidv6(),
+      settings: {
+        arrayNode: [
+          {
+            id: uuidv6(),
+            active: false,
+            name: 'Element 1',
+            icon: null,
+            children: []
+          },
+          {
+            id: uuidv6(),
+            active: false,
+            name: 'Element 2',
+            icon: null,
+            children: [
+              {
+                id: uuidv6(),
+                active: false,
+                name: 'Element 2.1',
+                icon: null,
+                children: []
+              }
+            ]
+          },
+        ]
+      },
+    },
+  ]
+);
+
 </script>
 
 <style scoped>

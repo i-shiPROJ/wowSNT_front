@@ -110,7 +110,7 @@ const close = () => {
 
     .body {
       height: calc(100% - 50px);
-      padding: 10px;
+      /* padding: 10px; */
     }
   }
 
