@@ -20,11 +20,9 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  //console.log(props);
 })
 
 const toggleActive = () => {
-  console.log(props.settings.active);
   props.settings.active = !props.settings.active;
 }
 </script>
