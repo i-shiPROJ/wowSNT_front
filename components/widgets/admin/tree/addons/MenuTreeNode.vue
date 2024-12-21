@@ -55,10 +55,12 @@ const toggleActive = () => {
 .text-menu {
   height: 35px;
   cursor: pointer;
+  transition: color 0.2s, padding-left 0.2s;
 }
 
 .text-menu:hover {
   color: #b4e9e9;
+  padding-left: 3px;
 }
 
 .point-none {
@@ -72,8 +74,6 @@ const toggleActive = () => {
 .icon {
   padding-right: 15px;
 }
-
-
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.2s;

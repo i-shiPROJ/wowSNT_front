@@ -33,6 +33,7 @@ const toggleActive = () => {
   height: 45px;
   padding-left: 20px;
   color: #9DABC4;
+  transition: color 0.2s, padding-left 0.2s, background-color 0.3s;
 }
 
 .menuBtn:hover {
