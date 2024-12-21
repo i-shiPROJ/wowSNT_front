@@ -1,9 +1,10 @@
 <template>
-  <div class="menuBtn fc fc-row fc-align-center tc-light-gray-0" :class="{ menuBtnActive: settings.active }" v-if="settings?.name" @click="toggleActive()">
+  <div class="menuBtn fc fc-row fc-align-center tc-light-gray-0 point-none" :class="{ menuBtnActive: settings.active }"
+    v-if="settings?.name" @click="toggleActive()">
     <div class='icon' v-if="settings?.icon">
       <wow-icon type="mdi" :path="settings.icon" :size="20" />
     </div>
-    <div>
+    <div class="user-select-none">
       {{ settings.name }}
     </div>
   </div>

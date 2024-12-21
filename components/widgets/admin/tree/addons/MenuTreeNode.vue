@@ -7,7 +7,7 @@
           <wow-icon type="mdi" :path="node.icon" :size="20" />
         </div>
 
-        <div class='text'>
+        <div class='user-select-none'>
           {{ node.name }}
         </div>
       </div>
@@ -57,6 +57,10 @@ const toggleActive = () => {
   cursor: pointer;
 }
 
+.text-menu:hover {
+  color: #b4e9e9;
+}
+
 .point-none {
   list-style-type: none;
 }
@@ -69,13 +73,12 @@ const toggleActive = () => {
   padding-right: 15px;
 }
 
-.text{
-  user-select: none;
-}
+
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.2s;
 }
+
 .fade-enter, .fade-leave-to  {
   opacity: 0;
 }
