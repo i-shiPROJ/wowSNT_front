@@ -24,7 +24,7 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  //console.log(props.objectMenu);
+
 })
 
 const getComponets = (type: string) => {

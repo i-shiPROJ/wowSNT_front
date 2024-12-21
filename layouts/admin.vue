@@ -81,7 +81,7 @@
 <script lang="ts" setup>
 import { reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { v6 as uuidv6 } from 'uuid';
-import { mdiChartBar, mdiMonitorDashboard } from '@mdi/js';
+import { mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
 
 const isMobile = ref(false);
 const drawerVisible = ref(false);
@@ -176,25 +176,34 @@ const objectMenu = reactive(
           {
             id: uuidv6(),
             active: false,
-            name: 'Element 1',
-            icon: null,
-            children: []
-          },
-          {
-            id: uuidv6(),
-            active: false,
-            name: 'Element 2',
-            icon: null,
+            name: 'Menu levels',
+            icon: mdiMenu,
             children: [
               {
                 id: uuidv6(),
                 active: false,
-                name: 'Element 2.1',
+                name: 'Element 1',
+                icon: null,
+                children: [
+                  {
+                    id: uuidv6(),
+                    active: false,
+                    name: 'Element 1.1',
+                    icon: null,
+                    children: []
+                  }
+                ]
+              },
+              {
+                id: uuidv6(),
+                active: false,
+                name: 'Element 2',
                 icon: null,
                 children: []
-              }
+              },
             ]
           },
+
         ]
       },
     },
