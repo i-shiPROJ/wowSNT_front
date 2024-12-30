@@ -1,19 +1,25 @@
 <template>
-  <div class="menuBtn fc fc-row fc-align-center tc-light-gray-0 point-none" :class="{ menuBtnActive: settings.active }"
-    v-if="settings?.name" @click="toggleActive()">
-    <div class='icon' v-if="settings?.icon">
-      <wow-icon type="mdi" :path="settings.icon" :size="20" />
+  <el-tooltip :content="content" placement="bottom-end" effect="light" :disabled="contentVisible">
+    <div class="menuBtn fc fc-row fc-align-center tc-light-gray-0 point-none"
+      :class="{ menuBtnActive: settings.active }" v-if="settings?.name" @click="toggleActive()">
+      <div class='icon' v-if="settings?.icon">
+        <wow-icon type="mdi" :path="settings.icon" :size="20" />
+      </div>
+      <div class="user-select-none">
+        {{ settings.name }}
+      </div>
     </div>
-    <div class="user-select-none">
-      {{ settings.name }}
-    </div>
-  </div>
+  </el-tooltip>
+
 </template>
 
 <script setup lang="ts">
 
 
 const props = defineProps({
+  keyComponent: {
+    type: String
+  },
   settings: {
     type: Object,
     required: true
@@ -23,8 +29,12 @@ const props = defineProps({
 onMounted(() => {
 })
 
+const content = computed(() => props.settings.tooltip ?? '');
+const contentVisible = computed(() => !props.settings.tooltip);
+
 const toggleActive = () => {
-  props.settings.active = !props.settings.active;
+  props.settings.functions.setActiveMenuItem(props.keyComponent);
+  //props.settings.active = !props.settings.active;
 }
 </script>
 

@@ -1,16 +1,18 @@
 <template>
   <div class="labelGropup fc fc-row fc-align-center tc-light-gray-0 point-none" v-if="settings?.name">
-    <div class='icon' v-if="settings?.icon">
-      <wow-icon type="mdi" :path="settings.icon" :size="20" />
-    </div>
-    <div class="text user-select-none">
-      {{ settings.name }}
-    </div>
+    <el-tooltip :content="content" placement="bottom" effect="light" :disabled="contentVisible">
+      <div class='icon' v-if="settings?.icon">
+        <wow-icon type="mdi" :path="settings.icon" :size="20" />
+      </div>
+      <div class="text user-select-none">
+        {{ settings.name }}
+      </div>
+    </el-tooltip>
   </div>
 </template>
 
 <script setup lang="ts">
-
+import { computed } from 'vue';
 
 const props = defineProps({
   settings: {
@@ -19,9 +21,12 @@ const props = defineProps({
   }
 })
 
-
 onMounted(() => {
 })
+
+const content = computed(() => props.settings.tooltip ?? '');
+const contentVisible = computed(() => !props.settings.tooltip);
+
 </script>
 
 <style scoped>

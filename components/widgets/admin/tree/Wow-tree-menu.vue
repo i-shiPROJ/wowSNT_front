@@ -1,7 +1,7 @@
 <template>
   <div class="menu-tree-widget">
     <component v-for="nodeComponents in objectMenu" :key="nodeComponents.id" :is="getComponets(nodeComponents.type)"
-      :settings="nodeComponents.settings" />
+      :settings="nodeComponents.settings" :keyComponent="nodeComponents.id"/>
   </div>
 
   <!-- <Tree-node v-for="node in objectTree" :key="node.id" :node="node" /> -->

@@ -8,6 +8,8 @@ export interface MenuInterface {
     active?: boolean;
     name?: string;
     icon?: string | null;
+    tooltip?: string,
+    functions?: object,
     arrayNode?: MenuNodeInterface[];
   };
 }
