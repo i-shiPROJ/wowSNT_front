@@ -39,5 +39,6 @@ const classActive = computed(() => {
   border-left: 5px solid #5fafaf;
   background-color: #364257;
   color: #E8E9E9;
+  transition: color 0.2s, padding-left 0.2s;
 }
 </style>

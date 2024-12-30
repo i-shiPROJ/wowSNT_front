@@ -7,7 +7,7 @@
     <el-col class="leftPanel" :xs="0" :sm="4">
       <div class="aside bg-blue_0 " v-if="!isMobile">
         <div class="logo fc fc-align-center fc-justify-center tc-light-gray-0">wowSNT</div>
-        <wow-tree-menu :objectMenu="objectMenu"></wow-tree-menu>
+        <wow-tree-menu :objectMenu="menuObject"></wow-tree-menu>
         <!-- <admin-menu /> -->
       </div>
     </el-col>
@@ -18,7 +18,7 @@
         <div v-if="isMobile">
           <wow-panel v-if="settingsWowPanel.show" title="Навигация" position="left" :settings="settingsWowPanel">
             <template #body>
-              <wow-tree-menu :objectMenu="objectMenu"></wow-tree-menu>
+              <wow-tree-menu :objectMenu="menuObject"></wow-tree-menu>
             </template>
           </wow-panel>
         </div>
@@ -34,18 +34,15 @@
           <div v-else></div>
 
           <div class="header-right">
-            <div class="iconBlock">
-              <div class="greenIndicator">
-                <div class="blinking-circle"></div>
-              </div>
-              <wow-icon type="mdi" :path="$mdi.mdiBellOutline" />
-            </div>
-            <div class="iconBlock">
+            <wow-bell />
+
+            <!--             <div class="iconBlock">
               <div class="greenIndicator">
                 <div class="blinking-circle"></div>
               </div>
               <wow-icon type="mdi" :path="$mdi.mdiChatOutline" />
             </div>
+            -->
             <div class="userSymbols bg-red-1 f-w-900">ГВ</div>
           </div>
         </header>
@@ -79,9 +76,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
-import { v6 as uuidv6 } from 'uuid';
-import { mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
+
+import { menuObject } from '~/pages/admin/menuObject';
 
 const isMobile = ref(false);
 const drawerVisible = ref(false);
@@ -124,91 +121,8 @@ onBeforeUnmount(() => {
 });
 
 
-
-const objectMenu = reactive(
-  [
-    {
-      type: 'labelGroup',
-      id: uuidv6(),
-      settings: {
-        name: 'Navigation',
-      },
-    },
-    {
-      type: 'menuBtn',
-      id: uuidv6(),
-      settings: {
-        active: false,
-        name: 'DashBoard',
-        icon: mdiMonitorDashboard
-      },
-    },
-    {
-      type: 'labelGroup',
-      id: uuidv6(),
-      settings: {
-        name: 'Отчеты',
-      },
-    },
-    {
-      type: 'menuBtn',
-      id: uuidv6(),
-      settings: {
-        active: false,
-        name: 'Месячные',
-        icon: mdiChartBar
-      },
-    },
-    {
-      type: 'menuBtn',
-      id: uuidv6(),
-      settings: {
-        active: false,
-        name: 'Квартальные',
-        icon: mdiChartBar
-      },
-    },
-    {
-      type: 'treeNodeMenu',
-      id: uuidv6(),
-      settings: {
-        arrayNode: [
-          {
-            id: uuidv6(),
-            active: false,
-            name: 'Menu levels',
-            icon: mdiMenu,
-            children: [
-              {
-                id: uuidv6(),
-                active: false,
-                name: 'Element 1',
-                icon: null,
-                children: [
-                  {
-                    id: uuidv6(),
-                    active: false,
-                    name: 'Element 1.1',
-                    icon: null,
-                    children: []
-                  }
-                ]
-              },
-              {
-                id: uuidv6(),
-                active: false,
-                name: 'Element 2',
-                icon: null,
-                children: []
-              },
-            ]
-          },
-
-        ]
-      },
-    },
-  ]
-);
+//reactiveObjectMenu
+const objectMenu = menuObject;
 
 </script>
 
@@ -225,6 +139,7 @@ const objectMenu = reactive(
   .leftPanel {
     box-shadow: 1px 0 20px 0 #3f4d67;
     z-index: 2;
+    min-width: 200px;
   }
 
   .aside {

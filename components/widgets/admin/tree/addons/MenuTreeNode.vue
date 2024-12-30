@@ -1,21 +1,23 @@
 <template>
   <li class="point-none" v-if="node">
 
-    <div class="text-menu fc fc-row fc-align-center fc-justify-space-b" @click="toggleActive()">
-      <div class="fc fc-row">
-        <div class='icon ' v-if="node?.icon">
-          <wow-icon type="mdi" :path="node.icon" :size="20" />
+    <el-tooltip :content="content" placement="bottom" effect="light" :disabled="contentVisible">
+      <div class="text-menu fc fc-row fc-align-center fc-justify-space-b" @click="toggleActive()">
+        <div class="fc fc-row">
+          <div class='icon ' v-if="node?.icon">
+            <wow-icon type="mdi" :path="node.icon" :size="20" />
+          </div>
+
+          <div class='user-select-none'>
+            {{ node.name }}
+          </div>
         </div>
 
-        <div class='text'>
-          {{ node.name }}
+        <div class='icon' v-if="node.children?.length">
+          <wow-icon type="mdi" :path="chevronTurn" :size="20" />
         </div>
       </div>
-
-      <div class='icon' v-if="node.children?.length">
-        <wow-icon type="mdi" :path="chevronTurn" :size="20" />
-      </div>
-    </div>
+    </el-tooltip>
 
     <transition name="fade">
       <ul class="point-none submenu" v-if="node.children?.length && props.node.active">
@@ -35,11 +37,17 @@ const props = defineProps({
   node: {
     type: Object as PropType<MenuNodeInterface>,
     required: true
+  },
+  functions: {
+    type: Object
   }
 });
 
 onMounted(() => {
 })
+
+const content = computed(() => props.node.tooltip ?? '');
+const contentVisible = computed(() => !props.node.tooltip);
 
 const chevronTurn = computed(() => {
   return props.node.active ? mdiChevronDown : mdiChevronRight;
@@ -55,6 +63,12 @@ const toggleActive = () => {
 .text-menu {
   height: 35px;
   cursor: pointer;
+  transition: color 0.2s, padding-left 0.2s;
+}
+
+.text-menu:hover {
+  color: #b4e9e9;
+  padding-left: 3px;
 }
 
 .point-none {
@@ -69,14 +83,13 @@ const toggleActive = () => {
   padding-right: 15px;
 }
 
-.text{
-  user-select: none;
-}
-
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.2s;
 }
-.fade-enter, .fade-leave-to  {
+
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
