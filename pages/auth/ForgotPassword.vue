@@ -1,6 +1,6 @@
 <template>
   <div>
-    form forgotPassword
+    fill out the forgot password future feature form
   </div>
 </template>
 

@@ -1,13 +1,13 @@
 <template>
   <NuxtLayout name="auth">
     <div>
-
+      
       <div>
-        <div class="padding-5-5  font-text-transform-uppercase">
-          Вход
+        <div class="padding-5-5 font-text-transform-uppercase">
+          Регистрация ст
         </div>
 
-        <div class="el-p ">
+        <div class="el-p">
           <el-input v-model="login" style="width: 240px" placeholder="Логин">
             <template #prefix>
               <el-icon>
@@ -58,5 +58,4 @@ const password = ref('');
 .btn-goup {
   padding: 25px 0px;
 }
-
 </style>

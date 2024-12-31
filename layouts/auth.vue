@@ -1,6 +1,37 @@
 <template>
+  <div class="wow-dark auth-layout fc fc-align-center fc-justify-center tc-dark_gray_0_soft tc-dark-gray-4">
+    <div class="auth-panel fc fc-row fc-wrap fc-justify-space-b">
+      <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2">
+        <template #body>
+          <div class="bodyLogo fc fc-align-center fc-justify-center">
+            wow-SNT
+          </div>
+        </template>
+      </wow-col>
+      <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2">
+        <template #body>
+          <div class="bodyForm fc fc-align-center fc-justify-center">
+            <slot />
+          </div>
+          <div class="footer fc fc-col fc-justify-center ">
+            <div class="padding-5-5 fc fc-justify-center">
+              <el-button link @click="toPageSignIn"> вход </el-button>
+            </div>
+            <div class="padding-5-5 fc fc-justify-center">
+              <el-button link @click="toPageRegister"> регистрация </el-button>
+              <el-button link @click="toPageRegisterSt"> регистрация СТ </el-button>
+            </div>
 
-  <el-row class=" auth-layout bg-dark-brown-0" justify="center" align="middle">
+          </div>
+        </template>
+      </wow-col>
+    </div>
+
+    <!--     <div class="logo">logo</div>
+    <div class="body">controll</div> -->
+  </div>
+
+  <!--  <el-row class=" auth-layout bg-dark-brown-0" justify="center" align="middle">
     <el-col class="wow-card-auth tc-brown-0" :xs="22" :sm="7" :md="6" :lg="5" :xl="4">
       <div class="wow-header-auth ">
         <slot name="header" />
@@ -12,11 +43,19 @@
         footer
       </div>
     </el-col>
-  </el-row>
+  </el-row> -->
 
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const toPageSignIn = () => router.push('/auth/signIn');
+const toPageRegister = () => router.push('/auth/register');
+const toPageRegisterSt = () => router.push('/auth/registerSt');
+
 
 </script>
 
@@ -24,9 +63,34 @@
 .auth-layout {
   width: 100%;
   height: 100%;
-  box-shadow: inset 0px 0px 20px 0px #00000075;
 
-  .wow-card-auth {
+  .auth-panel {
+    width: 1000px;
+    ;
+    /* border: 1px solid #fff; */
+    padding: 5px;
+
+    .bodyLogo {
+      font-size: 2rem;
+      height: 100%;
+      width: 100%;
+    }
+
+    .bodyForm {
+      min-height: 300px;
+      border-width: 0 0 0 1px;
+      border-style: solid;
+      border-image: linear-gradient(to bottom, #303030, #767676, #303030) 1;
+      padding: 5px;
+    }
+
+    .footer {
+      width: 100%;
+    }
+  }
+
+
+  /*   .wow-card-auth {
     height: 400px;
     border-radius: 15px;
 
@@ -47,14 +111,12 @@
       border-radius: 15px 15px 0px 0px;
       margin: 35px 10px 0px 51px;
       font-size: 2rem;
-      /* height: 60px; */
     }
 
     .wow-body-auth {
       display: flex;
       justify-content: center;
       align-items: center;
-      /* height: calc(400px - 140px); */
       padding: 10px;
     }
 
@@ -77,6 +139,6 @@
     align-items: center;
   }
 
-  .slot {}
+  .slot {} */
 }
 </style>
