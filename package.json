@@ -15,7 +15,8 @@
     "nuxt": "^3.13.2",
     "uuid": "^11.0.3",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "vue-the-mask": "^0.11.1"
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.1.0",

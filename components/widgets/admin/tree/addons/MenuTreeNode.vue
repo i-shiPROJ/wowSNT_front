@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onMounted, computed } from 'vue';
+import {  onMounted, computed } from 'vue';
 import type { PropType } from 'vue';
 import type { MenuNodeInterface } from '../interface/MenuNodeInterface';
 import { mdiChevronRight, mdiChevronDown } from '@mdi/js';

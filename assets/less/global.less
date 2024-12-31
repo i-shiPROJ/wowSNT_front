@@ -21,8 +21,8 @@
 @Synthwave-Sunset-4_3-rgba: rgb(69, 89, 163);
 @Synthwave-Sunset-4_4-rgba: rgba(85, 109, 200, 1);
 @Synthwave-Sunset-5-rgba: rgba(121, 152, 238, 1);
-@bs-background_0:#3F4D66;
-@bs-background_1:rgb(51.2, 126.4, 204);
+@bs-background_0: #3F4D66;
+@bs-background_1: rgb(51.2, 126.4, 204);
 
 
 /* Darktooth */
@@ -158,6 +158,11 @@ h6 {
   background-color: @dark_gray_8;
 }
 
+
+.tc-dark_gray_0_soft {
+  background-color: @dark_gray_0_soft;
+}
+
 .border-color-0 {
   border-color: @border_0;
 }
@@ -173,52 +178,99 @@ h6 {
 .tc-dark-gray-1 {
   color: @dark_gray_1;
 }
+
 .tc-dark-gray-2 {
   color: @dark_gray_2;
 }
+
 .tc-dark-gray-3 {
   color: @dark_gray_3;
 }
+
 .tc-dark-gray-4 {
   color: @dark_gray_4;
 }
+
 .tc-dark-gray-8 {
   color: @dark_gray_8;
 }
 
-.tc-light-gray-0{
+.tc-light-gray-0 {
   color: #E8EDF7;
 }
 
-.tc-muted_blue{
+.tc-muted_blue {
   color: @muted_blue;
 }
 
 /* ширина шрифта */
-.f-w-100{
+.f-w-100 {
   font-weight: 100;
 }
-.f-w-200{
+
+.f-w-200 {
   font-weight: 200;
 }
-.f-w-300{
+
+.f-w-300 {
   font-weight: 300;
 }
-.f-w-400{
+
+.f-w-400 {
   font-weight: 400;
 }
-.f-w-500{
+
+.f-w-500 {
   font-weight: 500;
 }
-.f-w-600{
+
+.f-w-600 {
   font-weight: 600;
 }
-.f-w-700{
+
+.f-w-700 {
   font-weight: 700;
 }
-.f-w-800{
+
+.f-w-800 {
   font-weight: 800;
 }
-.f-w-900{
+
+.f-w-900 {
   font-weight: 900;
+}
+
+.wow-dark {
+  .el-input {
+    --el-input-text-color: #A8ABB2;
+    --el-input-border-color: #767676;
+    --el-input-bg-color: #ffffff00;
+    --el-input-placeholder-color: #767676;
+    /*   --el-input-text-color: var(--el-text-color-regular);
+        --el-input-border: var(--el-border);
+        --el-input-hover-border: var(--el-border-color-hover);
+        --el-input-focus-border: var(--el-color-primary);
+        --el-input-transparent-border: 0 0 0 1px transparent inset;
+        --el-input-border-color: var(--el-border-color);
+        --el-input-border-radius: var(--el-border-radius-base);
+        --el-input-bg-color: var(--el-fill-color-blank);
+        --el-input-icon-color: var(--el-text-color-placeholder);
+        --el-input-placeholder-color: var(--el-text-color-placeholder);
+        --el-input-hover-border-color: var(--el-border-color-hover);
+        --el-input-clear-hover-color: var(--el-text-color-secondary);
+        --el-input-focus-border-color: var(--el-color-primary);
+        --el-input-width: 100%;
+        --el-input-height: var(--el-component-size);
+        box-sizing: border-box;
+        display: inline-flex;
+        font-size: var(--el-font-size-base);
+        line-height: var(--el-input-height);
+        position: relative;
+        vertical-align: middle;
+        width: var(--el-input-width); */
+  }
+
+  .el-form-item__label {
+    color: @light-gray_1;
+  }
 }
