@@ -1,5 +1,5 @@
 <template>
-  <div class="wow-dark auth-layout fc fc-align-center fc-justify-center tc-dark_gray_0_soft tc-dark-gray-4">
+  <div class="wow-dark auth-layout fc fc-justify-center tc-dark_gray_0_soft tc-dark-gray-4">
     <div class="auth-panel fc fc-row fc-wrap fc-justify-space-b">
       <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2">
         <template #body>
@@ -10,19 +10,18 @@
       </wow-col>
       <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2">
         <template #body>
-          <div class="bodyForm fc fc-align-center fc-justify-center">
+          <div class="forms fc fc-col fc-justify-center">
+            <div class="bodyForm fc fc-align-center fc-justify-center">
             <slot />
           </div>
           <div class="footer fc fc-col fc-justify-center ">
             <div class="padding-5-5 fc fc-justify-center">
               <el-button link @click="toPageSignIn"> вход </el-button>
-            </div>
-            <div class="padding-5-5 fc fc-justify-center">
               <el-button link @click="toPageRegister"> регистрация </el-button>
-              <el-button link @click="toPageRegisterSt"> регистрация СТ </el-button>
             </div>
-
           </div>
+          </div>
+          
         </template>
       </wow-col>
     </div>
@@ -53,7 +52,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const toPageSignIn = () => router.push('/auth/signIn');
-const toPageRegister = () => router.push('/auth/register');
+const toPageRegister = () => router.push('/auth/registerQuestion');
 const toPageRegisterSt = () => router.push('/auth/registerSt');
 
 
@@ -63,6 +62,11 @@ const toPageRegisterSt = () => router.push('/auth/registerSt');
 .auth-layout {
   width: 100%;
   height: 100%;
+  overflow: auto;
+
+  @media (max-width: 768px) {
+    overflow-y: scroll; /* Включите вертикальную прокрутку для мобильных устройств */
+  }
 
   .auth-panel {
     width: 1000px;
@@ -72,6 +76,11 @@ const toPageRegisterSt = () => router.push('/auth/registerSt');
 
     .bodyLogo {
       font-size: 2rem;
+      height: 100%;
+      width: 100%;
+    }
+
+    .forms{
       height: 100%;
       width: 100%;
     }

@@ -240,7 +240,70 @@ h6 {
   font-weight: 900;
 }
 
+/* scroll */
+::-webkit-scrollbar {
+  width: 10px;
+  /* Ширина скрола */
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff00;
+  /* Цвет фона скрола */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7c6f647c;
+  /* Цвет ползунка скрола */
+  border-radius: 20px;
+  /* Закругление углов ползунка */
+}
+
 .wow-dark {
+
+  .el-tabs__item {
+    align-items: center;
+    box-sizing: border-box;
+    color: #767676;
+  }
+
+  .el-tabs__active-bar {
+    background-color: #dd6f48;
+    height: 2px;
+  }
+
+  .el-tabs__item.is-active,
+  .el-tabs__item:hover {
+    color: #dd6f48
+  }
+
+  .el-tabs__nav-wrap:after {
+    background-color: #767676;
+    bottom: 0;
+    content: "";
+    height: 2px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  /*   .el-tabs--card>.el-tabs__header .el-tabs__item.is-active{
+    border-bottom-color: #af3a03;
+    
+  }
+
+  .el-tabs--card>.el-tabs__header {
+    border-bottom: 1px solid #767676;
+
+    .el-tabs__nav{
+      border: 1px solid #767676;
+      
+    }
+
+    .el-tabs__nav {
+      border-bottom: 1px solid #767676;
+    }
+  } */
+
   .el-input {
     --el-input-text-color: #A8ABB2;
     --el-input-border-color: #767676;
@@ -273,4 +336,5 @@ h6 {
   .el-form-item__label {
     color: @light-gray_1;
   }
+
 }

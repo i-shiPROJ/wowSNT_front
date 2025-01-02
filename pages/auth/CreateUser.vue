@@ -21,11 +21,7 @@
         </el-form-item>
 
         <el-form-item label="Телефон" prop="phoneNums">
-          <el-input 
-            v-model="registerForm.phoneNums"
-            v-mask="'+7 (###) ### ## ##'"
-            placeholder="+7 (999) 999 99 99"
-          />
+          <el-input v-model="registerForm.phoneNums" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (999) 999 99 99" />
         </el-form-item>
         <el-form-item prop="email" label="email">
           <el-input v-model="registerForm.email" />
