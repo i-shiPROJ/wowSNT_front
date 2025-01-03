@@ -11,7 +11,7 @@ import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
 xs <768px; sm	≥768px; md	≥992px; lg	≥1200px; xl	≥1920px
 */
 
-const screenWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1200);
+const screenWidth = ref(1200);
 
 const updateScreenWidth = () => {
   if (typeof window !== 'undefined') { // Проверка на наличие window
@@ -20,6 +20,7 @@ const updateScreenWidth = () => {
 };
 
 onMounted(() => {
+  updateScreenWidth();
   window.addEventListener('resize', updateScreenWidth);
 });
 

@@ -1,14 +1,14 @@
 <template>
   <div class="wow-dark auth-layout fc fc-justify-center tc-dark_gray_0_soft tc-dark-gray-4">
     <div class="auth-panel fc fc-row fc-wrap fc-justify-space-b">
-      <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2">
+      <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2" :style="{ width: '50%' }">
         <template #body>
           <div class="bodyLogo fc fc-align-center fc-justify-center">
             wow-SNT
           </div>
         </template>
       </wow-col>
-      <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2">
+      <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2" :style="{ width: '50%' }">
         <template #body>
           <div class="forms fc fc-col fc-justify-center">
             <div class="bodyForm fc fc-align-center fc-justify-center">
@@ -95,6 +95,13 @@ const toPageRegisterSt = () => router.push('/auth/registerSt');
 
     .footer {
       width: 100%;
+      
+      .el-button.is-link {
+        color:#66999d;
+      }
+      .el-button.is-link:hover {
+        color:#5fafaf;
+      }
     }
   }
 
