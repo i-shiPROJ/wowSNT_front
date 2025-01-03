@@ -38,10 +38,13 @@
           <el-input v-model="registerForm.passwordConfirm_" type="password" autocomplete="off" />
         </el-form-item>
 
-        <el-form-item>
-          <el-button type="primary" @click="submitForm(formRef)">Submit</el-button>
-          <el-button @click="resetForm(formRef)">Reset</el-button>
-        </el-form-item>
+        <div class="register-btn wow-w-100 fc fc-justify-center">
+          <!-- <el-button @click="resetForm(formRef)">Сбросить форму</el-button> -->
+          <el-button type="primary" @click="submitForm(formRef)">Зарегистрироваться</el-button>
+        </div>
+<!--         <el-form-item class="fc fc-justify-space-b">
+
+        </el-form-item> -->
       </el-form>
     </div>
   </NuxtLayout>
@@ -151,5 +154,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 .btn-goup {
   padding: 25px 0px;
+}
+
+.register-btn{
+  padding: 15px 0;
 }
 </style>
