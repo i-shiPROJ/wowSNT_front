@@ -1,6 +1,6 @@
 import { reactive } from 'vue';
 import { v6 as uuidv6 } from 'uuid';
-import { mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+import { mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline,  mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
 
 function setActiveMenuItem(id) {
   menuObject.forEach(item => {
@@ -13,8 +13,8 @@ export const menuObject = reactive([
     type: 'labelGroup',
     id: uuidv6(),
     settings: {
-      name: 'Navigation',
-      tooltip: 'Tooltip-1',
+      name: 'снт краснодаргорстрой',
+      //tooltip: 'Tooltip-1',
     },
   },
   {
@@ -22,15 +22,64 @@ export const menuObject = reactive([
     id: uuidv6(),
     settings: {
       active: false,
-      name: 'DashBoard',
-      icon: mdiMonitorDashboard,
-      tooltip: 'Tooltip-2',
+      name: 'Реквизиты',
+      icon: mdiCardAccountDetailsOutline ,
+      tooltip: 'Реквизиты СТ',
       functions: {
         setActiveMenuItem
       }
     },
   },
   {
+    type: 'menuBtn',
+    id: uuidv6(),
+    settings: {
+      active: false,
+      name: 'Расчетный счет',
+      icon: mdiSafeSquareOutline  ,
+      tooltip: 'Платежные реквизиты',
+      functions: {
+        setActiveMenuItem
+      }
+    },
+  },
+  {
+    type: 'labelGroup',
+    id: uuidv6(),
+    settings: {
+      name: 'члены товарищества',
+      //tooltip: 'Tooltip-1',
+    },
+  },
+  {
+    type: 'menuBtn',
+    id: uuidv6(),
+    settings: {
+      active: false,
+      name: 'Собственники',
+      icon: mdiAccountGroup ,
+      tooltip: 'Информация о собственниках',
+      functions: {
+        setActiveMenuItem
+      }
+    },
+  },
+  {
+    type: 'menuBtn',
+    id: uuidv6(),
+    settings: {
+      active: false,
+      name: 'Участки садоводчества',
+      icon: mdiTreeOutline  ,
+      tooltip: 'Информация об участках',
+      functions: {
+        setActiveMenuItem
+      }
+    },
+  },
+
+
+/*   {
     type: 'labelGroup',
     id: uuidv6(),
     settings: {
@@ -104,5 +153,5 @@ export const menuObject = reactive([
         },
       ]
     },
-  },
+  }, */
 ]);

@@ -49,12 +49,13 @@
 
         <div class="wrapper">
           <main class="main">
-            <div class="fc fc-row fc-wrap fc-justify-space-b">
+            <slot name="main"/>
+            <!-- <div class="fc fc-row fc-wrap fc-justify-space-b">
               <wow-card v-for="(item, index) in items" :key="index" :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
                 <template #header>Header {{ item }}</template>
                 <template #body>Body {{ item }}</template>
               </wow-card>
-            </div>
+            </div> -->
 
           </main>
 
