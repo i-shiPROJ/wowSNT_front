@@ -43,20 +43,13 @@
               <wow-icon type="mdi" :path="$mdi.mdiChatOutline" />
             </div>
             -->
-            <wow-userIcon/>
+            <wow-userIcon />
           </div>
         </header>
 
         <div class="wrapper">
           <main class="main">
-            <slot name="main"/>
-<!--             <div class="fc fc-row fc-wrap fc-justify-space-b">
-              <wow-card v-for="(item, index) in items" :key="index" :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
-                <template #header>Header {{ item }}</template>
-                <template #body>Body {{ item }}</template>
-              </wow-card>
-            </div> -->
-
+            <slot />
           </main>
 
           <footer class="footer fc fc-row fc-justify-space-a fc-align-center">
@@ -78,8 +71,10 @@
 
 <script lang="ts" setup>
 import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { v6 as uuidv6 } from 'uuid';
+import { mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+//import { menuObject } from '~/pages/user/menuObject';
 
-import { menuObject } from '~/pages/user/menuObject';
 
 const isMobile = ref(false);
 const drawerVisible = ref(false);
@@ -114,6 +109,7 @@ onMounted(() => {
   checkMobile();
   window.addEventListener('resize', checkMobile);
   document.addEventListener('click', handleClickOutside); // Добавляем обработчик клика
+  console.log('object');
 });
 
 onBeforeUnmount(() => {
@@ -123,7 +119,130 @@ onBeforeUnmount(() => {
 
 
 //reactiveObjectMenu
-const objectMenu = menuObject;
+const setActiveMenuItem = (id: string) => {
+  menuObject.forEach(item => {
+    item.settings.active = (item.id === id);
+    if (item.settings.active && item.settings.url) {
+      navigateTo(item.settings.url);
+      //router.replace(item.settings.url);
+    }
+  });
+}
+
+
+const menuObject = reactive([
+  {
+    type: 'menuBtn',
+    id: uuidv6(),
+    settings: {
+      active: false,
+      name: 'Главная',
+      icon: mdiMonitorDashboard,
+      tooltip: '',
+      url: '/user',
+      functions: {
+        setActiveMenuItem
+      }
+    },
+  },
+  {
+    type: 'labelGroup',
+    id: uuidv6(),
+    settings: {
+      name: 'СТ Краснодаргорстрой',
+      tooltip: 'Tooltip-1',
+    },
+  },
+  {
+    type: 'menuBtn',
+    id: uuidv6(),
+    settings: {
+      active: false,
+      name: '4 первомайская улица дом 20',
+      icon: mdiMonitorDashboard,
+      tooltip: 'Tooltip-2',
+      url: '/user/house',
+      functions: {
+        setActiveMenuItem
+      }
+    },
+  },
+  {
+    type: 'labelGroup',
+    id: uuidv6(),
+    settings: {
+      name: 'СТ Невеликое озеро багета',
+      tooltip: 'Tooltip-3'
+    },
+  },
+  {
+    type: 'menuBtn',
+    id: uuidv6(),
+    settings: {
+      active: false,
+      name: 'Центральный проезд Хорошёвского Серебряного Бора дом 20 корпус 1',
+      icon: mdiChartBar,
+      tooltip: 'Tooltip-4',
+      functions: {
+        setActiveMenuItem
+      }
+    },
+  },
+  {
+    type: 'menuBtn',
+    id: uuidv6(),
+    settings: {
+      active: false,
+      name: 'Юридическое лицо',
+      icon: mdiChartBar,
+      tooltip: 'Tooltip-5',
+      functions: {
+        setActiveMenuItem
+      }
+    },
+  },
+  {
+    type: 'treeNodeMenu',
+    id: uuidv6(),
+    settings: {
+      arrayNode: [
+        {
+          id: uuidv6(),
+          active: false,
+          name: 'Menu levels',
+          icon: mdiMenu,
+          children: [
+            {
+              id: uuidv6(),
+              active: false,
+              name: 'Element 1',
+              icon: null,
+              tooltip: 'Элемент1',
+              children: [
+                {
+                  id: uuidv6(),
+                  active: false,
+                  name: 'Element 1.1',
+                  icon: null,
+                  tooltip: '"Элемент 1.1"',
+                  children: []
+                }
+              ]
+            },
+            {
+              id: uuidv6(),
+              active: false,
+              name: 'Element 2',
+              tooltip: 'Element2',
+              icon: null,
+              children: []
+            },
+          ]
+        },
+      ]
+    },
+  },
+]);
 
 </script>
 

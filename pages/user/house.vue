@@ -1,15 +1,13 @@
 <template>
-  <NuxtLayout name="user">
-    <template #main>
-      HOUSE
-    </template>
-  </NuxtLayout>
+  <div>
+    house
+  </div>
 </template>
 
 <script setup lang="ts">
-
+definePageMeta({
+  layout: 'user'
+})
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
