@@ -109,7 +109,6 @@ onMounted(() => {
   checkMobile();
   window.addEventListener('resize', checkMobile);
   document.addEventListener('click', handleClickOutside); // Добавляем обработчик клика
-  console.log('object');
 });
 
 onBeforeUnmount(() => {
@@ -161,7 +160,7 @@ const menuObject = reactive([
       name: '4 первомайская улица дом 20',
       icon: mdiMonitorDashboard,
       tooltip: 'Tooltip-2',
-      url: '/user/house',
+      url: '/user/house/1232',
       functions: {
         setActiveMenuItem
       }

@@ -31,7 +31,7 @@
   </div>
 
   <!--  <el-row class=" auth-layout bg-dark-brown-0" justify="center" align="middle">
-    <el-col class="wow-card-auth tc-brown-0" :xs="22" :sm="7" :md="6" :lg="5" :xl="4">
+    <el-col class="wow-card-col-auth tc-brown-0" :xs="22" :sm="7" :md="6" :lg="5" :xl="4">
       <div class="wow-header-auth ">
         <slot name="header" />
       </div>
@@ -130,7 +130,7 @@ const getDataTest = async (url = 'http://185.42.14.187:8080/snt', data = {}) => 
   }
 
 
-  /*   .wow-card-auth {
+  /*   .wow-card-col-auth {
     height: 400px;
     border-radius: 15px;
 

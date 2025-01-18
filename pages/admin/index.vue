@@ -7,7 +7,7 @@
           <template #body>
             <div class="fc fc-row fc-wrap fc-justify-space-b">
 
-              <wow-card class="cur-pointer" :xs="1" :sm="2" :md="2" :lg="4" :xl="4" @click="switchMode()">
+              <wow-card-col class="cur-pointer" :xs="1" :sm="2" :md="2" :lg="4" :xl="4" @click="switchMode()">
                 <template #header><b>Переключение режима</b></template>
                 <template #body>
                   <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
@@ -17,9 +17,9 @@
                       <span>Режим председателя</span>
                   </div>
                 </template>
-              </wow-card>
+              </wow-card-col>
 
-              <wow-card :xs="1" :sm="2" :md="2" :lg="4" :xl="4">
+              <wow-card-col :xs="1" :sm="2" :md="2" :lg="4" :xl="4">
                 <template #header><b>Электронные обращения</b></template>
                 <template #body>
                   <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
@@ -30,9 +30,9 @@
 
                   </div>
                 </template>
-              </wow-card>
+              </wow-card-col>
 
-              <wow-card :xs="1" :sm="2" :md="2" :lg="4" :xl="4">
+              <wow-card-col :xs="1" :sm="2" :md="2" :lg="4" :xl="4">
                 <template #header><b>Членские взносы за 2025</b></template>
                 <template #body>
                   <div class="row-col-1 fc fc-col fc-justify-end">
@@ -51,9 +51,9 @@
                   </div>
 
                 </template>
-              </wow-card>
+              </wow-card-col>
 
-              <wow-card :xs="1" :sm="2" :md="2" :lg="4" :xl="4">
+              <wow-card-col :xs="1" :sm="2" :md="2" :lg="4" :xl="4">
                 <template #header><b>Садоводы должны</b></template>
                 <template #body>
                   <div class="row-col-1 fc fc-col fc-align-end fc-justify-end">
@@ -64,7 +64,7 @@
                     <div class="header-summa-done"> </div>
                   </div>
                 </template>
-              </wow-card>
+              </wow-card-col>
 
             </div>
 
@@ -73,19 +73,19 @@
 
         <!--         <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2" :style="{ width: '50%' }">
           <template #body>
-            <wow-card :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
+            <wow-card-col :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
               <template #header>Садовое товарищество </template>
               <template #body>Краснодаргорстрой </template>
-            </wow-card>
+            </wow-card-col>
           </template>
         </wow-col> -->
 
       </div>
       <!--       <div class="fc fc-row fc-wrap fc-justify-space-b">
-        <wow-card v-for="(item, index) in items" :key="index" :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
+        <wow-card-col v-for="(item, index) in items" :key="index" :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
           <template #header>Header {{ item }}</template>
           <template #body>Body {{ item }}</template>
-        </wow-card>
+        </wow-card-col>
       </div> -->
     </template>
   </NuxtLayout>
