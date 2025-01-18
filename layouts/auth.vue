@@ -12,16 +12,16 @@
         <template #body>
           <div class="forms fc fc-col fc-justify-center">
             <div class="bodyForm fc fc-align-center fc-justify-center">
-            <slot />
-          </div>
-          <div class="footer fc fc-col fc-justify-center ">
-            <div class="padding-5-5 fc fc-justify-center">
-              <el-button link @click="toPageSignIn"> вход </el-button>
-              <el-button link @click="toPageRegister"> регистрация </el-button>
+              <slot />
+            </div>
+            <div class="footer fc fc-col fc-justify-center ">
+              <div class="padding-5-5 fc fc-justify-center">
+                <el-button link @click="toPageSignIn"> вход </el-button>
+                <el-button link @click="toPageRegister"> регистрация </el-button>
+              </div>
             </div>
           </div>
-          </div>
-          
+
         </template>
       </wow-col>
     </div>
@@ -31,7 +31,7 @@
   </div>
 
   <!--  <el-row class=" auth-layout bg-dark-brown-0" justify="center" align="middle">
-    <el-col class="wow-card-auth tc-brown-0" :xs="22" :sm="7" :md="6" :lg="5" :xl="4">
+    <el-col class="wow-card-col-auth tc-brown-0" :xs="22" :sm="7" :md="6" :lg="5" :xl="4">
       <div class="wow-header-auth ">
         <slot name="header" />
       </div>
@@ -52,8 +52,30 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const toPageSignIn = () => router.push('/auth/signIn');
-const toPageRegister = () => router.push('/auth/registerQuestion');
+const toPageRegister = () => {
+  router.push('/auth/registerQuestion');
+  // const data = getDataTest();
+  // console.log(data);
+};
 const toPageRegisterSt = () => router.push('/auth/registerSt');
+
+const getDataTest = async (url = 'http://185.42.14.187:8080/snt', data = {}) => {
+  try {
+    const response = await $fetch(url, {
+      method: 'GET',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    return response.json();
+
+  } catch (error) {
+    console.error('error getDataTest', error);
+  }
+  //router.push('/auth/registerQuestion');
+
+};
 
 
 </script>
@@ -65,7 +87,8 @@ const toPageRegisterSt = () => router.push('/auth/registerSt');
   overflow: auto;
 
   @media (max-width: 768px) {
-    overflow-y: scroll; /* Включите вертикальную прокрутку для мобильных устройств */
+    overflow-y: scroll;
+    /* Включите вертикальную прокрутку для мобильных устройств */
   }
 
   .auth-panel {
@@ -80,7 +103,7 @@ const toPageRegisterSt = () => router.push('/auth/registerSt');
       width: 100%;
     }
 
-    .forms{
+    .forms {
       height: 100%;
       width: 100%;
     }
@@ -95,18 +118,19 @@ const toPageRegisterSt = () => router.push('/auth/registerSt');
 
     .footer {
       width: 100%;
-      
+
       .el-button.is-link {
-        color:#66999d;
+        color: #66999d;
       }
+
       .el-button.is-link:hover {
-        color:#5fafaf;
+        color: #5fafaf;
       }
     }
   }
 
 
-  /*   .wow-card-auth {
+  /*   .wow-card-col-auth {
     height: 400px;
     border-radius: 15px;
 

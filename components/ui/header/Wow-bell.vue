@@ -8,8 +8,7 @@
       <wow-icon type="mdi" :path="$mdi.mdiBellOutline" />
     </el-button>
 
-
-    <el-popover ref="popoverRef" trigger="click" title="Уведомления" :width="350" virtual-triggering persistent>
+    <el-popover ref="popoverRef" trigger="hover" title="Уведомления" :width="350" virtual-triggering persistent>
       <BellBody :bellArray="bellArray" />
     </el-popover>
 

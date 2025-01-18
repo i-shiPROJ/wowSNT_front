@@ -1,11 +1,18 @@
 <template>
-  <div class="wow-col" :style="computedStyle">
-    <slot name="body" />
+  <div class="wow-card-col" :style="computedStyle">
+    <div class="inside-block">
+      <div class="header">
+        <slot name="header" />
+      </div>
+      <div class="body">
+        <slot name="body" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
+import {  onMounted, onBeforeUnmount, ref, computed } from 'vue';
 
 /* 
 xs <768px; sm	≥768px; md	≥992px; lg	≥1200px; xl	≥1920px
@@ -20,7 +27,6 @@ const updateScreenWidth = () => {
 };
 
 onMounted(() => {
-  updateScreenWidth();
   window.addEventListener('resize', updateScreenWidth);
 });
 
@@ -31,7 +37,7 @@ onBeforeUnmount(() => {
 const props = defineProps({
   width: { type: String },
   //flex: 1 0 calc(100% / 3);
-  xs: { type: Number, default: 1 },
+  xs: { type: Number, default: 1  },
   sm: { type: Number, required: true },
   md: { type: Number },
   lg: { type: Number },
@@ -47,7 +53,7 @@ const getFlexcolumn = () => {
     { min: 1920, value: props.xl },
   ];
 
-  const breakpoint = breakpoints.find(item =>
+  const breakpoint = breakpoints.find(item => 
     (item.min === undefined || screenWidth.value >= item.min) &&
     (item.max === undefined || screenWidth.value < item.max)
   );
@@ -68,18 +74,14 @@ const computedStyle = computed(() => {
 </script>
 
 <style lang="less" scoped>
-.wow-col{
- 
-}
 .wow-card-col {
   margin: 0.8rem;
 
   .inside-block {
     box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03);
-    background-color: #FFF;
     border: 1px solid #F1F1F4;
     padding: 1.25rem;
-
+    background-color: #FFF;
     border-radius: 10px;
 
     .header {}
@@ -88,9 +90,5 @@ const computedStyle = computed(() => {
       padding: 1rem 0;
     }
   }
-
-
-
-
 }
 </style>

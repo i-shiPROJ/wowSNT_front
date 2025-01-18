@@ -6,70 +6,46 @@
       </div>
 
       <div v-if="stateCreateForm">
-        <el-tabs v-model="radioUser">
-          <el-tab-pane label="Создать пользователя" name="createUser">
 
-            <el-form ref="formRef" style="max-width: 600px" :model="registerForm" label-width="auto"
-              class="formCreateUser" :rules="rulesstRegister">
+        <el-form ref="formRef" style="max-width: 600px" :model="registerForm" label-width="auto" class="formCreateUser"
+          :rules="rulesstRegister">
 
-              <el-form-item label="Фамилия" prop="lastName">
-                <el-input v-model="registerForm.lastName" />
-              </el-form-item>
+          <el-form-item label="Фамилия" prop="lastName">
+            <el-input v-model="registerForm.lastName" />
+          </el-form-item>
 
-              <el-form-item label="Имя" prop="firstName">
-                <el-input v-model="registerForm.firstName" />
-              </el-form-item>
+          <el-form-item label="Имя" prop="firstName">
+            <el-input v-model="registerForm.firstName" />
+          </el-form-item>
 
-              <el-form-item label="Отчество" prop="patronymic">
-                <el-input v-model="registerForm.patronymic" />
-              </el-form-item>
+          <el-form-item label="Отчество" prop="patronymic">
+            <el-input v-model="registerForm.patronymic" />
+          </el-form-item>
 
-              <el-form-item label="Телефон" prop="phoneNums">
-                <el-input v-model="registerForm.phoneNums" v-mask="'+7 (###) ### ## ##'"
-                  placeholder="+7 (999) 999 99 99" />
-              </el-form-item>
-              <el-form-item prop="email" label="email">
-                <el-input v-model="registerForm.email" />
-              </el-form-item>
+          <el-form-item label="Телефон" prop="phoneNums">
+            <el-input v-model="registerForm.phoneNums" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (999) 999 99 99" />
+          </el-form-item>
+          <el-form-item prop="email" label="email">
+            <el-input v-model="registerForm.email" />
+          </el-form-item>
 
-              <el-form-item label="Логин" prop="username">
-                <el-input v-model="registerForm.username" />
-              </el-form-item>
+          <el-form-item label="Логин" prop="username">
+            <el-input v-model="registerForm.username" />
+          </el-form-item>
 
-              <el-form-item label="Пароль" prop="password">
-                <el-input v-model="registerForm.password" type="password" autocomplete="off" />
-              </el-form-item>
-              <el-form-item label="Повтор пароля" prop="passwordConfirm">
-                <el-input v-model="registerForm.passwordConfirm" type="password" autocomplete="off" />
-              </el-form-item>
+          <el-form-item label="Пароль" prop="password">
+            <el-input v-model="registerForm.password" type="password" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="Повтор пароля" prop="passwordConfirm">
+            <el-input v-model="registerForm.passwordConfirm" type="password" autocomplete="off" />
+          </el-form-item>
 
-              <div class="register-btn wow-w-100 fc fc-justify-center">
-                <!-- <el-button @click="resetForm(formRef)">Сбросить форму</el-button> -->
-                <el-button type="primary" @click="submitCreateUser(formRef)">Далее</el-button>
-              </div>
-            </el-form>
-          </el-tab-pane>
+          <div class="register-btn wow-w-100 fc fc-justify-center">
+            <!-- <el-button @click="resetForm(formRef)">Сбросить форму</el-button> -->
+            <el-button type="primary" @click="submitCreateUser(formRef)">Далее</el-button>
+          </div>
+        </el-form>
 
-          <el-tab-pane label="Уже есть пользователь" name="authUser">
-            <el-form ref="formAuthRef" style="max-width: 600px" :model="authForm" label-width="auto"
-              class="formCreateUser" :rules="rulesAuth">
-
-              <el-form-item label="Логин" prop="username">
-                <el-input v-model="authForm.username" />
-              </el-form-item>
-
-              <el-form-item label="Пароль" prop="password">
-                <el-input v-model="authForm.password" type="password" autocomplete="off" />
-              </el-form-item>
-
-              <div class="register-btn wow-w-100 fc fc-justify-center">
-                <!-- <el-button @click="resetForm(formRef)">Сбросить форму</el-button> -->
-                <el-button type="primary" @click="submitAuthUser(formAuthRef)">Далее</el-button>
-              </div>
-            </el-form>
-          </el-tab-pane>
-
-        </el-tabs>
       </div>
 
       <div v-else>
@@ -78,11 +54,11 @@
           class="formCreateUser" :rules="rulesSTRegister">
 
           <el-form-item label="ИНН" prop="inn">
-            <el-input v-model="stRegisterForm.inn" maxlength="10" v-mask="'##########'"/>
+            <el-input v-model="stRegisterForm.inn" maxlength="10" v-mask="'##########'" />
           </el-form-item>
 
           <el-form-item label="ОГРН" prop="ogrn">
-            <el-input v-model="stRegisterForm.ogrn" maxlength="13" v-mask="'#############'"/>
+            <el-input v-model="stRegisterForm.ogrn" maxlength="13" v-mask="'#############'" />
           </el-form-item>
 
           <el-form-item label="Дата регистрации" prop="regDate">
@@ -95,7 +71,7 @@
           </el-form-item>
 
           <el-form-item label="ОКТМО" prop="oktmoCode">
-            <el-input v-model="stRegisterForm.oktmoCode" minlength="8" maxlength="11"  v-mask="'###########'"/>
+            <el-input v-model="stRegisterForm.oktmoCode" minlength="8" maxlength="11" v-mask="'###########'" />
           </el-form-item>
 
           <el-form-item label="Адрес" prop="address">
@@ -134,11 +110,6 @@ interface RegisterForm {
   passwordConfirm: string,
 }
 
-interface AuthForm {
-  username: string,
-  password: string,
-}
-
 interface STRegisterForm {
   inn: number | null,
   ogrn: number | null,
@@ -161,11 +132,6 @@ const registerForm = reactive<RegisterForm>({
   username: '',
   password: '',
   passwordConfirm: '',
-})
-
-const authForm = reactive<AuthForm>({
-  username: '',
-  password: '',
 })
 
 const stRegisterForm = reactive<STRegisterForm>({
@@ -203,15 +169,15 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
 const rulesstRegister = reactive<FormRules<typeof registerForm>>({
   lastName: [
     { required: true, message: 'Введите Фамилию', trigger: 'blur' },
-    { min: 3, max: 50, message: 'Длина поля от 3 - 50', trigger: 'blur' },
+    { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
   ],
   firstName: [
     { required: true, message: 'Введите Имя', trigger: 'blur' },
-    { min: 3, max: 5, message: 'Длина поля от 3 - 50', trigger: 'blur' },
+    { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
   ],
   patronymic: [
     { required: true, message: 'Введите Отчество', trigger: 'blur' },
-    { min: 3, max: 50, message: 'Длина поля от 3 - 50', trigger: 'blur' },
+    { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
   ],
   phoneNums: [
     { required: true, message: 'Введите номер телефона', trigger: 'blur' },
@@ -219,7 +185,7 @@ const rulesstRegister = reactive<FormRules<typeof registerForm>>({
   ],
   email: [
     { required: true, message: 'Введите e-mail вдрес', trigger: 'blur', },
-    { type: 'email', message: 'Please input correct email address', trigger: 'blur', },
+    { type: 'email', message: 'email некорректен', trigger: 'blur', },
   ],
   username: [
     { required: true, message: 'Введите Логин', trigger: 'blur' },
@@ -227,14 +193,6 @@ const rulesstRegister = reactive<FormRules<typeof registerForm>>({
   ],
   password: [{ validator: validatePass, trigger: 'blur' }],
   passwordConfirm: [{ validator: validatePass2, trigger: 'blur' }],
-})
-
-const rulesAuth = reactive<FormRules<typeof authForm>>({
-  username: [
-    { required: true, message: 'Введите Логин', trigger: 'blur' },
-    { min: 3, max: 50, message: 'Длина поля от 3 - 50', trigger: 'blur' },
-  ],
-  password: [{ validator: validatePass, trigger: 'blur' }],
 })
 
 const rulesSTRegister = reactive<FormRules<typeof stRegisterForm>>({
@@ -282,18 +240,6 @@ const submitCreateUser = async (formEl: FormInstance | undefined) => {
   })
 }
 
-const submitAuthUser = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      console.log('submit! submitCreateUser')
-      stateCreateForm.value = !stateCreateForm.value;
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
-}
-
 const submitCreateST = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
@@ -319,7 +265,7 @@ const submitCreateST = async (formEl: FormInstance | undefined) => {
   padding: 15px 0;
 }
 
-.header-st{
+.header-st {
   padding: 10px 0px;
   color: #dd6f48;
 }
