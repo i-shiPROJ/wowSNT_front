@@ -169,15 +169,15 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
 const rulesstRegister = reactive<FormRules<typeof registerForm>>({
   lastName: [
     { required: true, message: 'Введите Фамилию', trigger: 'blur' },
-    { min: 3, max: 50, message: 'Длина поля от 3 - 50', trigger: 'blur' },
+    { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
   ],
   firstName: [
     { required: true, message: 'Введите Имя', trigger: 'blur' },
-    { min: 3, max: 5, message: 'Длина поля от 3 - 50', trigger: 'blur' },
+    { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
   ],
   patronymic: [
     { required: true, message: 'Введите Отчество', trigger: 'blur' },
-    { min: 3, max: 50, message: 'Длина поля от 3 - 50', trigger: 'blur' },
+    { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
   ],
   phoneNums: [
     { required: true, message: 'Введите номер телефона', trigger: 'blur' },
@@ -185,7 +185,7 @@ const rulesstRegister = reactive<FormRules<typeof registerForm>>({
   ],
   email: [
     { required: true, message: 'Введите e-mail вдрес', trigger: 'blur', },
-    { type: 'email', message: 'Please input correct email address', trigger: 'blur', },
+    { type: 'email', message: 'email некорректен', trigger: 'blur', },
   ],
   username: [
     { required: true, message: 'Введите Логин', trigger: 'blur' },

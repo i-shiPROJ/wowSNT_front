@@ -35,7 +35,7 @@
 
           <div class="header-right">
             <wow-bell />
-
+            
             <!--             <div class="iconBlock">
               <div class="greenIndicator">
                 <div class="blinking-circle"></div>
@@ -43,13 +43,13 @@
               <wow-icon type="mdi" :path="$mdi.mdiChatOutline" />
             </div>
             -->
-            <div class="userSymbols bg-red-1 f-w-900">ГВ</div>
+            <wow-userIcon/>
           </div>
         </header>
 
         <div class="wrapper">
           <main class="main">
-            <slot name="main"/>
+            <slot name="main" />
             <!-- <div class="fc fc-row fc-wrap fc-justify-space-b">
               <wow-card v-for="(item, index) in items" :key="index" :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
                 <template #header>Header {{ item }}</template>
@@ -210,16 +210,7 @@ const objectMenu = menuObject;
           }
         }
 
-        .userSymbols {
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 50px;
-          height: 50px;
-          border-radius: 10px;
-          cursor: default;
-        }
+
       }
     }
 

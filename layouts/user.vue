@@ -43,7 +43,7 @@
               <wow-icon type="mdi" :path="$mdi.mdiChatOutline" />
             </div>
             -->
-            <div class="userSymbols bg-red-1 f-w-900">ГВ</div>
+            <wow-userIcon/>
           </div>
         </header>
 

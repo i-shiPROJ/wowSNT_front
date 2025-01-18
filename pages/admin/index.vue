@@ -7,20 +7,32 @@
           <template #body>
             <div class="fc fc-row fc-wrap fc-justify-space-b">
 
-              <wow-card :xs="1" :sm="2" :md="2" :lg="3" :xl="3">
-                <template #header><b>Новых сообющений</b></template>
+              <wow-card class="cur-pointer" :xs="1" :sm="2" :md="2" :lg="4" :xl="4" @click="switchMode()">
+                <template #header><b>Переключение режима</b></template>
+                <template #body>
+                  <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
+
+                    <wow-icon type="mdi" :path="$mdi.mdiHomeSwitchOutline"
+                      style="width: 70px; height: 70px;"></wow-icon>
+                      <span>Режим председателя</span>
+                  </div>
+                </template>
+              </wow-card>
+
+              <wow-card :xs="1" :sm="2" :md="2" :lg="4" :xl="4">
+                <template #header><b>Электронные обращения</b></template>
                 <template #body>
                   <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
 
                     <el-badge :value="2" class="item">
                       <wow-icon type="mdi" :path="$mdi.mdiEmailOutline" style="width: 70px; height: 70px;"></wow-icon>
                     </el-badge>
-                    
+
                   </div>
                 </template>
               </wow-card>
 
-              <wow-card :xs="1" :sm="2" :md="2" :lg="3" :xl="3">
+              <wow-card :xs="1" :sm="2" :md="2" :lg="4" :xl="4">
                 <template #header><b>Членские взносы за 2025</b></template>
                 <template #body>
                   <div class="row-col-1 fc fc-col fc-justify-end">
@@ -41,7 +53,7 @@
                 </template>
               </wow-card>
 
-              <wow-card :xs="1" :sm="2" :md="2" :lg="3" :xl="3">
+              <wow-card :xs="1" :sm="2" :md="2" :lg="4" :xl="4">
                 <template #header><b>Садоводы должны</b></template>
                 <template #body>
                   <div class="row-col-1 fc fc-col fc-align-end fc-justify-end">
@@ -80,8 +92,10 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 
-import { Minus, Plus } from '@element-plus/icons-vue'
+const router = useRouter();
+const switchMode = () => router.push('/user');
 
 const percentage = ref(20)
 const headerSumma = computed(() => {
@@ -97,18 +111,8 @@ const customColors = [
   { color: '#5cb87a', percentage: 100 },
 ]
 
-const increase = () => {
-  percentage.value += 10
-  if (percentage.value > 100) {
-    percentage.value = 100
-  }
-}
-const decrease = () => {
-  percentage.value -= 10
-  if (percentage.value < 0) {
-    percentage.value = 0
-  }
-}
+
+
 
 </script>
 
