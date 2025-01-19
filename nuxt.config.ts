@@ -31,7 +31,9 @@ export default defineNuxtConfig({
       pathPrefix: false,
     }
   ],
-
-
-
+  runtimeConfig: {
+    public: {
+      baseURL: 'http://185.42.14.187:8080'
+    }
+  },
 })

@@ -53,28 +53,38 @@ const router = useRouter();
 
 const toPageSignIn = () => router.push('/auth/signIn');
 const toPageRegister = () => {
-  router.push('/auth/registerQuestion');
-  // const data = getDataTest();
+  navigateTo('/auth/registerQuestion');
+  //router.push('/auth/registerQuestion');
+   //const data = getDataTest();
   // console.log(data);
 };
 const toPageRegisterSt = () => router.push('/auth/registerSt');
 
-const getDataTest = async (url = 'http://185.42.14.187:8080/snt', data = {}) => {
+const getDataTest = async (url = 'http://185.42.14.187:8080/person', data = {}) => {
   try {
     const response = await $fetch(url, {
       method: 'GET',
-      mode: 'no-cors',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX08iLCJST0xFX1AiXSwic3ViIjoiamFzb24iLCJpYXQiOjE3MzcyODQxMTYsImV4cCI6MTczNzI4NTkxNn0.keqOiywYvkrhlKKiBsrFupMKi5nn_KX5l9f2CeEQiO0`
       }
     });
-    return response.json();
+
+    // Check if the response is ok (status code in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Assuming response is JSON
+    const jsonResponse = await response.json();
+    console.log(jsonResponse);
+    return jsonResponse;
 
   } catch (error) {
-    console.error('error getDataTest', error);
+    console.error('Error in getDataTest:', error);
   }
-  //router.push('/auth/registerQuestion');
-
+  // Optionally redirect or handle errors differently
+  // router.push('/auth/registerQuestion');
 };
 
 

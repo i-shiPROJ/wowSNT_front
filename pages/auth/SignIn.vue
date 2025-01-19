@@ -1,13 +1,10 @@
 <template>
   <NuxtLayout name="auth">
     <div>
-
       <div>
-        <div class="padding-5-5  font-text-transform-uppercase">
-          Вход
-        </div>
+        <div class="padding-5-5 font-text-transform-uppercase">Вход</div>
 
-        <div class="el-p ">
+        <div class="el-p">
           <el-input v-model="login" style="width: 240px" placeholder="Логин">
             <template #prefix>
               <el-icon>
@@ -24,30 +21,55 @@
             </template>
           </el-input>
         </div>
-
       </div>
 
       <div class="btn-goup">
-        <el-button type="primary" style="width: 100%" round>
+        <el-button type="primary" style="width: 100%" round @click="signIn">
           <el-icon style="vertical-align: middle">
             <wow-icon type="mdi" :path="$mdi.mdiAccount"></wow-icon>
           </el-icon>
           <span style="vertical-align: middle"> Вход </span>
         </el-button>
       </div>
-
     </div>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
+import { ElMessage } from "element-plus";
+
 const { $mdi } = useNuxtApp();
 
-const login = ref('');
-const password = ref('');
+const login = ref("");
+const password = ref("");
 
+const signIn = async () => {
+    try {
+        const response = await fetch(`${useRuntimeConfig().public.baseURL}/auth`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username: login.value, password: password.value }),
+        });
 
+        if (!response.ok) {
+            throw new Error("Ошибка сети");
+        }
+
+        const data = await response.json();
+        //console.log(data);
+        // Сохраните токен в sessionStorage
+        sessionStorage.setItem("authToken", data.token);
+        ElMessage.success("Вы успешно авторизовались");
+        
+        //router.push('/user');
+    } catch (error) {
+        console.error("Error in signIn:", error);
+        ElMessage.error("Ошибка авторизации");
+    }
+};
 </script>
 
 <style lang="less" scoped>
@@ -58,5 +80,4 @@ const password = ref('');
 .btn-goup {
   padding: 25px 0px;
 }
-
 </style>
