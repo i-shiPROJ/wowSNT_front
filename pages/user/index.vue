@@ -29,13 +29,13 @@
                   <wow-icon class="icon" type="mdi" :path="$mdi.mdiTreeOutline"
                     style="width: 50px; height: 50px;"></wow-icon>
                   <div class="text f-w-900">
-                   Краснодаргорстрой 4 первомайская дом 20       
+                    Краснодаргорстрой 4 первомайская дом 20
                   </div>
                 </div>
                 <span>Адрес участка</span>
               </el-col>
 
-              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt">
+              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt" @click="toPageMessage('12')">
                 <div class="fc fc-row fc-align-end">
                   <wow-icon class="icon" type="mdi" :path="$mdi.mdiEmailOutline"
                     style="width: 50px; height: 50px;"></wow-icon>
@@ -46,7 +46,7 @@
                 <span>Сообщения</span>
               </el-col>
 
-              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt">
+              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt" @click="toPagePayment">
                 <div class="fc fc-row fc-align-end">
                   <wow-icon class="icon" type="mdi" :path="$mdi.mdiCurrencyRub"
                     style="width: 50px; height: 50px;"></wow-icon>
@@ -57,7 +57,7 @@
                 <span>Оплата</span>
               </el-col>
 
-              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt">
+              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt" @click="toPageDocsst">
                 <div class="fc fc-row fc-align-end">
                   <wow-icon class="icon" type="mdi" :path="$mdi.mdiFileDocumentMultipleOutline"
                     style="width: 50px; height: 50px;"></wow-icon>
@@ -68,20 +68,20 @@
                 <span>Документы снт</span>
               </el-col>
 
-              <el-col :xs="24" :sm="10" :md="3" :lg="3" :xl="1" class="widget-snt">
+              <el-col :xs="24" :sm="10" :md="3" :lg="3" :xl="1" class="widget-snt" @click="toPageNews">
                 <div class="fc fc-row fc-align-end">
                   <wow-icon class="icon" type="mdi" :path="$mdi.mdiNewspaperVariantOutline"
                     style="width: 50px; height: 50px;"></wow-icon>
                   <div class="text f-w-900">
-                    
+
                   </div>
                 </div>
                 <span>Новости СТ</span>
               </el-col>
 
-              <el-col :xs="24" :sm="10" :md="6" :lg="5" :xl="1" class="widget-snt">
+              <el-col :xs="24" :sm="10" :md="6" :lg="5" :xl="1" class="widget-snt" @click="toPageVote">
                 <div class="fc fc-row fc-align-end">
-                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiNewspaperVariantOutline"
+                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiBallotOutline"
                     style="width: 50px; height: 50px;"></wow-icon>
                   <div class="text f-w-900">
                     Новое голосование
@@ -132,6 +132,12 @@ definePageMeta({
   layout: 'user'
 })
 
+const toPageMessage = (id: string) => navigateTo(`/user/page-widgets/message/${id}`);
+const toPagePayment = () => navigateTo(`/user/page-widgets/payment/1`);
+const toPageDocsst = () => navigateTo(`/user/page-widgets/docsst/1`);
+const toPageNews = () => navigateTo(`/user/page-widgets/news/1`);
+const toPageVote = () => navigateTo(`/user/page-widgets/vote/1`);
+
 const switchMode = () => navigateTo('/admin');
 
 const percentage = ref(20);
@@ -159,7 +165,8 @@ const customColors = [
   flex-direction: column;
   justify-content: space-between;
   border-left: 4px solid #9AA1B7;
-  transition: color 0.9s ease, border-left-color 0.9s ease;;
+  transition: color 0.9s ease, border-left-color 0.9s ease;
+  ;
 
   .icon {
     width: 50px;
@@ -182,5 +189,4 @@ const customColors = [
     color: #F56C6C;
   }
 }
-
 </style>
