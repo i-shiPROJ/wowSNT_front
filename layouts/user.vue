@@ -34,7 +34,7 @@
           <div v-else></div>
 
           <div class="header-right">
-            <wow-bell />
+            <!-- <wow-bell /> -->
 
             <!--             <div class="iconBlock">
               <div class="greenIndicator">
@@ -72,7 +72,7 @@
 <script lang="ts" setup>
 import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { v6 as uuidv6 } from 'uuid';
-import { mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+import { mdiChartBar, mdiMonitorDashboard, mdiHomeAccount , mdiMenu } from '@mdi/js';
 //import { menuObject } from '~/pages/user/menuObject';
 
 
@@ -134,7 +134,7 @@ const menuObject = reactive([
     type: 'menuBtn',
     id: uuidv6(),
     settings: {
-      active: false,
+      active: true,
       name: 'Главная',
       icon: mdiMonitorDashboard,
       tooltip: '',
@@ -145,6 +145,20 @@ const menuObject = reactive([
     },
   },
   {
+    type: 'menuBtn',
+    id: uuidv6(),
+    settings: {
+      active: false,
+      name: 'Профиль',
+      icon: mdiHomeAccount,
+      tooltip: '',
+      url: '/user/edit-user',
+      functions: {
+        setActiveMenuItem
+      }
+    },
+  },
+  /* {
     type: 'labelGroup',
     id: uuidv6(),
     settings: {
@@ -186,61 +200,8 @@ const menuObject = reactive([
         setActiveMenuItem
       }
     },
-  },
-  {
-    type: 'menuBtn',
-    id: uuidv6(),
-    settings: {
-      active: false,
-      name: 'Юридическое лицо',
-      icon: mdiChartBar,
-      tooltip: 'Tooltip-5',
-      functions: {
-        setActiveMenuItem
-      }
-    },
-  },
-  {
-    type: 'treeNodeMenu',
-    id: uuidv6(),
-    settings: {
-      arrayNode: [
-        {
-          id: uuidv6(),
-          active: false,
-          name: 'Menu levels',
-          icon: mdiMenu,
-          children: [
-            {
-              id: uuidv6(),
-              active: false,
-              name: 'Element 1',
-              icon: null,
-              tooltip: 'Элемент1',
-              children: [
-                {
-                  id: uuidv6(),
-                  active: false,
-                  name: 'Element 1.1',
-                  icon: null,
-                  tooltip: '"Элемент 1.1"',
-                  children: []
-                }
-              ]
-            },
-            {
-              id: uuidv6(),
-              active: false,
-              name: 'Element 2',
-              tooltip: 'Element2',
-              icon: null,
-              children: []
-            },
-          ]
-        },
-      ]
-    },
-  },
+  }, */
+
 ]);
 
 </script>
@@ -292,6 +253,7 @@ const menuObject = reactive([
       background-color: rgba(249, 249, 249, 0.6);
       /* Полупрозрачный фон */
       backdrop-filter: blur(3px);
+      z-index: 2;
 
       .btn-menu {
         height: 50px;

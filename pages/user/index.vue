@@ -23,6 +23,18 @@
           <template #header>Членство в СНТ краснодаргорстрой</template>
           <template #body>
             <el-row>
+
+              <el-col :xs="24" :sm="10" :md="7" :lg="6" :xl="1" class="widget-snt">
+                <div class="fc fc-row fc-align-end">
+                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiTreeOutline"
+                    style="width: 50px; height: 50px;"></wow-icon>
+                  <div class="text f-w-900">
+                   Краснодаргорстрой 4 первомайская дом 20       
+                  </div>
+                </div>
+                <span>Адрес участка</span>
+              </el-col>
+
               <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt">
                 <div class="fc fc-row fc-align-end">
                   <wow-icon class="icon" type="mdi" :path="$mdi.mdiEmailOutline"
@@ -31,21 +43,53 @@
                     2 сообщ.
                   </div>
                 </div>
-
                 <span>Сообщения</span>
               </el-col>
+
               <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt">
                 <div class="fc fc-row fc-align-end">
                   <wow-icon class="icon" type="mdi" :path="$mdi.mdiCurrencyRub"
                     style="width: 50px; height: 50px;"></wow-icon>
                   <div class="text f-w-900">
-                    14500p.
+                    1458800p.
                   </div>
                 </div>
-
                 <span>Оплата</span>
-
               </el-col>
+
+              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt">
+                <div class="fc fc-row fc-align-end">
+                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiFileDocumentMultipleOutline"
+                    style="width: 50px; height: 50px;"></wow-icon>
+                  <div class="text f-w-900">
+                    Посмотреть документ СТ
+                  </div>
+                </div>
+                <span>Документы снт</span>
+              </el-col>
+
+              <el-col :xs="24" :sm="10" :md="3" :lg="3" :xl="1" class="widget-snt">
+                <div class="fc fc-row fc-align-end">
+                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiNewspaperVariantOutline"
+                    style="width: 50px; height: 50px;"></wow-icon>
+                  <div class="text f-w-900">
+                    
+                  </div>
+                </div>
+                <span>Новости СТ</span>
+              </el-col>
+
+              <el-col :xs="24" :sm="10" :md="6" :lg="5" :xl="1" class="widget-snt">
+                <div class="fc fc-row fc-align-end">
+                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiNewspaperVariantOutline"
+                    style="width: 50px; height: 50px;"></wow-icon>
+                  <div class="text f-w-900">
+                    Новое голосование
+                  </div>
+                </div>
+                <span>Голосование</span>
+              </el-col>
+
 
             </el-row>
           </template>
@@ -126,16 +170,16 @@ const customColors = [
   .text {
     width: calc(100% - 50px);
     text-align: end;
-    color: #dd6f48;
+    color: #F56C6C;
   }
 }
 
 .widget-snt:hover {
   border-left: 4px solid #dd6f48;
-  color: #dd6f48;
+  color: #F56C6C;
 
   .icon {
-    color: #dd6f48;
+    color: #F56C6C;
   }
 }
 
