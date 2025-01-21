@@ -95,7 +95,7 @@
                   <span>Документы снт</span>
                 </el-col>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="5" :xl="1" class="widget-snt cur-pointer" @click="toPageNews">
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageNews">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiNewspaperVariantOutline"
                       style="width: 50px; height: 50px;"></wow-icon>
