@@ -11,6 +11,7 @@
         <!--         <el-form-item label="Садовое товарищество" prop="sntId">
           <el-select-v2 v-model="registerForm.sntId" placeholder="Выбор СТ" :options="options" filterable />
         </el-form-item> -->
+        
 
         <div v-if="tabRegistration == 0">
           <el-form-item label="Фамилия" prop="lastName">
@@ -266,6 +267,8 @@ const searchCadastrNumber = async () => {
 const sendRegistration = () => {
   console.log(cadastralModel);
 }
+
+//TODO ДОБАВИТЬ проверку на поиск по кадастровому номеру, если нет кадастра или снт нет в поиске снт то выдать выпадающий список с СНТ
 
 
 
