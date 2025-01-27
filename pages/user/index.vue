@@ -41,7 +41,7 @@
           </el-col>
 
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <wow-card class="cur-pointer" >
+            <wow-card >
               <template #header>Адрес вашего участка</template>
               <template #body>
                 <div class="area-house">
