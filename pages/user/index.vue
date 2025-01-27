@@ -2,7 +2,7 @@
   <div>
 
     <el-row class="wow-user">
-      <el-col :xs="24" :sm="10" :md="6" :lg="6" :xl="7">
+      <el-col :xs="24" :sm="11" :md="6" :lg="6" :xl="7">
         <wow-card class="cur-pointer" @click="switchMode()">
           <template #header><b>Переключение режима</b></template>
           <template #body>
@@ -18,80 +18,109 @@
     </el-row>
 
     <el-row class="bbb">
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <wow-card class="cur-pointer" @click="switchMode()">
-          <template #header>Членство в СНТ краснодаргорстрой</template>
+
+      <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="5" class="wow-area-info">
+
+        <el-row>
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <wow-card class="cur-pointer" >
+              <template #header>СНТ краснодаргорстрой</template>
+              <template #body>
+                <div class="wow-stinfo">
+                  <div class="fc fc-col st-time">
+                    <div>пн: 18:00 - 20:00</div>
+                    <div>пт: 14:00 - 19:00</div>
+                    <div>сб: 10:00 - 15:00</div>
+                  </div>
+                  <div class="st-phone">
+                    тел: +79676878656
+                  </div>
+                </div>
+              </template>
+            </wow-card>
+          </el-col>
+
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <wow-card >
+              <template #header>Адрес вашего участка</template>
+              <template #body>
+                <div class="area-house">
+                  Краснодаргорстрой 4 первомайская дом 20
+                </div>
+              </template>
+            </wow-card>
+          </el-col>
+        </el-row>
+
+      </el-col>
+
+
+      <el-col :xs="24" :sm="24" :md="12" :lg="18" :xl="19" class="wow-area-widgets">
+        <wow-card class="">
+          <template #header>Действия в СНТ краснодаргорстрой</template>
           <template #body>
-            <el-row>
+            <div class="body-height">
+              <el-row>
 
-              <el-col :xs="24" :sm="10" :md="7" :lg="6" :xl="1" class="widget-snt">
-                <div class="fc fc-row fc-align-end">
-                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiTreeOutline"
-                    style="width: 50px; height: 50px;"></wow-icon>
-                  <div class="text f-w-900">
-                   Краснодаргорстрой 4 первомайская дом 20       
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageMessage('12')">
+                  <div class="fc fc-row fc-align-end">
+                    <wow-icon class="icon" type="mdi" :path="$mdi.mdiEmailOutline"
+                      style="width: 50px; height: 50px;"></wow-icon>
+                    <div class="text f-w-900">
+                      2 сообщ.
+                    </div>
                   </div>
-                </div>
-                <span>Адрес участка</span>
-              </el-col>
+                  <span>Сообщения</span>
+                </el-col>
 
-              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt">
-                <div class="fc fc-row fc-align-end">
-                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiEmailOutline"
-                    style="width: 50px; height: 50px;"></wow-icon>
-                  <div class="text f-w-900">
-                    2 сообщ.
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPagePayment">
+                  <div class="fc fc-row fc-align-end">
+                    <wow-icon class="icon" type="mdi" :path="$mdi.mdiCurrencyRub"
+                      style="width: 50px; height: 50px;"></wow-icon>
+                    <div class="text f-w-900">
+                      1458800p.
+                    </div>
                   </div>
-                </div>
-                <span>Сообщения</span>
-              </el-col>
+                  <span>Оплата</span>
+                </el-col>
 
-              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt">
-                <div class="fc fc-row fc-align-end">
-                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiCurrencyRub"
-                    style="width: 50px; height: 50px;"></wow-icon>
-                  <div class="text f-w-900">
-                    1458800p.
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageDocsst">
+                  <div class="fc fc-row fc-align-end">
+                    <wow-icon class="icon" type="mdi" :path="$mdi.mdiFileDocumentMultipleOutline"
+                      style="width: 50px; height: 50px;"></wow-icon>
+                    <div class="text f-w-900">
+                      Посмотреть документ СТ
+                    </div>
                   </div>
-                </div>
-                <span>Оплата</span>
-              </el-col>
+                  <span>Документы снт</span>
+                </el-col>
 
-              <el-col :xs="24" :sm="10" :md="5" :lg="4" :xl="1" class="widget-snt">
-                <div class="fc fc-row fc-align-end">
-                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiFileDocumentMultipleOutline"
-                    style="width: 50px; height: 50px;"></wow-icon>
-                  <div class="text f-w-900">
-                    Посмотреть документ СТ
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageNews">
+                  <div class="fc fc-row fc-align-end">
+                    <wow-icon class="icon" type="mdi" :path="$mdi.mdiNewspaperVariantOutline"
+                      style="width: 50px; height: 50px;"></wow-icon>
+                    <div class="text f-w-900">
+
+                    </div>
                   </div>
-                </div>
-                <span>Документы снт</span>
-              </el-col>
+                  <span>Новости СТ</span>
+                </el-col>
 
-              <el-col :xs="24" :sm="10" :md="3" :lg="3" :xl="1" class="widget-snt">
-                <div class="fc fc-row fc-align-end">
-                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiNewspaperVariantOutline"
-                    style="width: 50px; height: 50px;"></wow-icon>
-                  <div class="text f-w-900">
-                    
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageVote">
+                  <div class="fc fc-row fc-align-end">
+                    <wow-icon class="icon" type="mdi" :path="$mdi.mdiBallotOutline"
+                      style="width: 50px; height: 50px;"></wow-icon>
+                    <div class="text f-w-900">
+                      Новое голосование
+                    </div>
                   </div>
-                </div>
-                <span>Новости СТ</span>
-              </el-col>
+                  <span>Голосование</span>
+                </el-col>
 
-              <el-col :xs="24" :sm="10" :md="6" :lg="5" :xl="1" class="widget-snt">
-                <div class="fc fc-row fc-align-end">
-                  <wow-icon class="icon" type="mdi" :path="$mdi.mdiNewspaperVariantOutline"
-                    style="width: 50px; height: 50px;"></wow-icon>
-                  <div class="text f-w-900">
-                    Новое голосование
-                  </div>
-                </div>
-                <span>Голосование</span>
-              </el-col>
+              </el-row>
+            </div>
 
 
-            </el-row>
           </template>
         </wow-card>
       </el-col>
@@ -102,7 +131,7 @@
         <template #body>
           <div class="fc fc-row fc-wrap fc-justify-space-b">
 
-            <wow-card-col class="cur-pointer" :xs="1" :sm="2" :md="2" :lg="4" :xl="4" @click="switchMode()">
+            <wow-card-col class="cur-pointer" :xs="1" :sm="2" :md="2" :lg="6" :xl="4" @click="switchMode()">
               <template #header><b>Переключение режима</b></template>
       <template #body>
                 <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
@@ -132,6 +161,12 @@ definePageMeta({
   layout: 'user'
 })
 
+const toPageMessage = (id: string) => navigateTo(`/user/page-widgets/message/${id}`);
+const toPagePayment = () => navigateTo(`/user/page-widgets/payment/1`);
+const toPageDocsst = () => navigateTo(`/user/page-widgets/docsst/1`);
+const toPageNews = () => navigateTo(`/user/page-widgets/news/1`);
+const toPageVote = () => navigateTo(`/user/page-widgets/vote/1`);
+
 const switchMode = () => navigateTo('/admin');
 
 const percentage = ref(20);
@@ -148,39 +183,72 @@ const customColors = [
   width: 100%;
 }
 
-.widget-snt {
-  width: 100%;
-  height: 100px;
-  border: 1px dotted #E0E3EA;
-  border-radius: 10px;
-  padding: 10px;
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-left: 4px solid #9AA1B7;
-  transition: color 0.9s ease, border-left-color 0.9s ease;;
-
-  .icon {
-    width: 50px;
-    color: #9AA1B7;
-    transition: color 0.9s ease;
+.body-height {
+    min-height: 330px;
   }
 
-  .text {
-    width: calc(100% - 50px);
-    text-align: end;
-    color: #F56C6C;
+.wow-area-info {
+
+
+  .wow-stinfo {
+    height: 174px;
+    .st-time {
+      padding-left: 10px;
+      border-left: 4px solid #87af87;
+      
+    }
+
+    .st-phone {
+      padding: 10px 0;
+    }
   }
-}
 
-.widget-snt:hover {
-  border-left: 4px solid #dd6f48;
-  color: #F56C6C;
-
-  .icon {
-    color: #F56C6C;
+  .area-house {
+    padding-left: 10px;
+    border-left: 4px solid #8f3f71;
   }
 }
 
+.wow-area-widgets {
+  min-height: 340px;
+
+  .info-area-user {
+    padding: 0px 5px;
+  }
+
+  .widget-snt {
+    width: 100%;
+    min-height: 100px;
+    border: 1px dotted #E0E3EA;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 4px solid #9AA1B7;
+    transition: color 0.9s ease, border-left-color 0.9s ease;
+
+    .icon {
+      width: 50px;
+      color: #9AA1B7;
+      transition: color 0.9s ease;
+    }
+
+    .text {
+      width: calc(100% - 50px);
+      text-align: end;
+      color: #F56C6C;
+    }
+  }
+
+  .widget-snt:hover {
+    border-left: 4px solid #dd6f48;
+    color: #F56C6C;
+
+    .icon {
+      color: #F56C6C;
+    }
+  }
+}
 </style>
