@@ -5,13 +5,13 @@
         Регистрация пользователя
       </div>
 
-      <el-form ref="formRef" style="width: 450px" :model="registerForm" label-width="auto" class="demo-dynamic"
+      <el-form ref="formRef" style="width: 100%" :model="registerForm" label-width="auto" class="demo-dynamic"
         :rules="rules">
 
         <!--         <el-form-item label="Садовое товарищество" prop="sntId">
           <el-select-v2 v-model="registerForm.sntId" placeholder="Выбор СТ" :options="options" filterable />
         </el-form-item> -->
-        
+
 
         <div v-if="tabRegistration == 0">
           <el-form-item label="Фамилия" prop="lastName">
@@ -44,33 +44,55 @@
             <el-input v-model="registerForm.passwordConfirm" type="password" autocomplete="off" />
           </el-form-item>
         </div>
-        <div v-else="tabRegistration != 0">
+
+        <div v-else="tabRegistration != 0" class="wow-cadastr-number">
+          <!--  -->
           <el-input v-model="cadastralModel.cadastr_nmber" style="width: 100%;"
             placeholder="Введите кадастровый номер" />
 
           <div v-if="cadastralModel.modelObject.address">
-            <div class="">
-              Адрес вашего участка:
+            <div class="wow-adress">
+              <span class="tc-bright_red"> Адрес вашего участка:</span> <br />
               {{ cadastralModel.modelObject?.address }}
             </div>
-            <div>Заявка на вступление будет отправлена в СТ {{ nameST.title }}</div>
+            <div>
+              <div v-if="nameST.id">
+                <span class="tc-bright_red">Заявка на вступление будет отправлена в СТ:</span><br />
+                {{ nameST.title }}
+              </div>
+              <div v-else="!!nameST.id">
+                <el-form-item label="Садовое товарищество" prop="sntId">
+                  <el-select-v2 v-model="registerForm.sntId" placeholder="Выбор СТ" :options="options" filterable />
+                </el-form-item>
+              </div>
+            </div>
           </div>
 
         </div>
 
-        <div class="register-btn wow-w-100 fc fc-justify-center">
+        <div class="register-btn wow-w-100 fc fc-justify-center fc-wrap">
           <!-- <el-button @click="resetForm(formRef)">Сбросить форму</el-button> -->
           <el-button v-if="tabRegistration != 0" type="primary" @click="submitBackForm">Назад</el-button>
           <el-button v-else="tabRegistration == 0" type="primary" @click="submitNextForm(formRef)">Далее</el-button>
 
-          <el-button v-if="tabRegistration != 0" type="primary" @click="searchCadastrNumber()">Проверить
-            номер</el-button>
-          <el-button v-if="!!cadastralModel.modelObject.sntId" type="primary"
-            @click="sendRegistration()">Зарегистрироваться</el-button>
+          <el-button v-if="tabRegistration != 0" type="primary" @click="searchCadastrNumber()">
+            Проверить номер
+          </el-button><!-- sendRegistration() -->
+          <el-button v-if="!!cadastralModel.modelObject.sntId || !!registerForm.sntId" type="primary"
+            @click="dialogCaptcha = true">Зарегистрироваться</el-button>
         </div>
-        <!--         <el-form-item class="fc fc-justify-space-b">
 
-        </el-form-item> -->
+        <el-dialog v-model="dialogCaptcha" title="Проверка" width="500" align-center>
+          <p>Введите цифры ниже: <b>{{ captcha }}</b></p>
+          <el-input v-model="captchaInput" placeholder="Введите цифры"></el-input>
+          <template #footer>
+            <div class="dialog-footer">
+              <el-button @click="dialogCaptcha = false"> Отмена </el-button>
+              <el-button type="primary" @click="checkCaptcha"> Принять </el-button>
+            </div>
+          </template>
+        </el-dialog>
+
       </el-form>
     </div>
   </NuxtLayout>
@@ -84,6 +106,7 @@ import { ElMessage } from "element-plus";
 
 
 interface RegisterForm {
+  sntId: string,
   lastName: string,
   firstName: string,
   patronymic: string,
@@ -96,6 +119,7 @@ interface RegisterForm {
 
 const formRef = ref<FormInstance>()
 const registerForm = reactive<RegisterForm>({
+  sntId: '',
   lastName: '',
   firstName: '',
   patronymic: '',
@@ -144,9 +168,9 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
 }
 
 const rules = reactive<FormRules<typeof registerForm>>({
-  /*   sntId: [
-      { required: true, message: 'Выберите СТ', trigger: 'change', },
-    ], */
+  sntId: [
+    { required: false, message: 'Выберите СТ', trigger: 'change', },
+  ],
   lastName: [
     { required: true, message: 'Введите Фамилию', trigger: 'blur' },
     { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
@@ -232,7 +256,7 @@ interface cadastrInterface {
 };
 interface sntInterface {
   address: string,
-  id:number,
+  id: number,
   inn: string,
   ogrn: string,
   oktmoCode: string,
@@ -253,17 +277,75 @@ const searchCadastrNumber = async () => {
     cadastralModel.modelObject = await $fetch<cadastrInterface>(`${useRuntimeConfig().public.baseURL}/cadastral/${cadastralModel.cadastr_nmber}`, {
       method: 'GET'
     });
-    
+
     if (cadastralModel.modelObject.sntId) {
       nameST.value = await $fetch<sntInterface>(`${useRuntimeConfig().public.baseURL}/snt/${cadastralModel.modelObject.sntId}`);
+    } else {
+      registerForm.sntId = '';
+      nameST.value = {
+        address: '',
+        id: 0,
+        inn: '',
+        ogrn: '',
+        oktmoCode: '',
+        regDate: '',
+        title: ''
+      };
+      console.log('sss', registerForm.sntId, nameST);
     }
-    
+
     console.log(cadastralModel, nameST.value);
-  } catch (error) {
+  } catch (error: any) {
+
     console.error("Ошибка:", error);
-    ElMessage.error('Нет результата по такому кадастровому номеру');
+    if (error.response.status > 400 && error.response.status < 500) {
+      ElMessage.error('Скорее всего, что Вы ошиблись, попробуйте ввести кадастровый номер еще раз');
+      registerForm.sntId = '';
+      cadastralModel.modelObject = {
+        cadastralNum: '',
+        square: 0,
+        address: '',
+        sntId: 0
+      }
+    }
+
+    if (error.response.status > 500 && error.response.status < 600) {
+      ElMessage.info('Не удалось получить информацию из Росреестра, выберите Садовое товарищество!');
+      registerForm.sntId = '';
+      nameST.value = {
+        address: '',
+        id: 0,
+        inn: '',
+        ogrn: '',
+        oktmoCode: '',
+        regDate: '',
+        title: ''
+      };
+    }
+
   }
 };
+
+/* Captcha */
+const dialogCaptcha = ref(false);
+
+const generateCaptcha = () => {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+};
+
+let captchaInput = ref('');
+const captcha = ref(generateCaptcha());
+
+const checkCaptcha = () => {
+  if (captchaInput.value === captcha.value) {
+    sendRegistration(); // Вызов функции регистрации
+    dialogCaptcha.value = false; 
+  } else {
+    ElMessage.error('Неверная капча, попробуйте снова.');
+    captcha.value = generateCaptcha(); // Генерация новой капчи
+  }
+};
+
 const sendRegistration = () => {
   console.log(cadastralModel);
 }
@@ -279,6 +361,15 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <style lang="less" scoped>
+.wow-cadastr-number {
+  padding: 10px 0;
+
+  .wow-adress {
+    padding: 20px 0;
+
+  }
+}
+
 .el-p {
   padding: 10px 0px;
 }
@@ -289,5 +380,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 .register-btn {
   padding: 15px 0;
+  row-gap: 30px;
 }
 </style>
