@@ -1,68 +1,13 @@
 import { defineStore } from 'pinia'
+import type { Personinfo } from './interface/Personinfo';
 
-interface membershipsObj {
-  id: number,
-  snt: {
-    id: number,
-    inn: number,
-    ogrn: number,
-    regDate: string,
-    title: string,
-    oktmoCode: number,
-    address: string
-  },
-  role: {
-    code: string,
-    name: string
-  },
-  beginDate: string,
-  endDate: null,
-  isApproved: boolean
-};
-
-interface areaOwnershipsObj {
-  id: number,
-  area: {
-    id: number,
-    snt: {
-      id: number,
-      inn: number,
-      ogrn: number,
-      regDate: string,
-      title: string,
-      oktmoCode: number,
-      address: string
-    },
-    cadastralNum: string,
-    square: string,
-    residentsNum: string,
-    street: string,
-    houseNum: string
-  },
-  startDate: string,
-  part: string,
-  endDate: null
-}
-
-interface userInfo {
-  id: number,
-  lastName: string,
-  firstName: string,
-  patronymic: string,
-  phoneNums: string,
-  email: string,
-  username: string,
-  memberships: [membershipsObj],
-  areaOwnerships: [areaOwnershipsObj]
-};
-
-export const useCounterStore = defineStore('counter', {
+export const useUserStore = defineStore('user', {
   state: () => ({
-    count: 0
+    currentUser: {} as Personinfo,
   }),
   actions: {
-    increment() {
-      this.count++
-    }
+    setUser(user: Personinfo) {
+      this.currentUser = user;
+    },
   }
 })

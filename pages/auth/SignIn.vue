@@ -44,8 +44,6 @@ const { $mdi } = useNuxtApp();
 const login = ref("");
 const password = ref("");
 
-const toPageUser = () => navigateTo(`/user`);
-
 const signIn = async () => {
   try {
     const response = await fetch(`${useRuntimeConfig().public.baseURL}/auth`, {
@@ -69,8 +67,7 @@ const signIn = async () => {
     // Сохраните токен в sessionStorage
     sessionStorage.setItem("authToken", data.token);
     ElMessage.success("Вы успешно авторизовались");
-    toPageUser();
-    //router.push('/user');
+    navigateTo(`/user`)
   } catch (error) {
     console.error("Error in signIn:", error);
     ElMessage.error("Ошибка авторизации");

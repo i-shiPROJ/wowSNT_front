@@ -73,7 +73,46 @@
 import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { v6 as uuidv6 } from 'uuid';
 import { mdiChartBar, mdiMonitorDashboard, mdiHomeAccount , mdiMenu } from '@mdi/js';
+
 //import { menuObject } from '~/pages/user/menuObject';
+import { useUserStore } from '@/stores/userInfo'
+const userInfoStore = useUserStore()
+
+onBeforeMount(async()=>{
+  await getUserInfo();
+})
+
+const getUserInfo = async () => {
+  //console.log(sessionStorage.authToken);
+  try {
+    const response = await fetch(`${useRuntimeConfig().public.baseURL}/person/user-info`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.authToken}`,
+      },
+    });
+
+    if (response.status === 401) {
+      ElMessage.error("Ошибка авторизации");
+      navigateTo(`/auth/SignIn`);
+      return
+    }
+
+    if (!response.ok) {
+      throw new Error("Ошибка сети");
+    }
+
+    const data = await response.json();
+    userInfoStore.setUser(data);
+    console.log('store', userInfoStore.currentUser);
+
+    //router.push('/user');
+  } catch (error) {
+    console.error("Error in signIn:", error);
+    ElMessage.error("Ошибка запроса");
+  }
+}
 
 
 const isMobile = ref(false);

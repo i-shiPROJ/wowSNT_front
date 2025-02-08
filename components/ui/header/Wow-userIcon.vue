@@ -11,17 +11,14 @@
           <div>
             <span class="role">Председатель</span>
             <div class="">
-              <b>Григорьев Владислав Алексанедрович</b>
+              <b>{{ getFIO }}</b>
             </div>
-            <div class="">+79615069069</div>
+            <div class="">{{ getPhone }}</div>
           </div>
 
         </div>
 
         <div class="controls">
-          <div>
-            <el-button class="btnMavi" text>В режим садовода</el-button>
-          </div>
           <div>
             <el-button class="btnMavi" text>Настройки аккаунта</el-button>
           </div>
@@ -34,15 +31,27 @@
       </div>
 
       <template #reference>
-        <div class="userSymbols bg-red-1 f-w-900">ГВ</div>
+        <div class="userSymbols bg-red-1 f-w-900">{{getUserFI}}</div>
       </template>
     </el-popover>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/userInfo'
+const userInfoStore = useUserStore()
 
+const getUserFI = computed(() => {
+  return userInfoStore.currentUser?.firstName?.charAt(0) + userInfoStore.currentUser?.lastName?.charAt(0)
+});
 
+const getFIO = computed(()=>{
+return `${userInfoStore.currentUser?.lastName} ${userInfoStore.currentUser?.firstName}` 
+});
+
+const getPhone = computed(()=>{
+  return userInfoStore.currentUser.phoneNums
+});
 
 </script>
 
