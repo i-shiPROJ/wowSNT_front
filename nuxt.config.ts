@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     'element-plus/theme-chalk/display.css', // для дополнительных утилит
     '@/assets/less/global.less',
     '@/assets/less/flexclasses.less',
+    '@/assets/less/padding.less',
   ],
   vite: {
     css: {

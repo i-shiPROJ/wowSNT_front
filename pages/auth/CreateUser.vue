@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="auth">
     <div>
-      <div class="padding-5-5 font-text-transform-uppercase">
+      <div class="padding-20-5 font-text-transform-uppercase">
         Регистрация пользователя
       </div>
 
@@ -37,10 +37,10 @@
             <el-input v-model="registerForm.username" />
           </el-form-item>
 
-          <el-form-item label="Пароль" prop="password_">
+          <el-form-item label="Пароль" prop="password">
             <el-input v-model="registerForm.password" type="password" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="Повтор пароля" prop="passwordConfirm_">
+          <el-form-item label="Повтор пароля" prop="passwordConfirm">
             <el-input v-model="registerForm.passwordConfirm" type="password" autocomplete="off" />
           </el-form-item>
         </div>
@@ -52,13 +52,14 @@
 
           <div v-if="cadastralModel.modelObject.address">
             <div class="wow-adress">
-              <span class="tc-bright_red"> Адрес вашего участка:</span> <br />
-              {{ cadastralModel.modelObject?.address }}
+              <span class="tc-bright_red f-w-900"> Адрес вашего участка:</span> <br />
+              <span class="medium_brown_2"> {{ cadastralModel.modelObject?.address }} </span>
             </div>
             <div>
               <div v-if="nameST.id">
-                <span class="tc-bright_red">Заявка на вступление будет отправлена в СТ:</span><br />
-                {{ nameST.title }}
+                <span class="tc-bright_red f-w-900">Заявка на вступление будет отправлена в СТ:</span><br />
+                <span class="medium_brown_2">{{ nameST.title }}</span>
+                
               </div>
               <div v-else="!!nameST.id">
                 <el-form-item label="Садовое товарищество" prop="sntId">
@@ -77,21 +78,10 @@
 
           <el-button v-if="tabRegistration != 0" type="primary" @click="searchCadastrNumber()">
             Проверить номер
-          </el-button><!-- sendRegistration() -->
-          <el-button v-if="!!cadastralModel.modelObject.sntId || !!registerForm.sntId" type="primary"
-            @click="dialogCaptcha = true">Зарегистрироваться</el-button>
+          </el-button>
+          <el-button v-if="(!!cadastralModel.modelObject.sntId || !!registerForm.sntId) && tabRegistration != 0" type="primary"
+            @click="sendRegistration">Зарегистрироваться</el-button>
         </div>
-
-        <el-dialog v-model="dialogCaptcha" title="Проверка" width="500" align-center>
-          <p>Введите цифры ниже: <b>{{ captcha }}</b></p>
-          <el-input v-model="captchaInput" placeholder="Введите цифры"></el-input>
-          <template #footer>
-            <div class="dialog-footer">
-              <el-button @click="dialogCaptcha = false"> Отмена </el-button>
-              <el-button type="primary" @click="checkCaptcha"> Принять </el-button>
-            </div>
-          </template>
-        </el-dialog>
 
       </el-form>
     </div>
@@ -215,30 +205,6 @@ const submitNextForm = async (formEl: FormInstance | undefined) => {
         ElMessage.info('нормас');
         tabRegistration.value = 1;
 
-        /* try {
-                const response = await fetch(`${useRuntimeConfig().public.baseURL}/register`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(registerForm),
-                });
-        
-                if (!response.ok) {
-                  const errorData = await response.json();
-                  throw new Error(errorData.message);
-                }
-        
-                const data = await response.json();
-                // Сохраните токен в sessionStorage
-                sessionStorage.setItem("authToken", data.token);
-                //const token = sessionStorage.getItem("authToken");
-                ElMessage.success("Вы успешно Зарегистрировались");
-                ElMessage.success("Заявка на вступление в СТ отправлена");
-              } catch (error: any) {
-                console.error("Error in signIn:", error);
-                ElMessage.error(error.message);
-              } */
       }
 
     } else {
@@ -291,10 +257,8 @@ const searchCadastrNumber = async () => {
         regDate: '',
         title: ''
       };
-      console.log('sss', registerForm.sntId, nameST);
     }
 
-    console.log(cadastralModel, nameST.value);
   } catch (error: any) {
 
     console.error("Ошибка:", error);
@@ -326,28 +290,34 @@ const searchCadastrNumber = async () => {
   }
 };
 
-/* Captcha */
-const dialogCaptcha = ref(false);
-
-const generateCaptcha = () => {
-  return Math.floor(1000 + Math.random() * 9000).toString();
-};
-
-let captchaInput = ref('');
-const captcha = ref(generateCaptcha());
-
-const checkCaptcha = () => {
-  if (captchaInput.value === captcha.value) {
-    sendRegistration(); // Вызов функции регистрации
-    dialogCaptcha.value = false; 
-  } else {
-    ElMessage.error('Неверная капча, попробуйте снова.');
-    captcha.value = generateCaptcha(); // Генерация новой капчи
-  }
-};
 
 const sendRegistration = () => {
   console.log(cadastralModel);
+  
+        /* try {
+                const response = await fetch(`${useRuntimeConfig().public.baseURL}/register`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(registerForm),
+                });
+        
+                if (!response.ok) {
+                  const errorData = await response.json();
+                  throw new Error(errorData.message);
+                }
+        
+                const data = await response.json();
+                // Сохраните токен в sessionStorage
+                sessionStorage.setItem("authToken", data.token);
+                //const token = sessionStorage.getItem("authToken");
+                ElMessage.success("Вы успешно Зарегистрировались");
+                ElMessage.success("Заявка на вступление в СТ отправлена");
+              } catch (error: any) {
+                console.error("Error in signIn:", error);
+                ElMessage.error(error.message);
+              } */
 }
 
 //TODO ДОБАВИТЬ проверку на поиск по кадастровому номеру, если нет кадастра или снт нет в поиске снт то выдать выпадающий список с СНТ

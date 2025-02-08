@@ -2,14 +2,16 @@
   <div>
 
     <el-row class="wow-user">
-      <el-col :xs="24" :sm="11" :md="6" :lg="6" :xl="7">
+
+      <el-col v-for="(snt, index) in getArraySTRole_p" :key="snt.id" :xs="24" :sm="11" :md="6" :lg="6" :xl="7">
         <wow-card class="cur-pointer" @click="switchMode()">
           <template #header><b>Переключение режима</b></template>
           <template #body>
             <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
 
               <wow-icon type="mdi" :path="$mdi.mdiHomeSwitchOutline" style="width: 70px; height: 70px;"></wow-icon>
-              <span>Режим садовода</span>
+              <span>Управлять товариществом</span>
+              <span class="nameST"><b>{{ snt.snt.title }}</b></span>
             </div>
           </template>
         </wow-card>
@@ -17,14 +19,14 @@
 
     </el-row>
 
-    <el-row class="bbb">
+    <el-row v-for="area in getArraySTROLE_O" :key="area.id" class="bbb">
 
       <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="5" class="wow-area-info">
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <wow-card class="cur-pointer" >
-              <template #header>СНТ краснодаргорстрой</template>
+            <wow-card class="cur-pointer">
+              <template #header>{{ area.area.snt.title }}</template>
               <template #body>
                 <div class="wow-stinfo">
                   <div class="fc fc-col st-time">
@@ -35,18 +37,24 @@
                   <div class="st-phone">
                     тел: +79676878656
                   </div>
+                  <div class="st-phone">
+                    <span>ИНН: {{ area.area.snt.inn }}</span><br />
+                    <span>ОГРН: {{ area.area.snt.ogrn }}</span>
+                  </div>
                 </div>
               </template>
             </wow-card>
           </el-col>
 
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <wow-card >
+            <wow-card>
               <template #header>Адрес вашего участка</template>
               <template #body>
                 <div class="area-house">
-                  Краснодаргорстрой 4 первомайская дом 20
+                  <div>{{ area.area.cadastralNum }}</div>
+                  <div>Здесь будет адрес участка</div>
                 </div>
+
               </template>
             </wow-card>
           </el-col>
@@ -62,7 +70,8 @@
             <div class="body-height">
               <el-row>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageMessage('12')">
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer"
+                  @click="toPageMessage('12')">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiEmailOutline"
                       style="width: 50px; height: 50px;"></wow-icon>
@@ -73,7 +82,8 @@
                   <span>Сообщения</span>
                 </el-col>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPagePayment">
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer"
+                  @click="toPagePayment">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiCurrencyRub"
                       style="width: 50px; height: 50px;"></wow-icon>
@@ -156,6 +166,31 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { onMounted, computed } from 'vue';
+import { useUserStore } from '@/stores/userInfo'
+
+import type { Memberships } from '~/stores/interface/Memberships';
+import type { Ownerships } from '~/stores/interface/Ownerships';
+//const { $utils } = useNuxtApp();
+const userInfoStore = useUserStore()
+
+onMounted(async () => {
+  //await getUserInfo();
+  //loadMounInfo();
+  //console.log('useCounterStore', userInfo.currentUser);
+});
+
+const getArraySTRole_p = computed(() => {
+  //вовзрат массива для отображения кнопок по управлению снт, где есть роль 
+  return userInfoStore.currentUser.memberships ? userInfoStore.currentUser.memberships.filter((item: Memberships) => item.role.code === 'ROLE_P') : [];
+});
+
+const getArraySTROLE_O = computed(() => {
+  //вовзрат массива для отображения своих участков в садоводчестве, где нет даты окончания владения участком
+  return userInfoStore.currentUser.areaOwnerships ? userInfoStore.currentUser.areaOwnerships.filter((item: Ownerships) => !item.endDate) : [];
+});
+
+
 
 definePageMeta({
   layout: 'user'
@@ -184,18 +219,19 @@ const customColors = [
 }
 
 .body-height {
-    min-height: 330px;
-  }
+  min-height: 330px;
+}
 
 .wow-area-info {
 
 
   .wow-stinfo {
     height: 174px;
+
     .st-time {
       padding-left: 10px;
       border-left: 4px solid #87af87;
-      
+
     }
 
     .st-phone {
