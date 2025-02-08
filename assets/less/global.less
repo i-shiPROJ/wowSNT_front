@@ -34,6 +34,7 @@
 @dark_brown_3: #665c54;
 @dark_brown_4: #7c6f64;
 
+
 @dark_gray_0_hard: #1c1c1c;
 @dark_gray_0: #262626;
 @dark_gray_0_soft: #303030;
@@ -44,6 +45,7 @@
 @dark_gray_8: #d7d7d7;
 
 @medium_brown: #928374;
+@medium_brown_2: #A49986;
 @medium_gray: #8a8a8a;
 
 @light-gray_0: #F9F9F9;
@@ -195,6 +197,10 @@ h6 {
   color: @dark_gray_8;
 }
 
+.medium_brown_2 {
+  color: @medium_brown_2;
+}
+
 .tc-light-gray-0 {
   color: #E8EDF7;
 }
@@ -254,22 +260,19 @@ h6 {
 }
 
 /* scroll */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 10px;
-  /* Ширина скрола */
 }
 
 ::-webkit-scrollbar-track {
   background: #ffffff00;
-  /* Цвет фона скрола */
 }
 
 ::-webkit-scrollbar-thumb {
   background: #7c6f647c;
-  /* Цвет ползунка скрола */
   border-radius: 20px;
-  /* Закругление углов ползунка */
-}
+} */
+
 
 .cur-pointer {
   cursor: pointer;
@@ -277,14 +280,35 @@ h6 {
 
 .wow-dark {
 
+  /* закрашиваем фон автозаполнения */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    -webkit-box-shadow: inset 0 1px 4px 0 #d91a1a00,
+      /* Внутренняя тень */
+      inset 0 0 0 50px #2e2e2e,
+      /* Цвет фона */
+      0 1px rgba(255, 255, 255, 0.06) !important;
+    /* Наружная тень */
+    -webkit-text-fill-color: #bbb !important;
+  }
+
   .el-select {
     --el-border-color: #767676;
     --el-select-disabled-border: #767676;
     --el-select-multiple-input-color: #a8abb2;
   }
-  .el-select__placeholder{
+
+  .el-select__placeholder {
     color: #a8abb2;
   }
+
   .el-select__wrapper {
     background-color: #ffffff00;
     border-radius: #767676;

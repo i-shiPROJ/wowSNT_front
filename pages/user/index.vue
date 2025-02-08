@@ -23,7 +23,7 @@
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <wow-card class="cur-pointer" >
+            <wow-card class="cur-pointer">
               <template #header>СНТ краснодаргорстрой</template>
               <template #body>
                 <div class="wow-stinfo">
@@ -41,7 +41,7 @@
           </el-col>
 
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <wow-card >
+            <wow-card>
               <template #header>Адрес вашего участка</template>
               <template #body>
                 <div class="area-house">
@@ -62,7 +62,8 @@
             <div class="body-height">
               <el-row>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageMessage('12')">
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer"
+                  @click="toPageMessage('12')">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiEmailOutline"
                       style="width: 50px; height: 50px;"></wow-icon>
@@ -73,7 +74,8 @@
                   <span>Сообщения</span>
                 </el-col>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPagePayment">
+                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer"
+                  @click="toPagePayment">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiCurrencyRub"
                       style="width: 50px; height: 50px;"></wow-icon>
@@ -156,6 +158,44 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
+import { useCounterStore } from '@/stores/counter'
+const counter = useCounterStore()
+
+onMounted(() => {
+  loadMounInfo();
+  console.log('useCounterStore', counter.count);
+});
+
+const loadMounInfo = async () => {
+  console.log(sessionStorage.authToken);
+  try {
+    const response = await fetch(`${useRuntimeConfig().public.baseURL}/person/user-info`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.authToken}`,
+      },
+    });
+
+    if (response.status === 401) {
+      navigateTo(`/auth/signin`);
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error("Ошибка сети");
+    }
+
+    const data = await response.json();
+    console.log('data', data);
+
+    //router.push('/user');
+  } catch (error) {
+    console.error("Error in signIn:", error);
+    ElMessage.error("Ошибка запроса");
+  }
+}
 
 definePageMeta({
   layout: 'user'
@@ -184,18 +224,19 @@ const customColors = [
 }
 
 .body-height {
-    min-height: 330px;
-  }
+  min-height: 330px;
+}
 
 .wow-area-info {
 
 
   .wow-stinfo {
     height: 174px;
+
     .st-time {
       padding-left: 10px;
       border-left: 4px solid #87af87;
-      
+
     }
 
     .st-phone {

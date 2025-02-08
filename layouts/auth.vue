@@ -1,48 +1,32 @@
 <template>
-  <div class="wow-dark auth-layout fc fc-justify-center tc-dark_gray_0_soft tc-dark-gray-4">
-    <div class="auth-panel fc fc-row fc-wrap fc-justify-space-b">
-      <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2" :style="{ width: '50%' }">
-        <template #body>
+  <div class=" auth-layout wow-dark tc-dark_gray_0_soft tc-dark-gray-4">
+    <el-row class="auth-panel" :gutter="10">
+
+      <el-col :xs="24" :sm="12">
+        <div class="auth-panel ">
           <div class="bodyLogo fc fc-align-center fc-justify-center">
             wow-SNT
           </div>
-        </template>
-      </wow-col>
-      <wow-col :xs="1" :sm="1" :md="2" :lg="2" :xl="2" :style="{ width: '50%' }">
-        <template #body>
-          <div class="forms fc fc-col fc-justify-center">
-            <div class="bodyForm fc fc-align-center fc-justify-center">
-              <slot />
-            </div>
-            <div class="footer fc fc-col fc-justify-center ">
-              <div class="padding-5-5 fc fc-justify-center">
-                <el-button link @click="toPageSignIn"> вход </el-button>
-                <el-button link @click="toPageRegister"> регистрация </el-button>
-              </div>
+        </div>
+      </el-col>
+
+      <el-col :xs="24" :sm="12">
+        <div class="forms fc fc-col fc-justify-center">
+          <div class="bodyForm ">
+            <slot />
+          </div>
+          <div class="footer ">
+            <div class="padding-5-5 fc fc-justify-center">
+              <el-button link @click="toPageSignIn"> вход </el-button>
+              <el-button link @click="toPageRegister"> регистрация </el-button>
             </div>
           </div>
+        </div>
+      </el-col>
 
-        </template>
-      </wow-col>
-    </div>
+    </el-row>
 
-    <!--     <div class="logo">logo</div>
-    <div class="body">controll</div> -->
   </div>
-
-  <!--  <el-row class=" auth-layout bg-dark-brown-0" justify="center" align="middle">
-    <el-col class="wow-card-col-auth tc-brown-0" :xs="22" :sm="7" :md="6" :lg="5" :xl="4">
-      <div class="wow-header-auth ">
-        <slot name="header" />
-      </div>
-      <div class="wow-body-auth">
-        <slot />
-      </div>
-      <div class="wow-footer-auth">
-        footer
-      </div>
-    </el-col>
-  </el-row> -->
 
 </template>
 
@@ -55,7 +39,7 @@ const toPageSignIn = () => router.push('/auth/signIn');
 const toPageRegister = () => {
   navigateTo('/auth/registerQuestion');
   //router.push('/auth/registerQuestion');
-   //const data = getDataTest();
+  //const data = getDataTest();
   // console.log(data);
 };
 const toPageRegisterSt = () => router.push('/auth/registerSt');
@@ -92,20 +76,16 @@ const getDataTest = async (url = 'http://185.42.14.187:8080/person', data = {}) 
 
 <style lang="less" scoped>
 .auth-layout {
-  width: 100%;
   height: 100%;
-  overflow: auto;
-
-  @media (max-width: 768px) {
+  width: 100%;
+  /* overflow: hidden; */
+  /*     @media (max-width: 768px) {
     overflow-y: scroll;
-    /* Включите вертикальную прокрутку для мобильных устройств */
-  }
+  } */
 
   .auth-panel {
-    width: 1000px;
-    ;
-    /* border: 1px solid #fff; */
-    padding: 5px;
+    height: 100%;
+    width: 100%;
 
     .bodyLogo {
       font-size: 2rem;
@@ -119,15 +99,33 @@ const getDataTest = async (url = 'http://185.42.14.187:8080/person', data = {}) 
     }
 
     .bodyForm {
-      min-height: 300px;
+      /* max-width: 550px; */
       border-width: 0 0 0 1px;
       border-style: solid;
       border-image: linear-gradient(to bottom, #303030, #767676, #303030) 1;
-      padding: 5px;
+      padding: 0px 40px;
+
+      @media (min-width: 1200px) {
+        max-width: 550px;
+      }
+
+      @media (max-width: 450px) {
+        padding: 0px 10px;
+      }
     }
 
     .footer {
       width: 100%;
+
+      >div {
+        padding: 0px 40px;
+
+        @media (min-width: 1200px) {
+          max-width: 550px;
+
+        }
+      }
+
 
       .el-button.is-link {
         color: #66999d;
@@ -140,55 +138,6 @@ const getDataTest = async (url = 'http://185.42.14.187:8080/person', data = {}) 
   }
 
 
-  /*   .wow-card-col-auth {
-    height: 400px;
-    border-radius: 15px;
 
-    border: 1px solid;
-    border-color: #3d3d3e;
-
-    background: 
-    linear-gradient(rgba(29, 32, 33, 0.7), rgba(124, 111, 100, 0.7)),
-    url('/public/pick/park_krd_800.jpg');
-  background-size: cover;
-
-    background-position: center center;
-    
-    
-    box-shadow: 0px 0px 20px 2px #00000075;
-
-    .wow-header-auth {
-      border-radius: 15px 15px 0px 0px;
-      margin: 35px 10px 0px 51px;
-      font-size: 2rem;
-    }
-
-    .wow-body-auth {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 10px;
-    }
-
-    .wow-footer-auth {
-      padding: 10px;
-      border-radius: 0px 0px 15px 15px;
-      height: 30px;
-    }
-  }
-
-
-
-
-
-  .second {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .slot {} */
 }
 </style>
