@@ -1,18 +1,15 @@
 <template>
   <div class="common-layout">
 
-    <!--     <div class="aside bg-dark-brown-0" >
-      <admin-menu></admin-menu>
-    </div> -->
-    <el-col class="leftPanel" :xs="0" :sm="4">
-      <div class="aside bg-blue_0 " v-if="!isMobile">
+    <div class="leftPanel" v-if="!isMobile">
+      <div class="aside bg-blue_0 ">
         <div class="logo fc fc-align-center fc-justify-center tc-light-gray-0">wowSNT</div>
         <wow-tree-menu :objectMenu="menuObject"></wow-tree-menu>
         <!-- <admin-menu /> -->
       </div>
-    </el-col>
+    </div>
 
-    <el-col :xs="24" :sm="20" class="bg-light-gray-0">
+    <div class="body bg-light-gray-0">
       <div class="wow-container tc-gray-0">
 
         <div v-if="isMobile">
@@ -64,7 +61,7 @@
           </footer>
         </div>
       </div>
-    </el-col>
+    </div>
 
   </div>
 </template>
@@ -258,7 +255,12 @@ const menuObject = reactive([
   .leftPanel {
     box-shadow: 1px 0 20px 0 #3f4d67;
     z-index: 2;
-    min-width: 200px;
+    width: 300px;
+    height: 100%;
+  }
+
+  .body{
+    flex: 1;
   }
 
   .aside {
@@ -277,7 +279,7 @@ const menuObject = reactive([
 
     @media (max-width: 768px) {
       padding-right: 15px;
-      padding-bottom: 15px;
+      /* padding-bottom: 15px; */
       padding-left: 16px;
     }
 

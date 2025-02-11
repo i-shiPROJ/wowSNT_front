@@ -24,7 +24,7 @@
           </div>
 
           <div class="out">
-            <el-button class="btnMavi" type="danger" text>Выход</el-button>
+            <el-button class="btnMavi" type="danger" text @click="userExit">Выход</el-button>
           </div>
         </div>
 
@@ -52,6 +52,10 @@ return `${userInfoStore.currentUser?.lastName} ${userInfoStore.currentUser?.firs
 const getPhone = computed(()=>{
   return userInfoStore.currentUser.phoneNums
 });
+
+const userExit = () => {
+  userInfoStore.logout();
+}
 
 </script>
 

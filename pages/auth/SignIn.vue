@@ -15,11 +15,11 @@
         </div>
 
         <div class="el-p fc fc-justify-center">
-          <el-input v-model="password" style="width: 240px" type="password" placeholder="Пароль" show-password>
+            <el-input v-model="password" style="width: 240px" type="password" placeholder="Пароль" show-password @keyup.enter="signIn">
             <template #prefix>
               <wow-icon type="mdi" :path="$mdi.mdiKey" />
             </template>
-          </el-input>
+            </el-input>
         </div>
       </div>
 

@@ -1,18 +1,15 @@
 <template>
   <div class="common-layout">
 
-    <!--     <div class="aside bg-dark-brown-0" >
-      <admin-menu></admin-menu>
-    </div> -->
-    <el-col class="leftPanel" :xs="0" :sm="4">
-      <div class="aside bg-blue_0 " v-if="!isMobile">
+    <div class="leftPanel" v-if="!isMobile">
+      <div class="aside bg-blue_0 ">
         <div class="logo fc fc-align-center fc-justify-center tc-light-gray-0">wowSNT</div>
         <wow-tree-menu :objectMenu="menuObject"></wow-tree-menu>
         <!-- <admin-menu /> -->
       </div>
-    </el-col>
+    </div>
 
-    <el-col :xs="24" :sm="20" class="bg-light-gray-0">
+    <div class="body bg-light-gray-0">
       <div class="wow-container tc-gray-0">
 
         <div v-if="isMobile">
@@ -35,7 +32,7 @@
 
           <div class="header-right">
             <wow-bell />
-            
+
             <!--             <div class="iconBlock">
               <div class="greenIndicator">
                 <div class="blinking-circle"></div>
@@ -43,7 +40,7 @@
               <wow-icon type="mdi" :path="$mdi.mdiChatOutline" />
             </div>
             -->
-            <wow-userIcon/>
+            <wow-userIcon />
           </div>
         </header>
 
@@ -71,19 +68,57 @@
           </footer>
         </div>
       </div>
-    </el-col>
+    </div>
 
   </div>
 </template>
 
 <script lang="ts" setup>
 import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
-
 import { menuObject } from '~/pages/admin/menuObject';
+import { useUserStore } from '~/stores/userInfo';
+
+const userInfoStore = useUserStore();
+
+
+onBeforeMount(async () => {
+  await getUserInfo();
+})
+
+const getUserInfo = async () => {
+  //console.log(sessionStorage.authToken);
+  try {
+    const response = await fetch(`${useRuntimeConfig().public.baseURL}/person/user-info`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.authToken}`,
+      },
+    });
+
+    if (response.status === 401) {
+      ElMessage.error("Ошибка авторизации");
+      navigateTo(`/auth/SignIn`);
+      return
+    }
+
+    if (!response.ok) {
+      throw new Error("Ошибка сети");
+    }
+
+    const data = await response.json();
+    userInfoStore.setUser(data);
+    console.log('store', userInfoStore.currentUser);
+
+    //router.push('/user');
+  } catch (error) {
+    console.error("Error in signIn:", error);
+    ElMessage.error("Ошибка запроса");
+  }
+}
 
 const isMobile = ref(false);
 const drawerVisible = ref(false);
-const items = 100;
 
 const toggleMenu = () => {
   settingsWowPanel.show = !settingsWowPanel.show; // Переключение состояния видимости
@@ -140,7 +175,12 @@ const objectMenu = menuObject;
   .leftPanel {
     box-shadow: 1px 0 20px 0 #3f4d67;
     z-index: 2;
-    min-width: 200px;
+    width: 300px;
+    height: 100%;
+  }
+
+  .body {
+    flex: 1;
   }
 
   .aside {
@@ -159,7 +199,7 @@ const objectMenu = menuObject;
 
     @media (max-width: 768px) {
       padding-right: 15px;
-      padding-bottom: 15px;
+      /* padding-bottom: 15px; */
       padding-left: 16px;
     }
 
@@ -174,6 +214,7 @@ const objectMenu = menuObject;
       background-color: rgba(249, 249, 249, 0.6);
       /* Полупрозрачный фон */
       backdrop-filter: blur(3px);
+      z-index: 2;
 
       .btn-menu {
         height: 50px;
