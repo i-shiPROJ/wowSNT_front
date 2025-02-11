@@ -4,7 +4,7 @@
     <el-row class="wow-user">
 
       <el-col v-for="(snt, index) in getArraySTRole_p" :key="snt.id" :xs="24" :sm="11" :md="6" :lg="6" :xl="7">
-        <wow-card class="cur-pointer" @click="switchMode()">
+        <wow-card class="cur-pointer" @click="switchMode(snt.snt.id)">
           <template #header><b>Переключение режима</b></template>
           <template #body>
             <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
@@ -202,7 +202,7 @@ const toPageDocsst = () => navigateTo(`/user/page-widgets/docsst/1`);
 const toPageNews = () => navigateTo(`/user/page-widgets/news/1`);
 const toPageVote = () => navigateTo(`/user/page-widgets/vote/1`);
 
-const switchMode = () => navigateTo('/admin');
+const switchMode = (id:number) => navigateTo(`/admin/${id}`);
 
 const percentage = ref(20);
 const customColors = [
