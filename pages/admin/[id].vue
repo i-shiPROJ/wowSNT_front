@@ -19,14 +19,31 @@
 
         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="7">
           <wow-card class="cur-pointer" @click="switchMode()">
+            <template #header><b>Заявки на вступление</b></template>
+            <template #body>
+              <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
+                <wow-badge>
+                  <template #icon>
+                    <wow-icon type="mdi" :path="$mdi.mdiHomePlusOutline" style="width: 70px; height: 70px;"></wow-icon>
+                  </template>
+                  <template #value>3</template>
+                </wow-badge>
+              </div>
+            </template>
+          </wow-card>
+        </el-col>
+
+        <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="7">
+          <wow-card class="cur-pointer" @click="switchMode()">
             <template #header><b>Электронные обращения</b></template>
             <template #body>
               <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
-
-                <el-badge :value="2" class="item">
-                  <wow-icon type="mdi" :path="$mdi.mdiEmailOutline" style="width: 70px; height: 70px;"></wow-icon>
-                </el-badge>
-
+                <wow-badge>
+                  <template #icon>
+                    <wow-icon type="mdi" :path="$mdi.mdiEmailOutline" style="width: 70px; height: 70px;"></wow-icon>
+                  </template>
+                  <template #value>2</template>
+                </wow-badge>
               </div>
             </template>
           </wow-card>
@@ -88,9 +105,7 @@ const router = useRouter();
 const switchMode = () => router.push('/user');
 
 onMounted(() => {
-  const route = useRoute();
-
-  if((checkAdminST()).length === 0) {
+  if ((checkAdminST()).length === 0) {
     router.push('/user');
   }
 });
@@ -121,6 +136,8 @@ const customColors = [
 </script>
 
 <style scoped>
+
+
 .row-col-1 {
   height: 65px;
 
