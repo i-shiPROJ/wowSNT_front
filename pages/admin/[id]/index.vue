@@ -5,19 +5,19 @@
       <el-row class="">
 
         <el-col :xs="24" :sm="11" :md="6" :lg="6" :xl="7">
-        <wow-card class="cur-pointer" @click="switchMode()">
-          <template #header><b>Переключение режима</b></template>
-          <template #body>
-            <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
-              <wow-icon type="mdi" :path="$mdi.mdiHomeSwitchOutline" style="width: 70px; height: 70px;"></wow-icon>
-              <span>В кабинет садовода</span>
-            </div>
-          </template>
-        </wow-card>
-      </el-col>
+          <wow-card class="cur-pointer" @click="switchMode()">
+            <template #header><b>Переключение режима</b></template>
+            <template #body>
+              <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
+                <wow-icon type="mdi" :path="$mdi.mdiHomeSwitchOutline" style="width: 70px; height: 70px;"></wow-icon>
+                <span>В кабинет садовода</span>
+              </div>
+            </template>
+          </wow-card>
+        </el-col>
 
         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="7">
-          <wow-card class="cur-pointer" @click="switchMode()">
+          <wow-card class="cur-pointer" @click="navToSolujtion()">
             <template #header><b>Заявки на вступление</b></template>
             <template #body>
               <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
@@ -32,7 +32,7 @@
         </el-col>
 
         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="7">
-          <wow-card class="cur-pointer" @click="switchMode()">
+          <wow-card class="cur-pointer">
             <template #header><b>Электронные обращения</b></template>
             <template #body>
               <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
@@ -114,6 +114,23 @@ const checkAdminST = () => {
   return userInfoStore.currentUser.memberships ? userInfoStore.currentUser.memberships.filter((item: Memberships) => item.role.code === 'ROLE_P' && item.snt.id === Number(route.params.id)) : [];
 }
 
+const navToSolujtion = () => {
+  const currentRoute = router.currentRoute.value;
+  navigateTo(`/admin/${currentRoute.params.id}/solution`);
+  /*   console.log({
+      path: currentRoute.path,
+      name: currentRoute.name,
+      params: currentRoute.params,
+      query: currentRoute.query,
+      fullPath: currentRoute.fullPath,
+      hash: currentRoute.hash,
+      matched: currentRoute.matched,
+      redirectedFrom: currentRoute.redirectedFrom
+    }); */
+
+  //navigateTo(router.'/admin/solution');
+}
+
 const percentage = ref(20)
 const headerSumma = computed(() => {
   return 45463322
@@ -134,8 +151,6 @@ const customColors = [
 </script>
 
 <style scoped>
-
-
 .row-col-1 {
   height: 65px;
 
