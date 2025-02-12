@@ -1,8 +1,8 @@
 <template>
   <div class="wow-icon-badge">
-    <slot name="icon"/>
+    <slot name="icon" />
     <div class="badge" :class="classes">
-      <slot name="value"/>
+      <span> <b>{{ props.value }}</b> </span>
     </div>
   </div>
 </template>
@@ -10,6 +10,11 @@
 <script setup lang="ts">
 
 const props = defineProps({
+  value: {
+    type: Number,
+    default: 0
+  },
+
   position: {
     type: String,
     default: 'badge-right-down'
@@ -40,11 +45,12 @@ const classes = computed(() => {
     transform: translate(-50%, -50%);
     height: 30px;
     width: 30px;
-    border-radius: 15px;
+    border-radius: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
+    border: 3px solid #fff;
   }
 
   .badge-color {
@@ -55,6 +61,6 @@ const classes = computed(() => {
     top: 70%;
     left: 80%;
   }
-        
+
 }
 </style>

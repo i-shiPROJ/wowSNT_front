@@ -4,29 +4,27 @@
 
       <el-row class="">
 
-        <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="7">
-          <wow-card class="cur-pointer" @click="switchMode()">
-            <template #header><b>Переключение режима</b></template>
-            <template #body>
-              <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
-
-                <wow-icon type="mdi" :path="$mdi.mdiHomeSwitchOutline" style="width: 70px; height: 70px;"></wow-icon>
-                <span>В кабинет садовода</span>
-              </div>
-            </template>
-          </wow-card>
-        </el-col>
+        <el-col :xs="24" :sm="11" :md="6" :lg="6" :xl="7">
+        <wow-card class="cur-pointer" @click="switchMode()">
+          <template #header><b>Переключение режима</b></template>
+          <template #body>
+            <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
+              <wow-icon type="mdi" :path="$mdi.mdiHomeSwitchOutline" style="width: 70px; height: 70px;"></wow-icon>
+              <span>В кабинет садовода</span>
+            </div>
+          </template>
+        </wow-card>
+      </el-col>
 
         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="7">
           <wow-card class="cur-pointer" @click="switchMode()">
             <template #header><b>Заявки на вступление</b></template>
             <template #body>
               <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
-                <wow-badge>
+                <wow-badge :value="2">
                   <template #icon>
                     <wow-icon type="mdi" :path="$mdi.mdiHomePlusOutline" style="width: 70px; height: 70px;"></wow-icon>
                   </template>
-                  <template #value>3</template>
                 </wow-badge>
               </div>
             </template>
@@ -38,7 +36,7 @@
             <template #header><b>Электронные обращения</b></template>
             <template #body>
               <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
-                <wow-badge>
+                <wow-badge :value="3">
                   <template #icon>
                     <wow-icon type="mdi" :path="$mdi.mdiEmailOutline" style="width: 70px; height: 70px;"></wow-icon>
                   </template>

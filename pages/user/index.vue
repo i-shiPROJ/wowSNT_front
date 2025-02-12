@@ -8,7 +8,6 @@
           <template #header><b>Переключение режима</b></template>
           <template #body>
             <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
-
               <wow-icon type="mdi" :path="$mdi.mdiHomeSwitchOutline" style="width: 70px; height: 70px;"></wow-icon>
               <span>Управлять товариществом</span>
               <span class="nameST"><b>{{ snt.snt.title }}</b></span>
