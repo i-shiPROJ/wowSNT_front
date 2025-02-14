@@ -174,13 +174,14 @@ const objectMenu = menuObject;
 
   .leftPanel {
     box-shadow: 1px 0 20px 0 #3f4d67;
-    z-index: 2;
+    z-index: 4;
     width: 300px;
     height: 100%;
   }
 
   .body {
     flex: 1;
+    width: 100%
   }
 
   .aside {
@@ -193,14 +194,15 @@ const objectMenu = menuObject;
 
   .wow-container {
     overflow-y: auto;
-    height: 100vh;
-    max-height: 100vh;
-    padding: 0 1.5rem;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    /* padding: 0 1.5rem; */
 
     @media (max-width: 768px) {
-      padding-right: 15px;
       /* padding-bottom: 15px; */
-      padding-left: 16px;
+      /* padding-right: 15px;
+      padding-left: 16px; */
     }
 
     .header {
@@ -214,7 +216,7 @@ const objectMenu = menuObject;
       background-color: rgba(249, 249, 249, 0.6);
       /* Полупрозрачный фон */
       backdrop-filter: blur(3px);
-      z-index: 2;
+      z-index: 3;
 
       .btn-menu {
         height: 50px;
@@ -259,6 +261,7 @@ const objectMenu = menuObject;
       min-height: calc(100% - 73px);
       display: flex;
       flex-direction: column;
+      width: 99%;
       /*       overflow-y: auto; 
       max-height: calc(100vh - 73px) */
       ;
@@ -266,6 +269,7 @@ const objectMenu = menuObject;
 
     .main {
       flex: 1;
+      width: 100%;
     }
 
     .footer {

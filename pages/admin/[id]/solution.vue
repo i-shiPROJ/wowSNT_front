@@ -9,10 +9,18 @@
             <template #header><b>Список заявок</b></template>
             <template #body>
 
-              <el-table :data="testDatas" border style="width: 100%;margin-top:10px">
-                <el-table-column v-if="columnList.length > 0" type="index" :label="'编号'" :width="50"></el-table-column>
-                <el-table-column v-for="(col, idx) in columnList" :key="col.prop" :prop="col.prop" :label="col.label"
-                  :index="idx" />
+              <el-table :data="solutionData" style="width: 100%">
+                <el-table-column v-for="item in getColumns()" :key="item.prop" :prop="item.prop" :label="item.label" min-width="100"/>
+
+                <el-table-column fixed="right" min-width="100">
+                  <template #default>
+                    <el-button link type="primary" size="small" @click="handleClick">
+                      <el-button type="primary">открыть</el-button>
+                    </el-button>
+
+                  </template>
+                </el-table-column>
+              
               </el-table>
 
             </template>
@@ -27,40 +35,32 @@
 <script setup lang="ts">
 import { useUserStore } from '~/stores/userInfo';
 
+interface DataSolutionType {
+  cadastralNum: string;
+  email: string;
+  firstName: string;
+  id: number;
+  isProcessed: boolean;
+  lastName: string;
+  patronymic: string;
+  phoneNum: string;
+  processDate: string;
+  requestDate: string;
+}
+
+interface ColumnType {
+  prop: string;
+  label: string;
+}
+
 const userInfoStore = useUserStore();
 
 const router = useRouter();
 const currentRoute = router.currentRoute.value;
 
-const columnList = [
-  { prop: "name", label: '姓名' },
-  { prop: "age", label: '年龄' },
-  { prop: "city", label: '城市' },
-  { prop: "tel", label: '电话' }
-];
+const solutionData = ref<DataSolutionType[]>([]);
 
-const testDatas= [
-  { name: '张三', age: 24, city: '广州', tel: '13312345678' },
-  { name: '李四', age: 25, city: '九江', tel: '18899998888' }
-];
-
-  onMounted(() => {
-    console.log(currentRoute.params);
-    /*   console.log({
-        path: currentRoute.path,
-        name: currentRoute.name,
-        params: currentRoute.params,
-        query: currentRoute.query,
-        fullPath: currentRoute.fullPath,
-        hash: currentRoute.hash,
-        matched: currentRoute.matched,
-        redirectedFrom: currentRoute.redirectedFrom
-      }); */
-    //getSolutioon();
-  })
-
-///register-request/solution/{id} - кнопка готово и отклонить еще не готово
-const getSolutioon = async () => {
+onMounted(async () => {
   try {
     const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request/not-processed/${currentRoute.params.id}`, {
       method: "get",
@@ -70,56 +70,45 @@ const getSolutioon = async () => {
       },
     });
 
-    console.log(response.status);
-
     if (response.status === 401) {
       ElMessage.error("Ошибка авторизации");
       navigateTo(`/auth/SignIn`);
-      return
+      return;
     }
 
-    if (!response.ok) {
-      throw new Error("Ошибка сети");
-    }
+    if (!response.ok) throw new Error("Ошибка сети");
 
-    const data = await response.json();
-    console.log(data);
-    //userInfoStore.setUser(data);
-    //console.log('store', userInfoStore.currentUser);
-
-    //router.push('/user');
+    const rawData = await response.json();
+    console.log(rawData);
+    solutionData.value = rawData.map((item: any) => ({
+      cadastralNum: item.cadastralNum,
+      email: item.email,
+      lastName: item.lastName,
+      firstName: item.firstName,
+      phoneNum: item.phoneNum,
+      requestDate: item.requestDate,
+    }));
   } catch (error) {
-    console.error("Error in signIn:", error);
+    console.error("Error:", error);
     ElMessage.error("Ошибка запроса");
   }
-}
-
+});
 const handleClick = () => {
   console.log('click')
 }
 
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-]
+const getColumns = () => {
+  return [
+    { prop: "cadastralNum", label: "Кадастровый номер" },
+    { prop: "email", label: "email" },
+    { prop: "lastName", label: "Фамилия" },
+    { prop: "firstName", label: "Имя" },
+    { prop: "phoneNum", label: "Телефон" },
+    { prop: "requestDate", label: "Дата регистрации" },
+
+  ]
+}
+
 
 
 </script>

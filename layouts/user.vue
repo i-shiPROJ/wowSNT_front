@@ -254,13 +254,14 @@ const menuObject = reactive([
 
   .leftPanel {
     box-shadow: 1px 0 20px 0 #3f4d67;
-    z-index: 2;
+    z-index: 4;
     width: 300px;
     height: 100%;
   }
 
-  .body{
+  .body {
     flex: 1;
+    width: 100%
   }
 
   .aside {
@@ -273,14 +274,15 @@ const menuObject = reactive([
 
   .wow-container {
     overflow-y: auto;
-    height: 100vh;
-    max-height: 100vh;
-    padding: 0 1.5rem;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    /* padding: 0 1.5rem; */
 
     @media (max-width: 768px) {
-      padding-right: 15px;
       /* padding-bottom: 15px; */
-      padding-left: 16px;
+      /* padding-right: 15px;
+      padding-left: 16px; */
     }
 
     .header {
@@ -294,7 +296,7 @@ const menuObject = reactive([
       background-color: rgba(249, 249, 249, 0.6);
       /* Полупрозрачный фон */
       backdrop-filter: blur(3px);
-      z-index: 2;
+      z-index: 3;
 
       .btn-menu {
         height: 50px;
@@ -331,16 +333,7 @@ const menuObject = reactive([
           }
         }
 
-        .userSymbols {
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 50px;
-          height: 50px;
-          border-radius: 10px;
-          cursor: default;
-        }
+
       }
     }
 
@@ -348,6 +341,7 @@ const menuObject = reactive([
       min-height: calc(100% - 73px);
       display: flex;
       flex-direction: column;
+      width: 99%;
       /*       overflow-y: auto; 
       max-height: calc(100vh - 73px) */
       ;
@@ -355,6 +349,7 @@ const menuObject = reactive([
 
     .main {
       flex: 1;
+      width: 100%;
     }
 
     .footer {
