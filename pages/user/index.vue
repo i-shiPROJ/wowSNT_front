@@ -164,6 +164,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: 'user'
+})
+
 import { useRouter } from 'vue-router';
 import { onMounted, computed } from 'vue';
 import { useUserStore } from '@/stores/userInfo'
@@ -191,9 +195,6 @@ const getArraySTROLE_O = computed(() => {
 
 
 
-definePageMeta({
-  layout: 'user'
-})
 
 const toPageMessage = (id: string) => navigateTo(`/user/page-widgets/message/${id}`);
 const toPagePayment = () => navigateTo(`/user/page-widgets/payment/1`);

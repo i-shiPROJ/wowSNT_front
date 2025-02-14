@@ -21,7 +21,7 @@
             <template #header><b>Заявки на вступление</b></template>
             <template #body>
               <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
-                <wow-badge :value="2">
+                <wow-badge :value="processedCount">
                   <template #icon>
                     <wow-icon type="mdi" :path="$mdi.mdiHomePlusOutline" style="width: 70px; height: 70px;"></wow-icon>
                   </template>
@@ -98,14 +98,16 @@ import { useUserStore } from '~/stores/userInfo';
 import type { Memberships } from '~/stores/interface/Memberships';
 
 const userInfoStore = useUserStore();
-
 const router = useRouter();
+const currentRoute = router.currentRoute.value;
+
 const switchMode = () => router.push('/user');
 
 onMounted(() => {
   if ((checkAdminST()).length === 0) {
     router.push('/user');
   }
+  getProcessedCount();
 });
 
 const checkAdminST = () => {
@@ -145,7 +147,40 @@ const customColors = [
   { color: '#5cb87a', percentage: 100 },
 ]
 
+const processedCount = ref(0);
+const getProcessedCount = async () => {
+  try {
+    const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request/not-processed-count/${currentRoute.params.id}`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.authToken}`,
+      },
+    });
 
+    console.log(response.status);
+
+    if (response.status === 401) {
+      ElMessage.error("Ошибка авторизации");
+      navigateTo(`/auth/SignIn`);
+      return 0
+    }
+
+    if (!response.ok) {
+      throw new Error("Ошибка сети");
+    }
+
+    const data: number = await response.json();
+    processedCount.value = data;
+    //userInfoStore.setUser(data);
+    //console.log('store', userInfoStore.currentUser);
+
+    //router.push('/user');
+  } catch (error) {
+    console.error("Error in signIn:", error);
+    ElMessage.error("Ошибка запроса");
+  }
+}
 
 
 </script>

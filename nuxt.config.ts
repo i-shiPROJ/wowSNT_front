@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     '@/assets/less/flexclasses.less',
     '@/assets/less/padding.less',
   ],
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -37,4 +38,7 @@ export default defineNuxtConfig({
       baseURL: 'http://185.42.14.187:8080'
     }
   },
+  routeRules: {
+   /*  'admin/1/solution': { ssr: true } */
+  }
 })
