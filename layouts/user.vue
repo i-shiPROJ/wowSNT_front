@@ -73,7 +73,10 @@ import { mdiChartBar, mdiMonitorDashboard, mdiHomeAccount , mdiMenu } from '@mdi
 
 //import { menuObject } from '~/pages/user/menuObject';
 import { useUserStore } from '@/stores/userInfo'
+import { useMobileStore } from '~/stores/mobileInfo';
+
 const userInfoStore = useUserStore()
+const mobileStore = useMobileStore();
 
 onBeforeMount(async()=>{
   await getUserInfo();
@@ -131,6 +134,7 @@ let settingsWowPanel = reactive({
 const checkMobile = () => {
   if (typeof window !== 'undefined') { // Проверка на наличие объекта window
     isMobile.value = window.innerWidth < 768;
+    mobileStore.setIsMobile(isMobile.value);
   }
 };
 

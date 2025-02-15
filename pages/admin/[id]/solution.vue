@@ -2,51 +2,43 @@
 
   <NuxtLayout name="admin">
     <template #main>
+      <div>
+        <el-row>
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <wow-card class="cur-pointer">
+              <template #header><b>Список заявок</b></template>
+              <template #body>
 
-      <el-row>
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <wow-card class="cur-pointer">
-            <template #header><b>Список заявок</b></template>
-            <template #body>
+                <el-table :data="solutionData" style="width: 100%">
+                  <el-table-column v-for="(item, index) in getColumns()" :key="item.prop" :prop="item.prop"
+                    :label="item.label" :min-width="index == 0 ? '50' : '100'" />
 
-              <el-table :data="solutionData" style="width: 100%">
-                <el-table-column v-for="item in getColumns()" :key="item.prop" :prop="item.prop" :label="item.label" min-width="100"/>
+                  <el-table-column fixed="right" min-width="100">
+                    <template #default="scope">
+                      <el-button type="primary" @click="showSolution(scope.$index, scope.row)">открыть</el-button>
+                    </template>
+                  </el-table-column>
 
-                <el-table-column fixed="right" min-width="100">
-                  <template #default>
-                    <el-button link type="primary" size="small" @click="handleClick">
-                      <el-button type="primary">открыть</el-button>
-                    </el-button>
+                </el-table>
 
-                  </template>
-                </el-table-column>
-              
-              </el-table>
+              </template>
+            </wow-card>
+          </el-col>
+        </el-row>
 
-            </template>
-          </wow-card>
-        </el-col>
-      </el-row>
+        <Solution-dialog ref="solutiondialog" />
 
+      </div>
     </template>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from '~/stores/userInfo';
+import { ref } from 'vue';
+import type { SolutionInterface } from '~/components/widgets/admin/solution/interface/SolutionInterface';
 
-interface DataSolutionType {
-  cadastralNum: string;
-  email: string;
-  firstName: string;
-  id: number;
-  isProcessed: boolean;
-  lastName: string;
-  patronymic: string;
-  phoneNum: string;
-  processDate: string;
-  requestDate: string;
-}
+
 
 interface ColumnType {
   prop: string;
@@ -58,7 +50,8 @@ const userInfoStore = useUserStore();
 const router = useRouter();
 const currentRoute = router.currentRoute.value;
 
-const solutionData = ref<DataSolutionType[]>([]);
+const solutionData = ref<SolutionInterface[]>([]);
+
 
 onMounted(async () => {
   try {
@@ -80,25 +73,17 @@ onMounted(async () => {
 
     const rawData = await response.json();
     console.log(rawData);
-    solutionData.value = rawData.map((item: any) => ({
-      cadastralNum: item.cadastralNum,
-      email: item.email,
-      lastName: item.lastName,
-      firstName: item.firstName,
-      phoneNum: item.phoneNum,
-      requestDate: item.requestDate,
-    }));
+    solutionData.value = rawData;
   } catch (error) {
     console.error("Error:", error);
     ElMessage.error("Ошибка запроса");
   }
 });
-const handleClick = () => {
-  console.log('click')
-}
+
 
 const getColumns = () => {
   return [
+    { prop: "id", label: "id" },
     { prop: "cadastralNum", label: "Кадастровый номер" },
     { prop: "email", label: "email" },
     { prop: "lastName", label: "Фамилия" },
@@ -109,7 +94,14 @@ const getColumns = () => {
   ]
 }
 
+const solutiondialog = ref();
 
+const showSolution = (index: number, row: SolutionInterface) => {
+  console.log(solutiondialog);
+  console.log(index, row);
+  solutiondialog.value.showDialog(row, solutionData.value);
+
+}
 
 </script>
 
