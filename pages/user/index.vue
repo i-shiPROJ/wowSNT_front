@@ -8,7 +8,6 @@
           <template #header><b>Переключение режима</b></template>
           <template #body>
             <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
-
               <wow-icon type="mdi" :path="$mdi.mdiHomeSwitchOutline" style="width: 70px; height: 70px;"></wow-icon>
               <span>Управлять товариществом</span>
               <span class="nameST"><b>{{ snt.snt.title }}</b></span>
@@ -165,6 +164,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: 'user'
+})
+
 import { useRouter } from 'vue-router';
 import { onMounted, computed } from 'vue';
 import { useUserStore } from '@/stores/userInfo'
@@ -192,9 +195,6 @@ const getArraySTROLE_O = computed(() => {
 
 
 
-definePageMeta({
-  layout: 'user'
-})
 
 const toPageMessage = (id: string) => navigateTo(`/user/page-widgets/message/${id}`);
 const toPagePayment = () => navigateTo(`/user/page-widgets/payment/1`);
