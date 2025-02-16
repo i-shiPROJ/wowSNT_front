@@ -4,7 +4,7 @@
       :title="`Заявка на вступление #${currentSolutionObject.id} от ${currentSolutionObject.requestDate}`"
       :width="getWidthDialog">
 
-      <div class="area-cadastr-number fc fc-row">
+      <div v-if="fromCadastrNumber" class="area-cadastr-number fc fc-row">
         <div class="title">Участок:</div>
         <div class="area f-w-900"><span>{{ fromCadastrNumber }}</span></div>
       </div>
@@ -67,7 +67,6 @@ let currentSolutionObject = reactive(<SolutionInterface>{});
 const getWidthDialog = computed(() => { return mobileStore.isMobile ? '95%' : 500 });
 
 const dialogFormVisible = ref(false);
-const formLabelWidth = '140px';
 
 const fromCadastrNumber = ref('');
 
