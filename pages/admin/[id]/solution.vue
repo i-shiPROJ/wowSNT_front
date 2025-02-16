@@ -72,8 +72,8 @@ onMounted(async () => {
     if (!response.ok) throw new Error("Ошибка сети");
 
     const rawData = await response.json();
-    console.log(rawData);
     solutionData.value = rawData;
+    console.log(rawData);
   } catch (error) {
     console.error("Error:", error);
     ElMessage.error("Ошибка запроса");
@@ -97,10 +97,7 @@ const getColumns = () => {
 const solutiondialog = ref();
 
 const showSolution = (index: number, row: SolutionInterface) => {
-  console.log(solutiondialog);
-  console.log(index, row);
   solutiondialog.value.showDialog(row, solutionData.value);
-
 }
 
 </script>
