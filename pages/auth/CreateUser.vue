@@ -92,6 +92,7 @@
 import { reactive, ref, onMounted, computed } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from "element-plus";
+import type { cadastrInterface } from '~/stores/interface/CadastrInterface';
 
 
 
@@ -214,12 +215,6 @@ const submitNextForm = async (formEl: FormInstance | undefined) => {
 };
 
 let btnRegisterView = ref(false);
-interface cadastrInterface {
-  "cadastralNum": string,
-  "square": number,
-  "address": string,
-  "sntId": number
-};
 interface sntInterface {
   address: string,
   id: number,

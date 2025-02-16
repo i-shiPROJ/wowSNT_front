@@ -1,7 +1,14 @@
 <template>
   <div>
-    <el-dialog v-model="dialogFormVisible" :title="`Заявка на вступление #${currentSolutionObject.id} от ${currentSolutionObject.requestDate}`"
+    <el-dialog v-model="dialogFormVisible"
+      :title="`Заявка на вступление #${currentSolutionObject.id} от ${currentSolutionObject.requestDate}`"
       :width="getWidthDialog">
+
+      <div class="area-cadastr-number fc fc-row">
+        <div class="title">Участок:</div>
+        <div class="area f-w-900"><span>{{ fromCadastrNumber }}</span></div>
+      </div>
+
 
       <el-form ref="formRef" style="width: 100%" :model="currentSolutionObject" label-width="auto" :rules="rules">
 
@@ -53,6 +60,7 @@ import { reactive, ref } from 'vue'
 import { useMobileStore } from '~/stores/mobileInfo';
 import type { SolutionInterface } from '~/components/widgets/admin/solution/interface/SolutionInterface';
 import type { FormInstance, FormRules } from 'element-plus';
+import type { cadastrInterface } from '~/stores/interface/CadastrInterface';
 
 const mobileStore = useMobileStore();
 let currentSolutionObject = reactive(<SolutionInterface>{});
@@ -61,9 +69,25 @@ const getWidthDialog = computed(() => { return mobileStore.isMobile ? '95%' : 50
 const dialogFormVisible = ref(false);
 const formLabelWidth = '140px';
 
+const fromCadastrNumber = ref('');
+
+const getFromCadastrNumber = async () => {
+  try {
+    const fromCadastr = await $fetch<cadastrInterface>(`${useRuntimeConfig().public.baseURL}/cadastral/${currentSolutionObject.cadastralNum}`, {
+      method: 'GET'
+    });
+    console.log(fromCadastr);
+    fromCadastrNumber.value = fromCadastr.address;
+  } catch (error: any) {
+    console.error("Error:", error);
+    ElMessage.error("Не смог подтянуть участок по кадастровому номеру");
+  }
+};
+
 const showDialog = (currentSolution: SolutionInterface) => {
   currentSolutionObject = reactive({ ...currentSolution });
   dialogFormVisible.value = true;
+  getFromCadastrNumber();
 };
 
 const formRef = ref<FormInstance>();
@@ -122,4 +146,15 @@ defineExpose({ showDialog });
 
 </script>
 
-<style scoped></style>
+<style type="less" scoped>
+.area-cadastr-number {
+  padding: 0 5px;
+  margin-bottom: 18px;
+
+  .title {
+    padding: 0 12px 0 0;
+  }
+
+
+}
+</style>
