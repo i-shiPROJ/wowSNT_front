@@ -92,7 +92,7 @@
 import { reactive, ref, onMounted, computed } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from "element-plus";
-import type { cadastrInterface } from '~/stores/interface/CadastrInterface';
+import type { cadastrInterface } from '~/interface/Cadastr.interface';
 
 
 
