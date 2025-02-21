@@ -1,5 +1,5 @@
-import type { Memberships } from "./Memberships";
-import type { Ownerships } from "./Ownerships";
+import type { Memberships } from "./Memberships.interface";
+import type { Ownerships } from "./Ownerships.interface";
 
 export interface Personinfo{
   id: number,

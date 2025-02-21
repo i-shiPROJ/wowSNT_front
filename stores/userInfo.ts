@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Personinfo } from './interface/Personinfo';
+import type { Personinfo } from '../interface/Personinfo.interface';
 
 export const useUserStore = defineStore('user', {
 

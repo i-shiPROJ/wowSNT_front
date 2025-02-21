@@ -37,7 +37,8 @@
 import { useUserStore } from '~/stores/userInfo';
 import { ref } from 'vue';
 import type { SolutionInterface } from '~/components/widgets/admin/solution/interface/SolutionInterface';
-
+import type { SolutionEdit } from '~/interface/solution/SolutionEdit.interface';
+import { ElMessage, ElLoading } from 'element-plus';
 
 
 interface ColumnType {
@@ -73,7 +74,6 @@ onMounted(async () => {
 
     const rawData = await response.json();
     solutionData.value = rawData;
-    console.log(rawData);
   } catch (error) {
     console.error("Error:", error);
     ElMessage.error("Ошибка запроса");
@@ -96,8 +96,25 @@ const getColumns = () => {
 
 const solutiondialog = ref();
 
-const showSolution = (index: number, row: SolutionInterface) => {
-  solutiondialog.value.showDialog(row, solutionData.value);
+const showSolution = async (index: number, row: SolutionInterface) => {
+  const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)' });
+  try {
+    const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request/solution/${row.id}`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.authToken}`,
+      },
+    });
+
+    const data: SolutionEdit = await response.json();
+    solutiondialog.value.showDialog(data);
+  } catch (error) {
+    console.error("Error:", error);
+    ElMessage.error("Ошибка запроса");
+  } finally {
+    loading.close();
+  }
 }
 
 </script>

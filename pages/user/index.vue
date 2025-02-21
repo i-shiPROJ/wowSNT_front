@@ -172,8 +172,8 @@ import { useRouter } from 'vue-router';
 import { onMounted, computed } from 'vue';
 import { useUserStore } from '@/stores/userInfo'
 
-import type { Memberships } from '~/stores/interface/Memberships';
-import type { Ownerships } from '~/stores/interface/Ownerships';
+import type { Memberships } from '~/interface/Memberships.interface';
+import type { Ownerships } from '~/interface/Ownerships.interface';
 //const { $utils } = useNuxtApp();
 const userInfoStore = useUserStore()
 

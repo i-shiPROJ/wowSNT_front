@@ -95,7 +95,7 @@
 import { useRouter } from 'vue-router';
 import { useUserStore } from '~/stores/userInfo';
 
-import type { Memberships } from '~/stores/interface/Memberships';
+import type { Memberships } from '~/interface/Memberships.interface';
 
 const userInfoStore = useUserStore();
 const router = useRouter();
