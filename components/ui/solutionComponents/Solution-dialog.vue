@@ -92,7 +92,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button type="danger" @click="showDeclineDialog"> Отклонить </el-button>
-          <el-button type="primary" @click="showConfirmDialog" :disabled="!!fromCadastrNumber"> Принять </el-button>
+          <el-button type="primary" @click="showConfirmDialog" :disabled="cadastrNumberComputed"> Принять </el-button>
         </div>
       </template>
     </el-dialog>
@@ -109,6 +109,8 @@ import type { FormInstance, FormRules } from 'element-plus';
 import type { cadastrInterface } from '~/interface/Cadastr.interface';
 import type { SolutionEdit } from '~/interface/solution/SolutionEdit.interface';
 import { ElMessage, ElLoading } from 'element-plus';
+
+const cadastrNumberComputed = computed(() => { console.log(cadastrNumberComputed.value); return !fromCadastrNumber.value; });
 
 const mobileStore = useMobileStore();
 let currentSolutionObject = reactive(<SolutionEdit>{});
@@ -195,6 +197,7 @@ const showConfirmDialog = async () => {
     confirmDialog.value.acceptFunction = () => {
       confirmDialog.value.showCloseDialog();
       console.log('Приняли');
+      dialogFormVisible.value = false;
     };
     confirmDialog.value.showConfirmDialog();
 
@@ -237,7 +240,7 @@ const debounceCadastrNumer = async () => {
 };
 
 //экспорт функции для использования через ref
-defineExpose({ showDialog });
+defineExpose({ showDialog, dialogFormVisible });
 
 </script>
 
