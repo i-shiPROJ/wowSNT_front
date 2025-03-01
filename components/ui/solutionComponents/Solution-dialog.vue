@@ -91,10 +91,8 @@
 
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="danger" @click="showDeclineDialog">Отклонить</el-button>
-          <el-button type="primary" @click="showConfirmDialog">
-            Принять
-          </el-button>
+          <el-button type="danger" @click="showDeclineDialog"> Отклонить </el-button>
+          <el-button type="primary" @click="showConfirmDialog" :disabled="!!fromCadastrNumber"> Принять </el-button>
         </div>
       </template>
     </el-dialog>
@@ -159,20 +157,43 @@ const confirmDialog = ref();
 const showDeclineDialog = () => {
   confirmDialog.value.title = 'Внимание!'
   confirmDialog.value.titleBody = `Отказать "${currentSolutionObject.regRequest.lastName} ${currentSolutionObject.regRequest.firstName}" во вступлении?`;
-  confirmDialog.value.acceptFunction = () => {
-    console.log('Отклонили');
+  confirmDialog.value.formVisible = true;
+  confirmDialog.value.acceptFunction = async () => {
+
+    await confirmDialog.value.ruleFormRef.validate(async (valid: any, fields: any) => {
+      if (valid) {
+        console.log(confirmDialog.value.form.comment, currentSolutionObject.regRequest.id);
+        try {
+          await $fetch(`${useRuntimeConfig().public.baseURL}/register-request/reject-request/${currentSolutionObject.regRequest.id}?comment=${confirmDialog.value.form.comment}`, {
+            method: "get",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${sessionStorage.authToken}`,
+            },
+          });
+          confirmDialog.value.showCloseDialog();
+          dialogFormVisible.value = false;
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    })
+    // const rejectRequest = await $fetch<SolutionInterface>(`${useRuntimeConfig().public.baseURL}register-request/reject-request/${currentSolutionObject.regRequest.id}?comment=<причина отклонения>${currentSolutionObject.regRequest.cadastralNum}`);
   };
+
   confirmDialog.value.showConfirmDialog();
 };
+
 const showConfirmDialog = async () => {
   try {
     const cadastr = await $fetch<cadastrInterface>(`${useRuntimeConfig().public.baseURL}/cadastral/${currentSolutionObject.regRequest.cadastralNum}`);
     fromCadastrNumber.value = cadastr.address;
 
-//жмем батон на принятие
+    //жмем батон на принятие
     confirmDialog.value.title = 'Внимание!'
     confirmDialog.value.titleBody = `Принять "${currentSolutionObject.regRequest.lastName} ${currentSolutionObject.regRequest.firstName}" в товарищество?`;
     confirmDialog.value.acceptFunction = () => {
+      confirmDialog.value.showCloseDialog();
       console.log('Приняли');
     };
     confirmDialog.value.showConfirmDialog();
