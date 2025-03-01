@@ -110,7 +110,7 @@ import type { cadastrInterface } from '~/interface/Cadastr.interface';
 import type { SolutionEdit } from '~/interface/solution/SolutionEdit.interface';
 import { ElMessage, ElLoading } from 'element-plus';
 
-const cadastrNumberComputed = computed(() => { console.log(cadastrNumberComputed.value); return !fromCadastrNumber.value; });
+const cadastrNumberComputed = computed(() => { return !fromCadastrNumber.value; });
 
 const mobileStore = useMobileStore();
 let currentSolutionObject = reactive(<SolutionEdit>{});
@@ -164,7 +164,7 @@ const showDeclineDialog = () => {
 
     await confirmDialog.value.ruleFormRef.validate(async (valid: any, fields: any) => {
       if (valid) {
-        console.log(confirmDialog.value.form.comment, currentSolutionObject.regRequest.id);
+        // console.log(confirmDialog.value.form.comment, currentSolutionObject.regRequest.id);
         try {
           await $fetch(`${useRuntimeConfig().public.baseURL}/register-request/reject-request/${currentSolutionObject.regRequest.id}?comment=${confirmDialog.value.form.comment}`, {
             method: "get",
@@ -194,10 +194,25 @@ const showConfirmDialog = async () => {
     //жмем батон на принятие
     confirmDialog.value.title = 'Внимание!'
     confirmDialog.value.titleBody = `Принять "${currentSolutionObject.regRequest.lastName} ${currentSolutionObject.regRequest.firstName}" в товарищество?`;
-    confirmDialog.value.acceptFunction = () => {
-      confirmDialog.value.showCloseDialog();
-      console.log('Приняли');
-      dialogFormVisible.value = false;
+    confirmDialog.value.acceptFunction = async () => {
+      
+      try {
+        ///register-request/apply-solution
+        await $fetch(`${useRuntimeConfig().public.baseURL}/register-request/apply-solution`, {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${sessionStorage.authToken}`,
+          },
+          body: JSON.stringify(currentSolutionObject),
+        });
+        confirmDialog.value.showCloseDialog();
+        dialogFormVisible.value = false;
+      } catch (error) {
+        console.error("Error:", error);
+      }
+
+      // const rejectRequest = await $fetch<SolutionInterface>(`${useRuntimeConfig().public.baseURL}register-request/reject-request/${currentSolutionObject.regRequest.id}?comment=<причина отклонения>${currentSolutionObject.regRequest.cadastralNum}`);
     };
     confirmDialog.value.showConfirmDialog();
 
