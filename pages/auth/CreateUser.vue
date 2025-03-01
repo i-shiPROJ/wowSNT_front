@@ -26,23 +26,23 @@
             <el-input v-model="registerForm.patronymic" />
           </el-form-item>
 
-          <el-form-item label="Телефон" prop="phoneNums">
-            <el-input v-model="registerForm.phoneNums" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (999) 999 99 99" />
+          <el-form-item label="Телефон" prop="phoneNum">
+            <el-input v-model="registerForm.phoneNum" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (999) 999 99 99" />
           </el-form-item>
           <el-form-item prop="email" label="email">
             <el-input v-model="registerForm.email" />
           </el-form-item>
 
-          <el-form-item label="Логин" prop="username">
+          <!-- <el-form-item label="Логин" prop="username">
             <el-input v-model="registerForm.username" />
-          </el-form-item>
+          </el-form-item> -->
 
-          <el-form-item label="Пароль" prop="password">
+          <!-- <el-form-item label="Пароль" prop="password">
             <el-input v-model="registerForm.password" type="password" autocomplete="off" />
           </el-form-item>
           <el-form-item label="Повтор пароля" prop="passwordConfirm">
             <el-input v-model="registerForm.passwordConfirm" type="password" autocomplete="off" />
-          </el-form-item>
+          </el-form-item> -->
         </div>
 
         <div v-else="tabRegistration != 0" class="wow-cadastr-number">
@@ -59,7 +59,7 @@
               <div v-if="nameST.id">
                 <span class="tc-bright_red f-w-900">Заявка на вступление будет отправлена в СТ:</span><br />
                 <span class="medium_brown_2">{{ nameST.title }}</span>
-                
+
               </div>
               <div v-else="!!nameST.id">
                 <el-form-item label="Садовое товарищество" prop="sntId">
@@ -79,8 +79,8 @@
           <el-button v-if="tabRegistration != 0" type="primary" @click="searchCadastrNumber()">
             Проверить номер
           </el-button>
-          <el-button v-if="(!!cadastralModel.modelObject.sntId || !!registerForm.sntId) && tabRegistration != 0" type="primary"
-            @click="sendRegistration">Зарегистрироваться</el-button>
+          <el-button v-if="(!!cadastralModel.modelObject.sntId || !!registerForm.sntId) && tabRegistration != 0"
+            type="primary" @click="sendRegistration">Зарегистрироваться</el-button>
         </div>
 
       </el-form>
@@ -97,28 +97,30 @@ import type { cadastrInterface } from '~/interface/Cadastr.interface';
 
 
 interface RegisterForm {
+  cadastralNum: string,
   sntId: string,
   lastName: string,
   firstName: string,
   patronymic: string,
-  phoneNums: string,
+  phoneNum: string,
   email: string,
-  username: string,
-  password: string,
-  passwordConfirm: string,
+  // username: string,
+  // password: string,
+  // passwordConfirm: string,
 }
 
 const formRef = ref<FormInstance>()
 const registerForm = reactive<RegisterForm>({
+  cadastralNum: '',
   sntId: '',
   lastName: '',
   firstName: '',
   patronymic: '',
-  phoneNums: '',
+  phoneNum: '',
   email: '',
-  username: '',
-  password: '',
-  passwordConfirm: '',
+  // username: '',
+  // password: '',
+  // passwordConfirm: '',
 })
 
 const options = ref<Array<{ value: string, label: string }>>([]);
@@ -136,27 +138,27 @@ onMounted(async () => {
   }));
 });
 
-const validatePass = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('Введите пароль'))
-  } else {
-    if (registerForm.passwordConfirm !== '') {
-      if (!formRef.value) return
-      formRef.value.validateField('passwordConfirm')
-    }
-    callback()
-  }
-}
+// const validatePass = (rule: any, value: any, callback: any) => {
+//   if (value === '') {
+//     callback(new Error('Введите пароль'))
+//   } else {
+//     if (registerForm.passwordConfirm !== '') {
+//       if (!formRef.value) return
+//       formRef.value.validateField('passwordConfirm')
+//     }
+//     callback()
+//   }
+// }
 
-const validatePass2 = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('Введите повтор пароля'))
-  } else if (value !== registerForm.password) {
-    callback(new Error("Пароль и повтор не совпадают!"))
-  } else {
-    callback()
-  }
-}
+// const validatePass2 = (rule: any, value: any, callback: any) => {
+//   if (value === '') {
+//     callback(new Error('Введите повтор пароля'))
+//   } else if (value !== registerForm.password) {
+//     callback(new Error("Пароль и повтор не совпадают!"))
+//   } else {
+//     callback()
+//   }
+// }
 
 const rules = reactive<FormRules<typeof registerForm>>({
   sntId: [
@@ -174,7 +176,7 @@ const rules = reactive<FormRules<typeof registerForm>>({
     { required: true, message: 'Введите Отчество', trigger: 'blur' },
     { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
   ],
-  phoneNums: [
+  phoneNum: [
     { required: true, message: 'Введите номер телефона', trigger: 'blur' },
     { pattern: /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/, message: 'Неверный номер', trigger: 'blur' },
   ],
@@ -182,12 +184,12 @@ const rules = reactive<FormRules<typeof registerForm>>({
     { required: true, message: 'Введите e-mail вдрес', trigger: 'blur', },
     { type: 'email', message: 'Please input correct email address', trigger: 'blur', },
   ],
-  username: [
-    { required: true, message: 'Введите Логин', trigger: 'blur' },
-    { min: 3, max: 50, message: 'Длина поля от 3 - 50', trigger: 'blur' },
-  ],
-  password: [{ validator: validatePass, trigger: 'blur' }],
-  passwordConfirm: [{ validator: validatePass2, trigger: 'blur' }],
+  // username: [
+  //   { required: true, message: 'Введите Логин', trigger: 'blur' },
+  //   { min: 3, max: 50, message: 'Длина поля от 3 - 50', trigger: 'blur' },
+  // ],
+  // password: [{ validator: validatePass, trigger: 'blur' }],
+  // passwordConfirm: [{ validator: validatePass2, trigger: 'blur' }],
 })
 
 let tabRegistration = ref(0);
@@ -217,7 +219,7 @@ const submitNextForm = async (formEl: FormInstance | undefined) => {
 let btnRegisterView = ref(false);
 interface sntInterface {
   address: string,
-  id: number,
+  id: string,
   inn: string,
   ogrn: string,
   oktmoCode: string,
@@ -241,11 +243,12 @@ const searchCadastrNumber = async () => {
 
     if (cadastralModel.modelObject.sntId) {
       nameST.value = await $fetch<sntInterface>(`${useRuntimeConfig().public.baseURL}/snt/${cadastralModel.modelObject.sntId}`);
+      registerForm.sntId = nameST.value.id;
     } else {
       registerForm.sntId = '';
       nameST.value = {
         address: '',
-        id: 0,
+        id: '',
         inn: '',
         ogrn: '',
         oktmoCode: '',
@@ -264,7 +267,7 @@ const searchCadastrNumber = async () => {
         cadastralNum: '',
         square: 0,
         address: '',
-        sntId: 0
+        sntId: '',
       }
     }
 
@@ -273,7 +276,7 @@ const searchCadastrNumber = async () => {
       registerForm.sntId = '';
       nameST.value = {
         address: '',
-        id: 0,
+        id: '',
         inn: '',
         ogrn: '',
         oktmoCode: '',
@@ -286,33 +289,37 @@ const searchCadastrNumber = async () => {
 };
 
 
-const sendRegistration = () => {
-  console.log(cadastralModel);
-  
-        /* try {
-                const response = await fetch(`${useRuntimeConfig().public.baseURL}/register`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(registerForm),
-                });
-        
-                if (!response.ok) {
-                  const errorData = await response.json();
-                  throw new Error(errorData.message);
-                }
-        
-                const data = await response.json();
-                // Сохраните токен в sessionStorage
-                sessionStorage.setItem("authToken", data.token);
-                //const token = sessionStorage.getItem("authToken");
-                ElMessage.success("Вы успешно Зарегистрировались");
-                ElMessage.success("Заявка на вступление в СТ отправлена");
-              } catch (error: any) {
-                console.error("Error in signIn:", error);
-                ElMessage.error(error.message);
-              } */
+const sendRegistration = async () => {
+
+  try {
+    
+    registerForm.cadastralNum = cadastralModel.modelObject.cadastralNum;
+    console.log(registerForm);
+
+    const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(registerForm),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    const data = await response.json();
+    // Сохраните токен в sessionStorage
+    sessionStorage.setItem("authToken", data.token);
+    //const token = sessionStorage.getItem("authToken");
+    ElMessage.success("Вы успешно Зарегистрировались");
+    ElMessage.success("Заявка на вступление в СТ отправлена");
+    ElMessage.success("Пароль будет выслан Вам на элеткронную почту после вступления в СТ");
+  } catch (error: any) {
+    console.error("Error in signIn:", error);
+    ElMessage.error(error.message);
+  }
 }
 
 //TODO ДОБАВИТЬ проверку на поиск по кадастровому номеру, если нет кадастра или снт нет в поиске снт то выдать выпадающий список с СНТ

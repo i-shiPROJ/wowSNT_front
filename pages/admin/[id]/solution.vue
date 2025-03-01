@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from '~/stores/userInfo';
-import { ref } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import type { SolutionInterface } from '~/components/widgets/admin/solution/interface/SolutionInterface';
 import type { SolutionEdit } from '~/interface/solution/SolutionEdit.interface';
 import { ElMessage, ElLoading } from 'element-plus';
@@ -55,6 +55,10 @@ const solutionData = ref<SolutionInterface[]>([]);
 
 
 onMounted(async () => {
+  //loadData();
+});
+
+const loadData = async () => {
   try {
     const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request/not-processed/${currentRoute.params.id}`, {
       method: "get",
@@ -78,8 +82,7 @@ onMounted(async () => {
     console.error("Error:", error);
     ElMessage.error("Ошибка запроса");
   }
-});
-
+}
 
 const getColumns = () => {
   return [
@@ -115,7 +118,16 @@ const showSolution = async (index: number, row: SolutionInterface) => {
   } finally {
     loading.close();
   }
-}
+};
+
+watch(
+  () => solutiondialog.value?.dialogFormVisible,
+  (newValue) => {
+    if (newValue == false) {
+      loadData();
+    }
+  }
+);
 
 </script>
 
