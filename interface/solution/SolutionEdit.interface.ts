@@ -36,10 +36,10 @@ export interface SolutionEdit {
     email: string
   },
   isPersonFromAnotherSnt: boolean,
-  areaOwnership: {
+  areaOwnershipDescr: {
     id: number | null,
-    startDate: string,
     part: string,
+    startDate: string,
     endDate: string | null
   },
   existingAreaOwnershipsDescr: string | null

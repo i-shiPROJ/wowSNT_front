@@ -25,6 +25,20 @@
           <div class="area f-w-900"><span class="tc-bright_red">{{ fromCadastrNumber }}</span></div>
         </div>
 
+        <el-form-item prop="area.square" label="Площадь участка">
+          <el-input v-model="currentSolutionObject.area.square" @input="debounceCadastrNumer" />
+        </el-form-item>
+        <el-form-item prop="area.residentsNum" label="Количество проживающих">
+          <el-input v-model="currentSolutionObject.area.residentsNum" @input="debounceCadastrNumer" />
+        </el-form-item>
+        <el-form-item prop="areaOwnershipDescr.part" label="Доля">
+          <el-input v-model="currentSolutionObject.areaOwnershipDescr.part" @input="debounceCadastrNumer" />
+        </el-form-item>
+        <el-form-item prop="areaOwnershipDescr.startDate" label="Дата начала владения">
+          <el-input v-model="currentSolutionObject.areaOwnershipDescr.startDate" @input="debounceCadastrNumer" />
+        </el-form-item>
+
+
         <el-tooltip v-if="!!currentSolutionObject.person.id" content="Заменить нижнее поле старыми данными"
           placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
@@ -134,6 +148,18 @@ const rules = reactive<FormRules<typeof currentSolutionObject>>({
   'regRequest.cadastralNum': [
     { required: true, message: 'Введите кадастровый номер', trigger: 'change', },
   ],
+  'area.square': [
+    { required: true, message: 'Введите площадь участка', trigger: 'change', },
+  ],
+  'area.residentsNum': [
+    { required: true, message: 'Введите число проживающих', trigger: 'change', },
+  ],
+  'areaOwnershipDescr.part': [
+    { required: true, message: 'Введите долю', trigger: 'change', },
+  ],
+  'areaOwnershipDescr.startDate': [
+    { required: true, message: 'Введите дату начала владения', trigger: 'change', },
+  ],
   'regRequest.email': [
     { required: true, message: 'Введите e-mail вдрес', trigger: 'blur', },
     { type: 'email', message: 'Please input correct email address', trigger: 'blur', },
@@ -187,40 +213,42 @@ const showDeclineDialog = () => {
 };
 
 const showConfirmDialog = async () => {
-  try {
-    const cadastr = await $fetch<cadastrInterface>(`${useRuntimeConfig().public.baseURL}/cadastral/${currentSolutionObject.regRequest.cadastralNum}`);
-    fromCadastrNumber.value = cadastr.address;
+  // try {
+  //   const cadastr = await $fetch<cadastrInterface>(`${useRuntimeConfig().public.baseURL}/cadastral/${currentSolutionObject.regRequest.cadastralNum}`);
+  //   fromCadastrNumber.value = cadastr.address;
 
-    //жмем батон на принятие
-    confirmDialog.value.title = 'Внимание!'
-    confirmDialog.value.titleBody = `Принять "${currentSolutionObject.regRequest.lastName} ${currentSolutionObject.regRequest.firstName}" в товарищество?`;
-    confirmDialog.value.acceptFunction = async () => {
-      
-      try {
-        ///register-request/apply-solution
-        await $fetch(`${useRuntimeConfig().public.baseURL}/register-request/apply-solution`, {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${sessionStorage.authToken}`,
-          },
-          body: JSON.stringify(currentSolutionObject),
-        });
-        confirmDialog.value.showCloseDialog();
-        dialogFormVisible.value = false;
-      } catch (error) {
-        console.error("Error:", error);
-      }
+  //жмем батон на принятие
+  confirmDialog.value.title = 'Внимание!'
+  confirmDialog.value.titleBody = `Принять "${currentSolutionObject.regRequest.lastName} ${currentSolutionObject.regRequest.firstName}" в товарищество?`;
+  confirmDialog.value.acceptFunction = async () => {
 
-      // const rejectRequest = await $fetch<SolutionInterface>(`${useRuntimeConfig().public.baseURL}register-request/reject-request/${currentSolutionObject.regRequest.id}?comment=<причина отклонения>${currentSolutionObject.regRequest.cadastralNum}`);
-    };
-    confirmDialog.value.showConfirmDialog();
+    try {
+      ///register-request/apply-solution
+      await $fetch(`${useRuntimeConfig().public.baseURL}/register-request/apply-solution`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${sessionStorage.authToken}`,
+        },
+        body: JSON.stringify(currentSolutionObject),
+      });
+      confirmDialog.value.showCloseDialog();
+      dialogFormVisible.value = false;
+    } catch (error) {
+      console.error("Error:", error);
+    }
 
-  } catch (error) {
-    console.error("Error:", error);
-    ElMessage.error("Ошибка запроса");
-    fromCadastrNumber.value = "Неправильный кадастровый номер";
-  }
+    // const rejectRequest = await $fetch<SolutionInterface>(`${useRuntimeConfig().public.baseURL}register-request/reject-request/${currentSolutionObject.regRequest.id}?comment=<причина отклонения>${currentSolutionObject.regRequest.cadastralNum}`);
+  };
+  confirmDialog.value.showConfirmDialog();
+
+  // } catch (error: any) {
+  //   console.error("Error:1111", error);
+  //   ElMessage.error("Ошибка запроса");
+  //   fromCadastrNumber.value = error.response?.status === 503
+  //     ? 'Сервер распознования кадастрового номера недоступен'
+  //     : "Неправильный кадастровый номер" + error.response?.status;
+  // }
 
 
 
@@ -235,6 +263,7 @@ const updateField = (field: 'patronymic' | 'firstName' | 'lastName' | 'email' | 
 
 const cadastrNumerInputTimeout = ref<NodeJS.Timeout | null>(null);
 
+//loader start
 const debounceCadastrNumer = async () => {
   if (cadastrNumerInputTimeout.value) {
     clearTimeout(cadastrNumerInputTimeout.value);
@@ -244,14 +273,16 @@ const debounceCadastrNumer = async () => {
     try {
       const cadastr = await $fetch<cadastrInterface>(`${useRuntimeConfig().public.baseURL}/cadastral/${currentSolutionObject.regRequest.cadastralNum}`);
       fromCadastrNumber.value = cadastr.address;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error:", error);
       ElMessage.error("Ошибка запроса");
-      fromCadastrNumber.value = "Неправильный кадастровый номер";
+      fromCadastrNumber.value = error.response?.status === 503
+        ? currentSolutionObject.area.address
+        : "Неправильный кадастровый номер" + error.response?.status;
     } finally {
       // loading.close();
     }
-  }, 1000);
+  }, 100);
 };
 
 //экспорт функции для использования через ref

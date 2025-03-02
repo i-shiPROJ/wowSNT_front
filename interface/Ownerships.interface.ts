@@ -2,6 +2,10 @@ export interface Ownerships{
   id: number,
   area: {
     id: number,
+    address: string,
+    cadastralNum: string,
+    residentsNum: string,
+    square: string,
     snt: {
       id: number,
       inn: number,
@@ -11,9 +15,6 @@ export interface Ownerships{
       oktmoCode: number,
       address: string
     },
-    cadastralNum: string,
-    square: string,
-    residentsNum: string,
     street: string,
     houseNum: string
   },
