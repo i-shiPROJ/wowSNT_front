@@ -51,7 +51,7 @@
               <template #body>
                 <div class="area-house">
                   <div>{{ area.area.cadastralNum }}</div>
-                  <div>Здесь будет адрес участка</div>
+                  <div>{{ area.area.address }}</div>
                 </div>
 
               </template>
