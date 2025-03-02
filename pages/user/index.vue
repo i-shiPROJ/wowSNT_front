@@ -18,9 +18,9 @@
 
     </el-row>
 
-    <el-row v-for="area in getArraySTROLE_O" :key="area.id" class="bbb">
+    <el-row v-for="area in getArraySTROLE_O" :key="area.id" class="block-house">
 
-      <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="5" class="wow-area-info">
+      <el-col :xs="24" :sm="24" :md="12" :lg="10" :xl="10" class="wow-area-info">
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -28,18 +28,24 @@
               <template #header>{{ area.area.snt.title }}</template>
               <template #body>
                 <div class="wow-stinfo">
-                  <div class="fc fc-col st-time">
-                    <div>пн: 18:00 - 20:00</div>
-                    <div>пт: 14:00 - 19:00</div>
-                    <div>сб: 10:00 - 15:00</div>
-                  </div>
-                  <div class="st-phone">
-                    тел: +79676878656
-                  </div>
-                  <div class="st-phone">
-                    <span>ИНН: {{ area.area.snt.inn }}</span><br />
-                    <span>ОГРН: {{ area.area.snt.ogrn }}</span>
-                  </div>
+                  <el-row>
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                      <div class="fc fc-col st-time">
+                        <div>пн: 18:00 - 20:00</div>
+                        <div>пт: 14:00 - 19:00</div>
+                        <div>сб: 10:00 - 15:00</div>
+                      </div>
+                      <div class="st-phone">
+                        тел: +79676878656
+                      </div>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                      <div class="st-phone">
+                        <span>ИНН: {{ area.area.snt.inn }}</span><br />
+                        <span>ОГРН: {{ area.area.snt.ogrn }}</span>
+                      </div>
+                    </el-col>
+                  </el-row>
                 </div>
               </template>
             </wow-card>
@@ -52,6 +58,7 @@
                 <div class="area-house">
                   <div>{{ area.area.cadastralNum }}</div>
                   <div>{{ area.area.address }}</div>
+                  <div>Кол-во проживающих: {{ area.area.residentsNum }}</div>
                 </div>
 
               </template>
@@ -62,14 +69,14 @@
       </el-col>
 
 
-      <el-col :xs="24" :sm="24" :md="12" :lg="18" :xl="19" class="wow-area-widgets">
+      <el-col :xs="24" :sm="24" :md="12" :lg="14" :xl="14" class="wow-area-widgets">
         <wow-card class="">
           <template #header>Действия в СНТ краснодаргорстрой</template>
           <template #body>
             <div class="body-height">
               <el-row>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer"
+                <el-col :xs="24" :sm="24" :md="11" :lg="10" :xl="7" class="widget-snt cur-pointer"
                   @click="toPageMessage('12')">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiEmailOutline"
@@ -81,7 +88,7 @@
                   <span>Сообщения</span>
                 </el-col>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer"
+                <el-col :xs="24" :sm="24" :md="11" :lg="10" :xl="7" class="widget-snt cur-pointer"
                   @click="toPagePayment">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiCurrencyRub"
@@ -93,7 +100,8 @@
                   <span>Оплата</span>
                 </el-col>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageDocsst">
+                <el-col :xs="24" :sm="24" :md="11" :lg="10" :xl="7" class="widget-snt cur-pointer"
+                  @click="toPageDocsst">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiFileDocumentMultipleOutline"
                       style="width: 50px; height: 50px;"></wow-icon>
@@ -104,7 +112,7 @@
                   <span>Документы снт</span>
                 </el-col>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageNews">
+                <el-col :xs="24" :sm="24" :md="11" :lg="10" :xl="7" class="widget-snt cur-pointer" @click="toPageNews">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiNewspaperVariantOutline"
                       style="width: 50px; height: 50px;"></wow-icon>
@@ -115,7 +123,7 @@
                   <span>Новости СТ</span>
                 </el-col>
 
-                <el-col :xs="24" :sm="11" :md="11" :lg="6" :xl="1" class="widget-snt cur-pointer" @click="toPageVote">
+                <el-col :xs="24" :sm="24" :md="11" :lg="10" :xl="7" class="widget-snt cur-pointer" @click="toPageVote">
                   <div class="fc fc-row fc-align-end">
                     <wow-icon class="icon" type="mdi" :path="$mdi.mdiBallotOutline"
                       style="width: 50px; height: 50px;"></wow-icon>
@@ -134,28 +142,6 @@
         </wow-card>
       </el-col>
     </el-row>
-
-    <!--     <div class="fc fc-row fc-wrap fc-justify-space-b">
-      <wow-col :xs="1" :sm="1" :md="1" :lg="1" :xl="1">
-        <template #body>
-          <div class="fc fc-row fc-wrap fc-justify-space-b">
-
-            <wow-card-col class="cur-pointer" :xs="1" :sm="2" :md="2" :lg="6" :xl="4" @click="switchMode()">
-              <template #header><b>Переключение режима</b></template>
-      <template #body>
-                <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
-
-                  <wow-icon type="mdi" :path="$mdi.mdiHomeSwitchOutline" style="width: 70px; height: 70px;"></wow-icon>
-                  <span>Режим садовода</span>
-                </div>
-              </template>
-      </wow-card-col>
-      </div>
-
-      </template>
-      </wow-col>
-
-      </div> -->
 
   </div>
 
@@ -202,7 +188,7 @@ const toPageDocsst = () => navigateTo(`/user/page-widgets/docsst/1`);
 const toPageNews = () => navigateTo(`/user/page-widgets/news/1`);
 const toPageVote = () => navigateTo(`/user/page-widgets/vote/1`);
 
-const switchMode = (id:number) => navigateTo(`/admin/${id}`);
+const switchMode = (id: number) => navigateTo(`/admin/${id}`);
 
 const percentage = ref(20);
 const customColors = [
@@ -218,72 +204,81 @@ const customColors = [
   width: 100%;
 }
 
-.body-height {
-  min-height: 330px;
-}
+.block-house {
+  padding-bottom: 15px;
+  border-bottom: dashed 2px #F56C6C;
 
-.wow-area-info {
+  .body-height {
+    min-height: 330px;
+  }
 
+  .wow-area-info {
 
-  .wow-stinfo {
-    height: 174px;
+    .wow-stinfo {
+      min-height: 107px;
 
-    .st-time {
+      .st-time {
+        padding-left: 10px;
+        border-left: 4px solid #87af87;
+
+      }
+
+      .st-phone {
+        padding: 10px 0;
+      }
+    }
+
+    .area-house {
+      min-height: 107px;
       padding-left: 10px;
-      border-left: 4px solid #87af87;
-
+      border-left: 4px solid #F56C6C;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
-    .st-phone {
-      padding: 10px 0;
-    }
   }
 
-  .area-house {
-    padding-left: 10px;
-    border-left: 4px solid #8f3f71;
-  }
-}
+  .wow-area-widgets {
+    min-height: 340px;
 
-.wow-area-widgets {
-  min-height: 340px;
-
-  .info-area-user {
-    padding: 0px 5px;
-  }
-
-  .widget-snt {
-    width: 100%;
-    min-height: 100px;
-    border: 1px dotted #E0E3EA;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-left: 4px solid #9AA1B7;
-    transition: color 0.9s ease, border-left-color 0.9s ease;
-
-    .icon {
-      width: 50px;
-      color: #9AA1B7;
-      transition: color 0.9s ease;
+    .info-area-user {
+      padding: 0px 5px;
     }
 
-    .text {
-      width: calc(100% - 50px);
-      text-align: end;
+    .widget-snt {
+      width: 100%;
+      min-height: 100px;
+      border: 1px dotted #E0E3EA;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 5px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-left: 4px solid #9AA1B7;
+      transition: color 0.9s ease, border-left-color 0.9s ease;
+
+      .icon {
+        width: 50px;
+        color: #9AA1B7;
+        transition: color 0.9s ease;
+      }
+
+      .text {
+        width: calc(100% - 50px);
+        text-align: end;
+        color: #F56C6C;
+      }
+    }
+
+    .widget-snt:hover {
+      border-left: 4px solid #dd6f48;
       color: #F56C6C;
-    }
-  }
 
-  .widget-snt:hover {
-    border-left: 4px solid #dd6f48;
-    color: #F56C6C;
-
-    .icon {
-      color: #F56C6C;
+      .icon {
+        color: #F56C6C;
+      }
     }
   }
 }
