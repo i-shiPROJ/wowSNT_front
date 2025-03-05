@@ -336,6 +336,7 @@ const cadastrNumerInputTimeout = ref<NodeJS.Timeout | null>(null);
 
 //loader start
 const debounceCadastrNumer = async () => {
+  //TODO возникет ошибка Uncaught ResizeObserver loop completed with undelivered notifications. при повторном открытии формы
   if (cadastrNumerInputTimeout.value) {
     clearTimeout(cadastrNumerInputTimeout.value);
   }
