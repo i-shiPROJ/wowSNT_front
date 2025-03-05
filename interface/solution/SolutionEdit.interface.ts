@@ -1,3 +1,10 @@
+interface existingAreaOwnershipsDescr {
+  endDate: string | null,
+  fio: string,
+  id: number,
+  part: string,
+  startDate: string,
+}
 export interface SolutionEdit {
   regRequest: {
     id: number | null,
@@ -23,8 +30,8 @@ export interface SolutionEdit {
   area: {
     id: number | null,
     cadastralNum: string,
-    square: string,
-    residentsNum: string | null,
+    square: number | 0,
+    residentsNum: number | 0,
     address: string
   },
   person: {
@@ -38,10 +45,10 @@ export interface SolutionEdit {
   isPersonFromAnotherSnt: boolean,
   areaOwnershipDescr: {
     id: number | null,
-    part: string,
+    part: number,
     startDate: string,
     endDate: string | null
   },
-  existingAreaOwnershipsDescr: string | null
+  existingAreaOwnershipsDescr: [existingAreaOwnershipsDescr]
 }
 

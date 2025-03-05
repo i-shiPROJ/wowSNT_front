@@ -12,6 +12,7 @@
   "dependencies": {
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.4.47",
+    "moment": "^2.30.1",
     "nuxt": "^3.13.2",
     "pinia": "^2.3.1",
     "uuid": "^11.0.3",

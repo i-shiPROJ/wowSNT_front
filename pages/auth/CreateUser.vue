@@ -33,6 +33,16 @@
             <el-input v-model="registerForm.email" />
           </el-form-item>
 
+          <el-form-item prop="square" label="Площадь участка">
+                <el-input-number v-model="registerForm.square" :min="0" :step="0.5" :max="9999"   />
+          </el-form-item>
+          <el-form-item prop="residentsNum" label="Количество проживающих">
+                <el-input-number v-model="registerForm.residentsNum" :min="0" :step="1" :max="999"   />
+          </el-form-item>
+          <el-form-item prop="part" label="Доля">
+                <el-input-number v-model="registerForm.part" :min="0.1" :step="0.01" :max="1"   />
+          </el-form-item>
+
           <!-- <el-form-item label="Логин" prop="username">
             <el-input v-model="registerForm.username" />
           </el-form-item> -->
@@ -88,6 +98,9 @@
   </NuxtLayout>
 </template>
 
+        <!-- TODO добавть в регистрационную ьформу доля владения дата начала владение, кол-во проживающих  -->
+
+
 <script setup lang="ts">
 import { reactive, ref, onMounted, computed } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
@@ -104,6 +117,9 @@ interface RegisterForm {
   patronymic: string,
   phoneNum: string,
   email: string,
+  square: number | 0,
+  residentsNum: number | 0,
+  part: number | 0,
   // username: string,
   // password: string,
   // passwordConfirm: string,
@@ -118,6 +134,9 @@ const registerForm = reactive<RegisterForm>({
   patronymic: '',
   phoneNum: '',
   email: '',
+  square: 0,
+  residentsNum: 0,
+  part:1
   // username: '',
   // password: '',
   // passwordConfirm: '',
@@ -183,6 +202,18 @@ const rules = reactive<FormRules<typeof registerForm>>({
   email: [
     { required: true, message: 'Введите e-mail вдрес', trigger: 'blur', },
     { type: 'email', message: 'Please input correct email address', trigger: 'blur', },
+  ],
+  square: [
+    { required: true, message: 'Введите площадь участка', trigger: 'blur' },
+    { type: 'number', min: 0, max: 999, message: 'Длина поля от 0 - 999', trigger: 'blur' },
+  ],
+  residentsNum: [
+    { required: true, message: 'Введите кол-во проживающих', trigger: 'blur' },
+    { type: 'number', min: 0, max: 99, message: 'Длина поля от 0 - 99', trigger: 'blur' },
+  ],
+  part: [
+    { required: true, message: 'Введите долю', trigger: 'blur' },
+    { type: 'number', min: 0.01, max: 50, message: 'Длина поля от 0.01 - 1', trigger: 'blur' },
   ],
   // username: [
   //   { required: true, message: 'Введите Логин', trigger: 'blur' },
