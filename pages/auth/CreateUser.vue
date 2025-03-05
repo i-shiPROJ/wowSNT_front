@@ -205,15 +205,15 @@ const rules = reactive<FormRules<typeof registerForm>>({
   ],
   square: [
     { required: true, message: 'Введите площадь участка', trigger: 'blur' },
-    { min: 0, max: 999, message: 'Длина поля от 0 - 999', trigger: 'blur' },
+    { type: 'number', min: 0, max: 999, message: 'Длина поля от 0 - 999', trigger: 'blur' },
   ],
   residentsNum: [
     { required: true, message: 'Введите кол-во проживающих', trigger: 'blur' },
-    { min: 0, max: 99, message: 'Длина поля от 0 - 99', trigger: 'blur' },
+    { type: 'number', min: 0, max: 99, message: 'Длина поля от 0 - 99', trigger: 'blur' },
   ],
   part: [
     { required: true, message: 'Введите долю', trigger: 'blur' },
-    { min: 0.01, max: 50, message: 'Длина поля от 0.01 - 1', trigger: 'blur' },
+    { type: 'number', min: 0.01, max: 50, message: 'Длина поля от 0.01 - 1', trigger: 'blur' },
   ],
   // username: [
   //   { required: true, message: 'Введите Логин', trigger: 'blur' },
