@@ -1,20 +1,40 @@
 import { reactive } from 'vue';
 import { v6 as uuidv6 } from 'uuid';
 import { mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline,  mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+import { useRouter } from 'vue-router';
+
+// const router = useRouter();
+// const currentRoute = router.currentRoute.value;
 
 function setActiveMenuItem(id) {
   menuObject.forEach(item => {
     item.settings.active = (item.id === id);
+    navigateTo(item.settings.url);
   });
 }
+
 
 export const menuObject = reactive([
   {
     type: 'labelGroup',
-    id: uuidv6(),
+    id: 'menu0',
     settings: {
       name: 'снт краснодаргорстрой',
       //tooltip: 'Tooltip-1',
+    },
+  },
+  {
+    type: 'menuBtn',
+    id: uuidv6(),
+    settings: {
+      active: false,
+      name: 'Рабочий стол',
+      icon: mdiCardAccountDetailsOutline ,
+      tooltip: 'Стол с основными виджетами',
+      // url: `/admin/${currentRoute.params.id}`,
+      functions: {
+        setActiveMenuItem
+      }
     },
   },
   {
@@ -155,3 +175,4 @@ export const menuObject = reactive([
     },
   }, */
 ]);
+

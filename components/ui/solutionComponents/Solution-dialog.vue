@@ -8,7 +8,7 @@
 
       <el-form ref="formRef" style="width: 100%" :model="currentSolutionObject" label-width="auto" :rules="rules">
 
-        <el-tooltip v-if="!!currentSolutionObject.area.id" content="Заменить нижнее поле старыми данными"
+        <!-- <el-tooltip v-if="!!currentSolutionObject.area.id" content="Заменить нижнее поле старыми данными"
           placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
             @click="updateField('cadastralNum', currentSolutionObject.area.cadastralNum)">
@@ -16,89 +16,158 @@
               номер: ${currentSolutionObject.area.cadastralNum}` }}</span>
             <wow-icon type="mdi" :path="$mdi.mdiArrowDownRight" />
           </div>
-        </el-tooltip>
-        <el-form-item prop="regRequest.cadastralNum" label="Кадастровый номер">
-          <el-input v-model="currentSolutionObject.regRequest.cadastralNum" @input="debounceCadastrNumer" />
-        </el-form-item>
-        <div v-if="fromCadastrNumber" class="area-cadastr-number fc fc-row">
-          <div class="title">Участок по кадастровому номеру:</div>
-          <div class="area f-w-900"><span class="tc-bright_red">{{ fromCadastrNumber }}</span></div>
+        </el-tooltip> -->
+
+        <!-- TODO  если у нас найден id currentSolutionObject.area.id тогда подставляем поля с заменой, если они отличаются-->
+        <div>
+          <div class="f-w-900 tc-heading-blue">Таблица собственников по текущему участку</div>
+          <el-table :data="currentSolutionObject.existingAreaOwnershipsDescr" style="width: 100%">
+            <el-table-column prop="fio" label="ФИО" width="180" />
+            <el-table-column prop="part" label="Доля" width="180" />
+            <el-table-column prop="startDate" label="нач. собств" />
+            <el-table-column label="оконч. собств">
+              <template #default="scope">
+                <el-date-picker v-if="!scope.row.endDate" v-model="scope.row.endDate" style="width: 100%;" type="date"
+                  aria-label="Pick a date" placeholder="Дата окончания" :disabled="!!scope.row.endDate"/>
+                <!-- {{ scope.row.endDate ? $moment(scope.row.endDate).format('YYYY-MM-DD') : '' }} -->
+                <div v-else>{{ $moment(scope.row.endDate).format('YYYY-MM-DD') }}</div>
+
+                <!-- <el-button type="primary" @click="showSolution(scope.$index, scope.row)">открыть</el-button> -->
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <!-- <div class="padding-20-0 fc fc-row fc-justify-center  fc-align-start tc-dark-gray-5"
+          v-if="currentSolutionObject.existingAreaOwnershipsDescr.length > 0">
+          <div class="f-w-900 tc-bright_red">{{ `Внимание! Текущий
+            владелец другой: ${currentSolutionObject.existingAreaOwnershipsDescr[getIndexcurrentSolutionObject]?.fio}.
+            Владееет
+            от
+            ${currentSolutionObject.existingAreaOwnershipsDescr[getIndexcurrentSolutionObject]?.startDate}` }}
+          </div>
+        </div> -->
+
+        <div class="area-task">
+          <div class="f-w-900 tc-heading-blue">Заявка:</div>
+          <el-form-item prop="regRequest.cadastralNum" label="Кадастровый номер">
+            <el-input v-model="currentSolutionObject.regRequest.cadastralNum" @input="debounceCadastrNumer" />
+          </el-form-item>
+          <div v-if="fromCadastrNumber" class="area-cadastr-number fc fc-row">
+            <div class="title">Участок по кадастровому номеру:</div>
+            <div class="area f-w-900"><span class="">{{ fromCadastrNumber }}</span></div>
+          </div>
+          <el-row>
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <el-form-item prop="area.square" label="Площадь участка">
+                <el-input-number v-model="currentSolutionObject.area.square" :min="0" :step="0.5" :max="9999"   />
+                <!-- <el-input v-model="currentSolutionObject.area.square" @input="debounceCadastrNumer" /> -->
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <el-form-item prop="area.residentsNum" label="Количество проживающих">
+                <el-input-number v-model="currentSolutionObject.area.residentsNum" :min="0" :step="1" :max="999"   />
+                <!-- <el-input v-model="currentSolutionObject.area.residentsNum" @input="debounceCadastrNumer" /> -->
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <el-form-item prop="areaOwnershipDescr.part" label="Доля">
+                <el-input-number v-model="currentSolutionObject.areaOwnershipDescr.part" :min="0.1" :step="0.01" :max="1"   />
+                <!-- <el-input v-model="currentSolutionObject.areaOwnershipDescr.part" @input="debounceCadastrNumer" /> -->
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <el-form-item prop="areaOwnershipDescr.startDate" label="Дата начала владения">
+                <el-date-picker v-model="currentSolutionObject.areaOwnershipDescr.startDate" type="date"
+                  aria-label="Pick a date" placeholder="Выберите дату" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <el-form-item prop="regRequest.email" label="email">
+                <el-input v-model="currentSolutionObject.regRequest.email" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <el-form-item prop="regRequest.phoneNums" label="Телефон">
+                <el-input v-model="currentSolutionObject.regRequest.phoneNum" v-mask="'+7 (###) ### ## ##'"
+                  placeholder="+7 (999) 999 99 99" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+              <el-form-item prop="regRequest.lastName" label="Фамилия">
+                <el-input v-model="currentSolutionObject.regRequest.lastName" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <el-form-item prop="regRequest.firstName" label="Имя">
+                <el-input v-model="currentSolutionObject.regRequest.firstName" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <el-form-item prop="regRequest.patronymic" label="Отчество">
+                <el-input v-model="currentSolutionObject.regRequest.patronymic" />
+              </el-form-item>
+            </el-col>
+          </el-row>
         </div>
 
-        <el-form-item prop="area.square" label="Площадь участка">
-          <el-input v-model="currentSolutionObject.area.square" @input="debounceCadastrNumer" />
-        </el-form-item>
-        <el-form-item prop="area.residentsNum" label="Количество проживающих">
-          <el-input v-model="currentSolutionObject.area.residentsNum" @input="debounceCadastrNumer" />
-        </el-form-item>
-        <el-form-item prop="areaOwnershipDescr.part" label="Доля">
-          <el-input v-model="currentSolutionObject.areaOwnershipDescr.part" @input="debounceCadastrNumer" />
-        </el-form-item>
-        <el-form-item prop="areaOwnershipDescr.startDate" label="Дата начала владения">
-          <el-input v-model="currentSolutionObject.areaOwnershipDescr.startDate" @input="debounceCadastrNumer" />
-        </el-form-item>
 
 
-        <el-tooltip v-if="!!currentSolutionObject.person.id" content="Заменить нижнее поле старыми данными"
-          placement="bottom-end" effect="light">
+
+
+
+        <!-- TODO добавть в регистрационную ьформу доля владения дата начала владение, кол-во проживающих  -->
+        <!-- <el-tooltip v-if="!!currentSolutionObject.area.id"
+          content="Заменить нижнее поле старыми данными" placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
             @click="updateField('email', currentSolutionObject.person.email)">
             <span>{{ currentSolutionObject.person.email }}</span>
             <wow-icon type="mdi" :path="$mdi.mdiArrowDownRight" />
           </div>
-        </el-tooltip>
-        <el-form-item prop="regRequest.email" label="email">
-          <el-input v-model="currentSolutionObject.regRequest.email" />
-        </el-form-item>
+        </el-tooltip> -->
 
-        <el-tooltip v-if="!!currentSolutionObject.person.id" content="Заменить нижнее поле старыми данными"
+
+        <!-- <el-tooltip v-if="currentSolutionObject.existingAreaOwnershipsDescr.length > 0" content="Заменить нижнее поле старыми данными"
           placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
             @click="updateField('lastName', currentSolutionObject.person.lastName)">
             <span>{{ currentSolutionObject.person.lastName }}</span>
             <wow-icon type="mdi" :path="$mdi.mdiArrowDownRight" />
           </div>
-        </el-tooltip>
-        <el-form-item prop="regRequest.lastName" label="Фамилия">
-          <el-input v-model="currentSolutionObject.regRequest.lastName" />
-        </el-form-item>
+        </el-tooltip> -->
 
-        <el-tooltip v-if="!!currentSolutionObject.person.id" content="Заменить нижнее поле старыми данными"
+
+        <!-- <el-tooltip v-if="currentSolutionObject.existingAreaOwnershipsDescr.length > 0" content="Заменить нижнее поле старыми данными"
           placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
             @click="updateField('firstName', currentSolutionObject.person.firstName)">
             <span>{{ currentSolutionObject.person.firstName }}</span>
             <wow-icon type="mdi" :path="$mdi.mdiArrowDownRight" />
           </div>
-        </el-tooltip>
-        <el-form-item prop="regRequest.firstName" label="Имя">
-          <el-input v-model="currentSolutionObject.regRequest.firstName" />
-        </el-form-item>
+        </el-tooltip> -->
 
-        <el-tooltip v-if="!!currentSolutionObject.person.id" content="Заменить нижнее поле старыми данными"
+
+        <!-- <el-tooltip v-if="currentSolutionObject.existingAreaOwnershipsDescr.length > 0" content="Заменить нижнее поле старыми данными"
           placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
             @click="updateField('patronymic', currentSolutionObject.person.patronymic)">
             <span>{{ currentSolutionObject.person.patronymic }}</span>
             <wow-icon type="mdi" :path="$mdi.mdiArrowDownRight" />
           </div>
-        </el-tooltip>
-        <el-form-item prop="regRequest.patronymic" label="Отчество">
-          <el-input v-model="currentSolutionObject.regRequest.patronymic" />
-        </el-form-item>
+        </el-tooltip> -->
 
-        <el-tooltip v-if="!!currentSolutionObject.person.id" content="Заменить нижнее поле старыми данными"
+
+        <!-- <el-tooltip v-if="currentSolutionObject.existingAreaOwnershipsDescr.length > 0" content="Заменить нижнее поле старыми данными"
           placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
             @click="updateField('phoneNum', currentSolutionObject.person.phoneNums)">
             <span>{{ currentSolutionObject.person.phoneNums }}</span>
             <wow-icon type="mdi" :path="$mdi.mdiArrowDownRight" />
           </div>
-        </el-tooltip>
-        <el-form-item prop="regRequest.phoneNums" label="Телефон">
-          <el-input v-model="currentSolutionObject.regRequest.phoneNum" v-mask="'+7 (###) ### ## ##'"
-            placeholder="+7 (999) 999 99 99" />
-        </el-form-item>
+        </el-tooltip> -->
+
 
       </el-form>
 
@@ -136,7 +205,6 @@ const fromCadastrNumber = ref('');
 
 const showDialog = (currentSolution: SolutionEdit) => {
   currentSolutionObject = reactive({ ...currentSolution });//JSON.parse(JSON.stringify(currentSolution))
-  console.log(currentSolutionObject);
   dialogFormVisible.value = true;
   debounceCadastrNumer();
 };
@@ -154,11 +222,11 @@ const rules = reactive<FormRules<typeof currentSolutionObject>>({
   'area.residentsNum': [
     { required: true, message: 'Введите число проживающих', trigger: 'change', },
   ],
-  'areaOwnershipDescr.part': [
-    { required: true, message: 'Введите долю', trigger: 'change', },
-  ],
+  // 'areaOwnershipDescr.part': [
+  //   { required: true, message: 'Введите долю', trigger: 'change', },
+  // ],
   'areaOwnershipDescr.startDate': [
-    { required: true, message: 'Введите дату начала владения', trigger: 'change', },
+    { required: true, type: 'date', message: 'Введите дату начала владения', trigger: 'change' },
   ],
   'regRequest.email': [
     { required: true, message: 'Введите e-mail вдрес', trigger: 'blur', },
@@ -190,7 +258,6 @@ const showDeclineDialog = () => {
 
     await confirmDialog.value.ruleFormRef.validate(async (valid: any, fields: any) => {
       if (valid) {
-        // console.log(confirmDialog.value.form.comment, currentSolutionObject.regRequest.id);
         try {
           await $fetch(`${useRuntimeConfig().public.baseURL}/register-request/reject-request/${currentSolutionObject.regRequest.id}?comment=${confirmDialog.value.form.comment}`, {
             method: "get",
@@ -285,6 +352,10 @@ const debounceCadastrNumer = async () => {
   }, 100);
 };
 
+const getIndexcurrentSolutionObject = computed(() => {
+  return <number>currentSolutionObject.existingAreaOwnershipsDescr.length - 1;
+});
+
 //экспорт функции для использования через ref
 defineExpose({ showDialog, dialogFormVisible });
 
@@ -294,6 +365,10 @@ defineExpose({ showDialog, dialogFormVisible });
 .text-cadastnum {
   line-height: 20px;
   text-align: center;
+}
+
+.area-task {
+  padding-top: 25px;
 }
 
 .area-cadastr-number {
