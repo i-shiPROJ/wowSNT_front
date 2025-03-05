@@ -118,7 +118,6 @@
 
 
 
-        <!-- TODO добавть в регистрационную ьформу доля владения дата начала владение, кол-во проживающих  -->
         <!-- <el-tooltip v-if="!!currentSolutionObject.area.id"
           content="Заменить нижнее поле старыми данными" placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
