@@ -215,12 +215,6 @@ const rules = reactive<FormRules<typeof currentSolutionObject>>({
   'regRequest.cadastralNum': [
     { required: true, message: 'Введите кадастровый номер', trigger: 'change', },
   ],
-  'area.square': [
-    { required: true, message: 'Введите площадь участка', trigger: 'change', },
-  ],
-  'area.residentsNum': [
-    { required: true, message: 'Введите число проживающих', trigger: 'change', },
-  ],
   // 'areaOwnershipDescr.part': [
   //   { required: true, message: 'Введите долю', trigger: 'change', },
   // ],
@@ -245,7 +239,18 @@ const rules = reactive<FormRules<typeof currentSolutionObject>>({
     { required: true, message: 'Введите номер телефона', trigger: 'blur' },
     { pattern: /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/, message: 'Неверный номер', trigger: 'blur' },
   ],
-
+  'area.square': [
+    { required: true, message: 'Введите площадь участка', trigger: 'blur' },
+    { type: 'number', min: 0, max: 999, message: 'Длина поля от 0 - 999', trigger: 'blur' },
+  ],
+  'area.residentsNum': [
+    { required: true, message: 'Введите кол-во проживающих', trigger: 'blur' },
+    { type: 'number', min: 0, max: 99, message: 'Длина поля от 0 - 99', trigger: 'blur' },
+  ],
+  'areaOwnershipDescr.part': [
+    { required: true, message: 'Введите долю', trigger: 'blur' },
+    { type: 'number', min: 0.01, max: 50, message: 'Длина поля от 0.01 - 1', trigger: 'blur' },
+  ],
 })
 
 const confirmDialog = ref();
