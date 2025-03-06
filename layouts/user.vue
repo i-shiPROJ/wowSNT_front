@@ -74,6 +74,7 @@ import { mdiChartBar, mdiMonitorDashboard, mdiHomeAccount , mdiMenu } from '@mdi
 //import { menuObject } from '~/pages/user/menuObject';
 import { useUserStore } from '@/stores/userInfo'
 import { useMobileStore } from '~/stores/mobileInfo';
+import type { Personinfo } from '~/interface/Personinfo.interface';
 
 const userInfoStore = useUserStore()
 const mobileStore = useMobileStore();
@@ -83,34 +84,18 @@ onBeforeMount(async()=>{
 })
 
 const getUserInfo = async () => {
-  //console.log(sessionStorage.authToken);
   try {
-    const response = await fetch(`${useRuntimeConfig().public.baseURL}/person/user-info`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${sessionStorage.authToken}`,
-      },
-    });
-
-    if (response.status === 401) {
-      ElMessage.error("Ошибка авторизации");
-      navigateTo(`/auth/SignIn`);
-      return
-    }
-
-    if (!response.ok) {
-      throw new Error("Ошибка сети");
-    }
-
-    const data = await response.json();
+    const data = await $fetch<Personinfo>('/person/user-info', {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'GET'
+    })
+    
     userInfoStore.setUser(data);
     console.log('store', userInfoStore.currentUser);
-
-    //router.push('/user');
   } catch (error) {
-    console.error("Error in signIn:", error);
+    console.error("Error in getUserInfo:", error);
     ElMessage.error("Ошибка запроса");
+    navigateTo('/auth/SignIn');
   }
 }
 

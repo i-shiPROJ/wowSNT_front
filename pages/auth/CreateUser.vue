@@ -98,9 +98,6 @@
   </NuxtLayout>
 </template>
 
-        <!-- TODO добавть в регистрационную ьформу доля владения дата начала владение, кол-во проживающих  -->
-
-
 <script setup lang="ts">
 import { reactive, ref, onMounted, computed } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';

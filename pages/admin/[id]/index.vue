@@ -150,32 +150,12 @@ const customColors = [
 const processedCount = ref(0);
 const getProcessedCount = async () => {
   try {
-    const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request/not-processed-count/${currentRoute.params.id}`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${sessionStorage.authToken}`,
-      },
+    const data = await $fetch<number>(`/register-request/not-processed-count/${currentRoute.params.id}`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'GET'
     });
-
-    console.log(response.status);
-
-    if (response.status === 401) {
-      ElMessage.error("Ошибка авторизации");
-      navigateTo(`/auth/SignIn`);
-      return 0
-    }
-
-    if (!response.ok) {
-      throw new Error("Ошибка сети");
-    }
-
-    const data: number = await response.json();
+    
     processedCount.value = data;
-    //userInfoStore.setUser(data);
-    //console.log('store', userInfoStore.currentUser);
-
-    //router.push('/user');
   } catch (error) {
     console.error("Error in signIn:", error);
     ElMessage.error("Ошибка запроса");

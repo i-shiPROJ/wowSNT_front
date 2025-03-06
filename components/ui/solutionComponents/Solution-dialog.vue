@@ -28,7 +28,7 @@
             <el-table-column label="оконч. собств">
               <template #default="scope">
                 <el-date-picker v-if="!scope.row.endDate" v-model="scope.row.endDate" style="width: 100%;" type="date"
-                  aria-label="Pick a date" placeholder="Дата окончания" :disabled="!!scope.row.endDate"/>
+                  aria-label="Pick a date" placeholder="Дата окончания" :disabled="!!scope.row.endDate" />
                 <!-- {{ scope.row.endDate ? $moment(scope.row.endDate).format('YYYY-MM-DD') : '' }} -->
                 <div v-else>{{ $moment(scope.row.endDate).format('YYYY-MM-DD') }}</div>
 
@@ -59,19 +59,20 @@
           <el-row>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
               <el-form-item prop="area.square" label="Площадь участка">
-                <el-input-number v-model="currentSolutionObject.area.square" :min="0" :step="0.5" :max="9999"   />
+                <el-input-number v-model="currentSolutionObject.area.square" :min="0" :step="0.5" :max="9999" />
                 <!-- <el-input v-model="currentSolutionObject.area.square" @input="debounceCadastrNumer" /> -->
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
               <el-form-item prop="area.residentsNum" label="Количество проживающих">
-                <el-input-number v-model="currentSolutionObject.area.residentsNum" :min="0" :step="1" :max="999"   />
+                <el-input-number v-model="currentSolutionObject.area.residentsNum" :min="0" :step="1" :max="999" />
                 <!-- <el-input v-model="currentSolutionObject.area.residentsNum" @input="debounceCadastrNumer" /> -->
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
               <el-form-item prop="areaOwnershipDescr.part" label="Доля">
-                <el-input-number v-model="currentSolutionObject.areaOwnershipDescr.part" :min="0.1" :step="0.01" :max="1"   />
+                <el-input-number v-model="currentSolutionObject.areaOwnershipDescr.part" :min="0.1" :step="0.01"
+                  :max="1" />
                 <!-- <el-input v-model="currentSolutionObject.areaOwnershipDescr.part" @input="debounceCadastrNumer" /> -->
               </el-form-item>
             </el-col>
@@ -215,12 +216,6 @@ const rules = reactive<FormRules<typeof currentSolutionObject>>({
   'regRequest.cadastralNum': [
     { required: true, message: 'Введите кадастровый номер', trigger: 'change', },
   ],
-  'area.square': [
-    { required: true, message: 'Введите площадь участка', trigger: 'change', },
-  ],
-  'area.residentsNum': [
-    { required: true, message: 'Введите число проживающих', trigger: 'change', },
-  ],
   // 'areaOwnershipDescr.part': [
   //   { required: true, message: 'Введите долю', trigger: 'change', },
   // ],
@@ -245,7 +240,18 @@ const rules = reactive<FormRules<typeof currentSolutionObject>>({
     { required: true, message: 'Введите номер телефона', trigger: 'blur' },
     { pattern: /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/, message: 'Неверный номер', trigger: 'blur' },
   ],
-
+  'area.square': [
+    { required: true, message: 'Введите площадь участка', trigger: 'blur' },
+    { type: 'number', min: 0, max: 999, message: 'Длина поля от 0 - 999', trigger: 'blur' },
+  ],
+  'area.residentsNum': [
+    { required: true, message: 'Введите кол-во проживающих', trigger: 'blur' },
+    { type: 'number', min: 0, max: 99, message: 'Длина поля от 0 - 99', trigger: 'blur' },
+  ],
+  'areaOwnershipDescr.part': [
+    { required: true, message: 'Введите долю', trigger: 'blur' },
+    { type: 'number', min: 0.01, max: 50, message: 'Длина поля от 0.01 - 1', trigger: 'blur' },
+  ],
 })
 
 const confirmDialog = ref();
@@ -258,12 +264,9 @@ const showDeclineDialog = () => {
     await confirmDialog.value.ruleFormRef.validate(async (valid: any, fields: any) => {
       if (valid) {
         try {
-          await $fetch(`${useRuntimeConfig().public.baseURL}/register-request/reject-request/${currentSolutionObject.regRequest.id}?comment=${confirmDialog.value.form.comment}`, {
-            method: "get",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${sessionStorage.authToken}`,
-            },
+          await $fetch(`/register-request/reject-request/${currentSolutionObject.regRequest.id}?comment=${confirmDialog.value.form.comment}`, {
+            baseURL: useRuntimeConfig().public.baseURL,
+            method: 'GET'
           });
           confirmDialog.value.showCloseDialog();
           dialogFormVisible.value = false;
@@ -290,12 +293,9 @@ const showConfirmDialog = async () => {
 
     try {
       ///register-request/apply-solution
-      await $fetch(`${useRuntimeConfig().public.baseURL}/register-request/apply-solution`, {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.authToken}`,
-        },
+      await $fetch(`/register-request/apply-solution`, {
+        baseURL: useRuntimeConfig().public.baseURL,
+        method: 'POST',
         body: JSON.stringify(currentSolutionObject),
       });
       confirmDialog.value.showCloseDialog();
@@ -331,6 +331,7 @@ const cadastrNumerInputTimeout = ref<NodeJS.Timeout | null>(null);
 
 //loader start
 const debounceCadastrNumer = async () => {
+  //TODO возникет ошибка Uncaught ResizeObserver loop completed with undelivered notifications. при повторном открытии формы
   if (cadastrNumerInputTimeout.value) {
     clearTimeout(cadastrNumerInputTimeout.value);
   }
