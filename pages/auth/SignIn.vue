@@ -38,36 +38,25 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
+import type { LoginCredentials } from '~/types/auth';
+import { useAuth } from '~/composables/useAuth';
 
 const { $mdi } = useNuxtApp();
+const auth = useAuth();
 
 const login = ref("");
 const password = ref("");
 
 const signIn = async () => {
   try {
-    const response = await fetch(`${useRuntimeConfig().public.baseURL}/auth`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username: login.value, password: password.value }),
-    });
-
-    if (response.status === 401) {
-      ElMessage.error("Введены неправильные логин или пароль");
-      return;
+    const credentials: LoginCredentials = {
+      username: login.value,
+      password: password.value
     }
-
-    if (!response.ok) {
-      throw new Error("Ошибка сети");
-    }
-
-    const data = await response.json();
-    // Сохраните токен в sessionStorage
-    sessionStorage.setItem("authToken", data.token);
+    
+    await auth.login(credentials)
     ElMessage.success("Вы успешно авторизовались");
-    navigateTo(`/user`)
+    navigateTo('/user')
   } catch (error) {
     console.error("Error in signIn:", error);
     ElMessage.error("Ошибка авторизации");

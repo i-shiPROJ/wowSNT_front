@@ -41,6 +41,7 @@ import type { SolutionEdit } from '~/interface/solution/SolutionEdit.interface';
 import { ElMessage, ElLoading } from 'element-plus';
 
 
+
 interface ColumnType {
   prop: string;
   label: string;
@@ -60,24 +61,10 @@ onMounted(async () => {
 
 const loadData = async () => {
   try {
-    const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request/not-processed/${currentRoute.params.id}`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${sessionStorage.authToken}`,
-      },
+    solutionData.value = await $fetch<SolutionInterface[]>(`/register-request/not-processed/${currentRoute.params.id}`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'GET'
     });
-
-    if (response.status === 401) {
-      ElMessage.error("Ошибка авторизации");
-      navigateTo(`/auth/SignIn`);
-      return;
-    }
-
-    if (!response.ok) throw new Error("Ошибка сети");
-
-    const rawData = await response.json();
-    solutionData.value = rawData;
   } catch (error) {
     console.error("Error:", error);
     ElMessage.error("Ошибка запроса");

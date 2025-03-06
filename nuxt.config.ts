@@ -36,6 +36,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseURL: 'http://185.42.14.187:8080'
+      //baseURL: process.env.API_BASE_URL || 'http://localhost:3000'
     }
   },
   routeRules: {
