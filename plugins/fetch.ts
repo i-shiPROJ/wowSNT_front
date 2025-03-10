@@ -8,7 +8,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook('app:created', () => {
     const originalFetch = globalThis.$fetch
 
-    const customFetch = async (request: any, options: any = {}) => {
+    let isRefreshing = false; // флаг для отслеживания процесса обновления токена
+
+    const fetchWithAuth = async (request: string, options: any) => {
       const token = sessionStorage.getItem('authToken')
       
       if (token) {
@@ -21,18 +23,26 @@ export default defineNuxtPlugin((nuxtApp) => {
       try {
         return await originalFetch(request, options)
       } catch (error: unknown) {
-        if ((error as FetchError).response?.status === 401) {
+        console.log('fuck');
+        if ((error as FetchError).response?.status === 401 && !isRefreshing) {
           const auth = useAuth()
           try {
+            isRefreshing = true; // устанавливаем флаг
             await auth.refreshAccessToken()
-            return await originalFetch(request, {
+            
+            // Повторяем оригинальный запрос с новым токеном
+            const result = await originalFetch(request, {
               ...options,
               headers: {
                 ...options.headers,
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
               }
             })
+            
+            isRefreshing = false; // сбрасываем флаг после успешного обновления
+            return result
           } catch (refreshError) {
+            isRefreshing = false; // сбрасываем флаг в случае ошибки
             auth.logout()
             navigateTo('/auth/SignIn')
             throw refreshError
@@ -43,9 +53,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
 
     // Добавляем недостающие методы
-    customFetch.raw = originalFetch.raw
-    customFetch.create = originalFetch.create
+    fetchWithAuth.raw = originalFetch.raw
+    fetchWithAuth.create = originalFetch.create
 
-    globalThis.$fetch = customFetch as typeof originalFetch
+    globalThis.$fetch = fetchWithAuth as typeof originalFetch
   })
 }) 

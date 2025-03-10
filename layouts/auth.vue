@@ -42,34 +42,34 @@ const toPageRegister = () => {
   //const data = getDataTest();
   // console.log(data);
 };
-const toPageRegisterSt = () => router.push('/auth/registerSt');
+// const toPageRegisterSt = () => router.push('/auth/registerSt');
 
-const getDataTest = async (url = 'http://185.42.14.187:8080/person', data = {}) => {
-  try {
-    const response = await $fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX08iLCJST0xFX1AiXSwic3ViIjoiamFzb24iLCJpYXQiOjE3MzcyODQxMTYsImV4cCI6MTczNzI4NTkxNn0.keqOiywYvkrhlKKiBsrFupMKi5nn_KX5l9f2CeEQiO0`
-      }
-    });
+// const getDataTest = async (url = 'http://185.42.14.187:8080/person', data = {}) => {
+//   try {
+//     const response = await $fetch(url, {
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX08iLCJST0xFX1AiXSwic3ViIjoiamFzb24iLCJpYXQiOjE3MzcyODQxMTYsImV4cCI6MTczNzI4NTkxNn0.keqOiywYvkrhlKKiBsrFupMKi5nn_KX5l9f2CeEQiO0`
+//       }
+//     });
 
-    // Check if the response is ok (status code in the range 200-299)
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+//     // Check if the response is ok (status code in the range 200-299)
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
 
-    // Assuming response is JSON
-    const jsonResponse = await response.json();
-    console.log(jsonResponse);
-    return jsonResponse;
+//     // Assuming response is JSON
+//     const jsonResponse = await response.json();
+//     console.log(jsonResponse);
+//     return jsonResponse;
 
-  } catch (error) {
-    console.error('Error in getDataTest:', error);
-  }
-  // Optionally redirect or handle errors differently
-  // router.push('/auth/registerQuestion');
-};
+//   } catch (error) {
+//     console.error('Error in getDataTest:', error);
+//   }
+//   // Optionally redirect or handle errors differently
+//   // router.push('/auth/registerQuestion');
+// };
 
 
 </script>

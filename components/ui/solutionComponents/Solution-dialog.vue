@@ -338,14 +338,17 @@ const debounceCadastrNumer = async () => {
   cadastrNumerInputTimeout.value = setTimeout(async () => {
     // const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)', lock: true });
     try {
-      const cadastr = await $fetch<cadastrInterface>(`${useRuntimeConfig().public.baseURL}/cadastral/${currentSolutionObject.regRequest.cadastralNum}`);
+      const cadastr = await $fetch<cadastrInterface>(`/cadastral/${currentSolutionObject.regRequest.cadastralNum}`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'GET'
+    });
       fromCadastrNumber.value = cadastr.address;
     } catch (error: any) {
       console.error("Error:", error);
       ElMessage.error("Ошибка запроса");
       fromCadastrNumber.value = error.response?.status === 503
         ? currentSolutionObject.area.address
-        : "Неправильный кадастровый номер" + error.response?.status;
+        : "Неправильный кадастровый номер";
     } finally {
       // loading.close();
     }
