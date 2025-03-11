@@ -28,7 +28,7 @@
             <el-table-column label="оконч. собств">
               <template #default="scope">
                 <el-date-picker v-if="!scope.row.endDate" v-model="scope.row.endDate" style="width: 100%;" type="date"
-                  aria-label="Pick a date" placeholder="Дата окончания" :disabled="!!scope.row.endDate" />
+                  aria-label="Pick a date" placeholder="Дата окончания" :disabled="!!scope.row.endDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
                 <!-- {{ scope.row.endDate ? $moment(scope.row.endDate).format('YYYY-MM-DD') : '' }} -->
                 <div v-else>{{ $moment(scope.row.endDate).format('YYYY-MM-DD') }}</div>
 
@@ -79,7 +79,7 @@
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
               <el-form-item prop="areaOwnershipDescr.startDate" label="Дата начала владения">
                 <el-date-picker v-model="currentSolutionObject.areaOwnershipDescr.startDate" type="date"
-                  aria-label="Pick a date" placeholder="Выберите дату" />
+                  aria-label="Pick a date" placeholder="Выберите дату" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">

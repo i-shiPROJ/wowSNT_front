@@ -78,7 +78,7 @@ import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue
 import { menuObject } from '~/pages/admin/menuObject';
 import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
-import { mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+import {mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox,  mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
 
 
 import type { Memberships } from '~/interface/Memberships.interface';
@@ -216,7 +216,7 @@ const setMenu = () => {
       settings: {
         active: activeMenu('admin-id'),
         name: 'Рабочий стол',
-        icon: mdiCardAccountDetailsOutline,
+        icon: mdiNetworkPos,
         tooltip: 'Стол с основными виджетами',
         url: `/admin/${router.currentRoute.value.params.id}`,
         functions: {
@@ -230,8 +230,41 @@ const setMenu = () => {
       settings: {
         active: activeMenu('admin-id-solution'),
         name: 'Заявки на вступление',
-        icon: mdiCardAccountDetailsOutline,
+        icon: mdiCheckboxMarkedCircleAutoOutline ,
         url: `/admin/${router.currentRoute.value.params.id}/solution`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'labelGroup',
+      id: 'labelRefistry',
+      settings: {
+        name: 'Реестры', // Используем имя роли, если запись найдена
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-id-allLands',
+      settings: {
+        active: activeMenu('admin-id-alllands'),
+        name: 'Участки',
+        icon: mdiTextureBox,
+        url: `/admin/${router.currentRoute.value.params.id}/alllands`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-id-participant',
+      settings: {
+        active: activeMenu('admin-id-participant'),
+        name: 'Участники',
+        icon: mdiCardAccountDetailsOutline,
+        url: `/admin/${router.currentRoute.value.params.id}/participant`,
         functions: {
           setActiveMenuItem
         }

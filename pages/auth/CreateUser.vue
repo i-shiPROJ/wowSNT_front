@@ -33,6 +33,10 @@
             <el-input v-model="registerForm.email" />
           </el-form-item>
 
+          <el-form-item prop="areaOwnershipDescr.startDate" label="Дата начала владения">
+            <el-date-picker v-model="registerForm.startDate" type="date" aria-label="Pick a date"
+              placeholder="Выберите дату" format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
+          </el-form-item>
           <el-form-item prop="square" label="Площадь участка">
             <el-input-number v-model="registerForm.square" :min="0" :step="0.5" :max="9999" />
           </el-form-item>
@@ -96,10 +100,9 @@
       </el-form>
       <div v-else="registerComplate">
         <div>
-          - Заявка на вступление в СТ отправлена<br/>
-          - Пароль будет выслан Вам на элеткронную почту после вступления в СТ<br/>
+          - Заявка на вступление в СТ отправлена<br />
+          - Пароль будет выслан Вам на электронную почту после вступления в СТ<br />
         </div>
-        регистрация успешно пройдена
       </div>
     </div>
   </NuxtLayout>
@@ -110,9 +113,11 @@ import { reactive, ref, onMounted, computed } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from "element-plus";
 import type { cadastrInterface } from '~/interface/Cadastr.interface';
+import moment from 'moment';
+
 
 const registerComplate = ref(false);
-
+// TODO добавить startDate
 interface RegisterForm {
   cadastralNum: string,
   sntId: string,
@@ -124,6 +129,7 @@ interface RegisterForm {
   square: number | 0,
   residentsNum: number | 0,
   part: number | 0,
+  startDate: string
   // username: string,
   // password: string,
   // passwordConfirm: string,
@@ -140,7 +146,8 @@ const registerForm = reactive<RegisterForm>({
   email: '',
   square: 0,
   residentsNum: 0,
-  part: 1
+  part: 1,
+  startDate: moment().format('YYYY-MM-DD')
   // username: '',
   // password: '',
   // passwordConfirm: '',
@@ -154,6 +161,7 @@ interface SNTResponse {
 }
 
 onMounted(async () => {
+  console.log(moment().format('YYYY-MM-DD'));
   const response = await $fetch<SNTResponse[]>(`/snt`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
@@ -221,6 +229,9 @@ const rules = reactive<FormRules<typeof registerForm>>({
   part: [
     { required: true, message: 'Введите долю', trigger: 'blur' },
     { type: 'number', min: 0.01, max: 50, message: 'Длина поля от 0.01 - 1', trigger: 'blur' },
+  ],
+  startDate: [
+    { required: true, type: 'date', message: 'Введите дату начала владения', trigger: 'change' },
   ],
   // username: [
   //   { required: true, message: 'Введите Логин', trigger: 'blur' },
