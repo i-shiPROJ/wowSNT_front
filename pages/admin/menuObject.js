@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router';
 // const router = useRouter();
 // const currentRoute = router.currentRoute.value;
 
-function setActiveMenuItem(id) {
+export function setActiveMenuItem(id) {
   menuObject.forEach(item => {
     item.settings.active = (item.id === id);
     navigateTo(item.settings.url);

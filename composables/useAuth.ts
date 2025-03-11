@@ -46,11 +46,11 @@ export const useAuth = () => {
   }
 
   const logout = () => {
-    token.value = null
-    refreshToken.value = null
-    isAuthenticated.value = false
-    sessionStorage.removeItem('authToken')
-    sessionStorage.removeItem('refreshToken')
+    token.value = null;
+    refreshToken.value = null;
+    isAuthenticated.value = false;
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('refreshToken');
   }
 
   return {

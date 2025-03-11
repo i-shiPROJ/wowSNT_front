@@ -5,8 +5,8 @@
         Регистрация пользователя
       </div>
 
-      <el-form ref="formRef" style="width: 100%" :model="registerForm" label-width="auto" class="demo-dynamic"
-        :rules="rules">
+      <el-form v-if="!registerComplate" ref="formRef" style="width: 100%" :model="registerForm" label-width="auto"
+        class="demo-dynamic" :rules="rules">
 
         <!--         <el-form-item label="Садовое товарищество" prop="sntId">
           <el-select-v2 v-model="registerForm.sntId" placeholder="Выбор СТ" :options="options" filterable />
@@ -33,14 +33,18 @@
             <el-input v-model="registerForm.email" />
           </el-form-item>
 
+          <el-form-item prop="areaOwnershipDescr.startDate" label="Дата начала владения">
+            <el-date-picker v-model="registerForm.startDate" type="date" aria-label="Pick a date"
+              placeholder="Выберите дату" format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
+          </el-form-item>
           <el-form-item prop="square" label="Площадь участка">
-                <el-input-number v-model="registerForm.square" :min="0" :step="0.5" :max="9999"   />
+            <el-input-number v-model="registerForm.square" :min="0" :step="0.5" :max="9999" />
           </el-form-item>
           <el-form-item prop="residentsNum" label="Количество проживающих">
-                <el-input-number v-model="registerForm.residentsNum" :min="0" :step="1" :max="999"   />
+            <el-input-number v-model="registerForm.residentsNum" :min="0" :step="1" :max="999" />
           </el-form-item>
           <el-form-item prop="part" label="Доля">
-                <el-input-number v-model="registerForm.part" :min="0.1" :step="0.01" :max="1"   />
+            <el-input-number v-model="registerForm.part" :min="0.1" :step="0.01" :max="1" />
           </el-form-item>
 
           <!-- <el-form-item label="Логин" prop="username">
@@ -94,6 +98,12 @@
         </div>
 
       </el-form>
+      <div v-else="registerComplate">
+        <div>
+          - Заявка на вступление в СТ отправлена<br />
+          - Пароль будет выслан Вам на электронную почту после вступления в СТ<br />
+        </div>
+      </div>
     </div>
   </NuxtLayout>
 </template>
@@ -103,9 +113,11 @@ import { reactive, ref, onMounted, computed } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from "element-plus";
 import type { cadastrInterface } from '~/interface/Cadastr.interface';
+import moment from 'moment';
 
 
-
+const registerComplate = ref(false);
+// TODO добавить startDate
 interface RegisterForm {
   cadastralNum: string,
   sntId: string,
@@ -117,6 +129,7 @@ interface RegisterForm {
   square: number | 0,
   residentsNum: number | 0,
   part: number | 0,
+  startDate: string
   // username: string,
   // password: string,
   // passwordConfirm: string,
@@ -133,7 +146,8 @@ const registerForm = reactive<RegisterForm>({
   email: '',
   square: 0,
   residentsNum: 0,
-  part:1
+  part: 1,
+  startDate: moment().format('YYYY-MM-DD')
   // username: '',
   // password: '',
   // passwordConfirm: '',
@@ -147,7 +161,11 @@ interface SNTResponse {
 }
 
 onMounted(async () => {
-  const response = await $fetch<SNTResponse[]>(`${useRuntimeConfig().public.baseURL}/snt`);
+  console.log(moment().format('YYYY-MM-DD'));
+  const response = await $fetch<SNTResponse[]>(`/snt`, {
+    baseURL: useRuntimeConfig().public.baseURL,
+    method: 'GET'
+  });
   options.value = response.map(item => ({
     value: item.id,
     label: item.title
@@ -212,6 +230,9 @@ const rules = reactive<FormRules<typeof registerForm>>({
     { required: true, message: 'Введите долю', trigger: 'blur' },
     { type: 'number', min: 0.01, max: 50, message: 'Длина поля от 0.01 - 1', trigger: 'blur' },
   ],
+  startDate: [
+    { required: true, type: 'date', message: 'Введите дату начала владения', trigger: 'change' },
+  ],
   // username: [
   //   { required: true, message: 'Введите Логин', trigger: 'blur' },
   //   { min: 3, max: 50, message: 'Длина поля от 3 - 50', trigger: 'blur' },
@@ -229,7 +250,10 @@ const submitNextForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      const checkEmail = await $fetch<Boolean>(`${useRuntimeConfig().public.baseURL}/person/email-exists/${registerForm.email}`);
+      const checkEmail = await $fetch<Boolean>(`/person/email-exists/${registerForm.email}`, {
+        baseURL: useRuntimeConfig().public.baseURL,
+        method: 'GET'
+      });
       if (checkEmail) {
         ElMessage.error('Такой емейл уже существует');
       } else {
@@ -265,12 +289,16 @@ let nameST = ref({} as sntInterface);
 
 const searchCadastrNumber = async () => {
   try {
-    cadastralModel.modelObject = await $fetch<cadastrInterface>(`${useRuntimeConfig().public.baseURL}/cadastral/${cadastralModel.cadastr_nmber}`, {
+    cadastralModel.modelObject = await $fetch<cadastrInterface>(`/cadastral/${cadastralModel.cadastr_nmber}`, {
+      baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });
 
     if (cadastralModel.modelObject.sntId) {
-      nameST.value = await $fetch<sntInterface>(`${useRuntimeConfig().public.baseURL}/snt/${cadastralModel.modelObject.sntId}`);
+      nameST.value = await $fetch<sntInterface>(`/snt/${cadastralModel.modelObject.sntId}`, {
+        baseURL: useRuntimeConfig().public.baseURL,
+        method: 'GET'
+      });
       registerForm.sntId = nameST.value.id;
     } else {
       registerForm.sntId = '';
@@ -320,7 +348,7 @@ const searchCadastrNumber = async () => {
 const sendRegistration = async () => {
 
   try {
-    
+
     registerForm.cadastralNum = cadastralModel.modelObject.cadastralNum;
     console.log(registerForm);
 
@@ -344,6 +372,7 @@ const sendRegistration = async () => {
     ElMessage.success("Вы успешно Зарегистрировались");
     ElMessage.success("Заявка на вступление в СТ отправлена");
     ElMessage.success("Пароль будет выслан Вам на элеткронную почту после вступления в СТ");
+    registerComplate.value = true;
   } catch (error: any) {
     console.error("Error in signIn:", error);
     ElMessage.error(error.message);

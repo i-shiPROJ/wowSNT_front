@@ -156,12 +156,13 @@ definePageMeta({
 
 import { useRouter } from 'vue-router';
 import { onMounted, computed } from 'vue';
-import { useUserStore } from '@/stores/userInfo'
+import { useUserStore } from '@/stores/userInfo';
+const userInfoStore = useUserStore();
 
 import type { Memberships } from '~/interface/Memberships.interface';
 import type { Ownerships } from '~/interface/Ownerships.interface';
 //const { $utils } = useNuxtApp();
-const userInfoStore = useUserStore()
+
 
 onMounted(async () => {
   //await getUserInfo();

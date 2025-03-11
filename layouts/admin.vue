@@ -78,8 +78,16 @@ import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue
 import { menuObject } from '~/pages/admin/menuObject';
 import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
+import {mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox,  mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
 
+
+import type { Memberships } from '~/interface/Memberships.interface';
 import type { Personinfo } from '~/interface/Personinfo.interface';
+import { v6 as uuidv6 } from 'uuid';
+
+import { useRouter } from 'vue-router';
+import mdi from '~/plugins/mdi';
+const router = useRouter();
 
 const userInfoStore = useUserStore();
 const mobileStore = useMobileStore();
@@ -90,13 +98,12 @@ onBeforeMount(async () => {
 })
 
 const getUserInfo = async () => {
-  //console.log(sessionStorage.authToken);
   try {
     const data = await $fetch<Personinfo>('/person/user-info', {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     })
-    
+
     userInfoStore.setUser(data);
     console.log('store', userInfoStore.currentUser);
   } catch (error) {
@@ -134,12 +141,137 @@ const handleClickOutside = (event: MouseEvent) => {
     drawerVisible.value = false; // Закрыть меню, если кликнули вне
   }
 };
+//reactiveObjectMenu
+
+
+let objectMenu: Array<MenuSettings> = reactive(menuObject);
 
 onMounted(() => {
+  //console.log('sss', router.currentRoute.value);
   checkMobile();
   window.addEventListener('resize', checkMobile);
   document.addEventListener('click', handleClickOutside); // Добавляем обработчик клика
+  setMenu();
 });
+
+
+interface MenuSettings {
+  type: string;
+  id: string;
+  settings: {
+    active?: boolean;
+    name: string;
+    icon?: string;
+    tooltip?: string;
+    url?: string;
+    functions?: {
+      setActiveMenuItem: (id: any) => void;
+    };
+  };
+}
+
+const setMenu = () => {
+  const getArraySTRole_p = () => {
+    // Возвращаем первую найденную запись для управления СНТ, где есть роль
+    const currentId = Number(router.currentRoute.value.params.id); 
+    return userInfoStore.currentUser.memberships
+      ? userInfoStore.currentUser.memberships.find((item: Memberships) =>
+          item.role?.code === 'ROLE_P' && item.snt?.id === currentId
+        )
+      : null;
+  };
+
+  const setActiveMenuItem = (id: string) => {
+    let urlNavigate: string = '';
+
+    objectMenu.forEach(item => {
+      if (item.id === id && item.settings.url) {
+        urlNavigate = item.settings.url;
+      }
+    });
+
+    if (urlNavigate) {
+      navigateTo(urlNavigate);
+    }
+  };
+
+  const activeMenu = (id: string) => {
+    return id === router.currentRoute.value.name ? true : false;
+  };
+
+  objectMenu.length = 0;
+  const membership = getArraySTRole_p(); // Получаем первую запись
+
+  objectMenu.push(
+    {
+      type: 'labelGroup',
+      id: 'SntLabelRemove0',
+      settings: {
+        name: membership ? membership.snt.title : 'Нет роли', // Используем имя роли, если запись найдена
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-id',
+      settings: {
+        active: activeMenu('admin-id'),
+        name: 'Рабочий стол',
+        icon: mdiNetworkPos,
+        tooltip: 'Стол с основными виджетами',
+        url: `/admin/${router.currentRoute.value.params.id}`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-id-solution',
+      settings: {
+        active: activeMenu('admin-id-solution'),
+        name: 'Заявки на вступление',
+        icon: mdiCheckboxMarkedCircleAutoOutline ,
+        url: `/admin/${router.currentRoute.value.params.id}/solution`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'labelGroup',
+      id: 'labelRefistry',
+      settings: {
+        name: 'Реестры', // Используем имя роли, если запись найдена
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-id-allLands',
+      settings: {
+        active: activeMenu('admin-id-alllands'),
+        name: 'Участки',
+        icon: mdiTextureBox,
+        url: `/admin/${router.currentRoute.value.params.id}/alllands`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-id-participant',
+      settings: {
+        active: activeMenu('admin-id-participant'),
+        name: 'Участники',
+        icon: mdiCardAccountDetailsOutline,
+        url: `/admin/${router.currentRoute.value.params.id}/participant`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+  );
+}
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', checkMobile);
@@ -147,8 +279,7 @@ onBeforeUnmount(() => {
 });
 
 
-//reactiveObjectMenu
-const objectMenu = menuObject;
+
 
 </script>
 
