@@ -78,7 +78,7 @@ import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue
 import { menuObject } from '~/pages/admin/menuObject';
 import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
-import {mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox,  mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+import {mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox,mdiMessageReplyTextOutline,  mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
 
 
 import type { Memberships } from '~/interface/Memberships.interface';
@@ -232,6 +232,19 @@ const setMenu = () => {
         name: 'Заявки на вступление',
         icon: mdiCheckboxMarkedCircleAutoOutline ,
         url: `/admin/${router.currentRoute.value.params.id}/solution`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-id-messages',
+      settings: {
+        active: activeMenu('admin-id-messages'),
+        name: 'Обращения садоводов',
+        icon: mdiMessageReplyTextOutline  ,
+        url: `/admin/${router.currentRoute.value.params.id}/messages`,
         functions: {
           setActiveMenuItem
         }
