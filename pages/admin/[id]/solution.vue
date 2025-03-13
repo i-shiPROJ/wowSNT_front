@@ -34,6 +34,10 @@
 </template>
 
 <script setup lang="ts">
+useHead({
+  title: 'Заявки на вступление'
+})
+
 import { useUserStore } from '~/stores/userInfo';
 import { ref, watch, watchEffect } from 'vue';
 import type { SolutionInterface } from '~/components/widgets/admin/solution/interface/SolutionInterface';
@@ -89,6 +93,7 @@ const solutiondialog = ref();
 const showSolution = async (index: number, row: SolutionInterface) => {
   const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)' });
   try {
+    //TODO заменить метод fetch
     const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request/solution/${row.id}`, {
       method: "get",
       headers: {

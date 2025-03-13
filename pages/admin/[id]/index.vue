@@ -17,7 +17,7 @@
         </el-col>
 
         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="7">
-          <wow-card class="cur-pointer" @click="navToSolujtion()">
+          <wow-card class="cur-pointer" @click="navToSolujtion('solution')">
             <template #header><b>Заявки на вступление</b></template>
             <template #body>
               <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
@@ -32,7 +32,7 @@
         </el-col>
 
         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="7">
-          <wow-card class="cur-pointer">
+          <wow-card class="cur-pointer" @click="navToSolujtion('messages')">
             <template #header><b>Электронные обращения</b></template>
             <template #body>
               <div class="row-col-1 fc fc-col fc-align-center fc-justify-end">
@@ -92,6 +92,9 @@
 </template>
 
 <script setup lang="ts">
+useHead({
+  title: 'Рабочий стол'
+})
 import { useRouter } from 'vue-router';
 import { useUserStore } from '~/stores/userInfo';
 
@@ -116,9 +119,9 @@ const checkAdminST = () => {
   return userInfoStore.currentUser.memberships ? userInfoStore.currentUser.memberships.filter((item: Memberships) => item.role.code === 'ROLE_P' && item.snt.id === Number(route.params.id)) : [];
 }
 
-const navToSolujtion = () => {
+const navToSolujtion = (urlNavigateTo:string) => {
   const currentRoute = router.currentRoute.value;
-  navigateTo(`/admin/${currentRoute.params.id}/solution`);
+  navigateTo(`/admin/${currentRoute.params.id}/${urlNavigateTo}`);
   /*   console.log({
       path: currentRoute.path,
       name: currentRoute.name,

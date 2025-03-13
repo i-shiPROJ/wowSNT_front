@@ -6,7 +6,7 @@
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card class="cur-pointer">
-              <template #header><b>Все участники</b></template>
+              <template #header><b>Обращения садоводов</b></template>
               <template #body>
 
                 <!-- <el-table :data="solutionData" style="width: 100%">
@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 useHead({
-  title: 'Участники'
+  title: 'Обращение садоводов'
 })
 </script>
 
