@@ -21,7 +21,6 @@
           </el-col>
         </el-row>
 
-        <Solution-dialog ref="solutiondialog" />
 
       </div>
     </template>
@@ -29,6 +28,10 @@
 </template>
 
 <script setup lang="ts">
+useHead({
+  title: 'Участки'
+})
+
 import { ref } from 'vue';
 import type { Area } from '~/interface/Area.interface';
 
@@ -61,6 +64,6 @@ const getAllLend = async () => {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 
 </style>

@@ -78,7 +78,7 @@ import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue
 import { menuObject } from '~/pages/admin/menuObject';
 import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
-import {mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox,mdiMessageReplyTextOutline,  mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+import {mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox,mdiMessageReplyTextOutline, mdiCogOutline,  mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
 
 
 import type { Memberships } from '~/interface/Memberships.interface';
@@ -245,6 +245,19 @@ const setMenu = () => {
         name: 'Обращения садоводов',
         icon: mdiMessageReplyTextOutline  ,
         url: `/admin/${router.currentRoute.value.params.id}/messages`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-id-settings',
+      settings: {
+        active: activeMenu('admin-id-settings'),
+        name: 'Настройки СТ',
+        icon: mdiCogOutline  ,
+        url: `/admin/${router.currentRoute.value.params.id}/settings`,
         functions: {
           setActiveMenuItem
         }

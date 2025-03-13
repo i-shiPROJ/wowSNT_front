@@ -26,15 +26,16 @@
           </el-col>
         </el-row>
 
-        <Solution-dialog ref="solutiondialog" />
 
       </div>
     </template>
   </NuxtLayout>
 </template>
 
-<script setup>
-
+<script setup lang="ts">
+useHead({
+  title: 'Участники'
+})
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped></style>

@@ -25,7 +25,9 @@ import { v6 as uuidv6 } from 'uuid';
 const getBlinkingCircle = computed(() => true);
 const popoverRef = ref();
 const onClickOutside = () => {
-  unref(popoverRef).popperRef?.delayHide?.()
+  if (popoverRef.value) {
+    unref(popoverRef).popperRef?.delayHide?.()
+  }
 }
 
 const bellArray = reactive(

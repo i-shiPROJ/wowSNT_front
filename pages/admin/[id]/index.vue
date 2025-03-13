@@ -92,6 +92,9 @@
 </template>
 
 <script setup lang="ts">
+useHead({
+  title: 'Рабочий стол'
+})
 import { useRouter } from 'vue-router';
 import { useUserStore } from '~/stores/userInfo';
 
