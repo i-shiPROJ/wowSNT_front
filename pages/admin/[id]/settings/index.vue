@@ -30,13 +30,13 @@
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
                       <div class="label-body fc fc-col">
-                        <div>oktmoCode:</div>
+                        <div>ОКТМО:</div>
                         <div class="area-naming-st">{{ dataSnt.oktmoCode }}</div>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
                       <div class="label-body fc fc-col">
-                        <div>regDate:</div>
+                        <div>Дата регистрации:</div>
                         <div class="area-naming-st">{{ dataSnt.regDate }}</div>
                       </div>
                     </el-col>
