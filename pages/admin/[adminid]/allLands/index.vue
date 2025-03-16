@@ -6,7 +6,7 @@
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
-              <template #header><b>Участники СТ</b></template>
+              <template #header><b>Все участки</b></template>
               <template #body>
 
                 <el-table :data="areas" stripe style="width: 100%" class="cur-pointer" @row-click="showLandInfo">
@@ -30,16 +30,17 @@
 
 <script setup lang="ts">
 useHead({
-  title: 'Участники СТ'
+  title: 'Участки'
 })
 
 import { ref } from 'vue';
-import type { Personinfo } from '~/interface/Personinfo.interface';
 import type { Area } from '~/interface/Area.interface';
+import type { PersoneInfoSmall } from '~/interface/PersoneInfoSmall';
 
 const landDialog = ref();
 
 const router = useRouter();
+const route = useRoute();
 const areas = ref<Area[]>([]);
 
 onMounted(async () => {
@@ -48,7 +49,7 @@ onMounted(async () => {
 
 const getAllLend = async () => {
   try {
-    areas.value = await $fetch<Area[]>(`person/${router.currentRoute.value.params.id}`, {
+    areas.value = await $fetch<Area[]>(`area/${route.params.adminid}`, {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });
@@ -58,9 +59,15 @@ const getAllLend = async () => {
   }
 }
 
-const showLandInfo = (row: Area) => {
-  landDialog.value.showDialog();
-  console.log(row);
+const showLandInfo = async (row: Area) => {
+  navigateTo(`${router.currentRoute.value.path}/${row.id}`)
+  // const allPersonsArea = await $fetch<PersoneInfoSmall[]>(`area_ownership/owners_descr/${row.id}`, {
+  //   baseURL: useRuntimeConfig().public.baseURL,
+  //   method: 'GET'
+  // });
+  // console.log(allPersonsArea, row);
+  // Object.assign(landDialog.value.allPersonsArea, allPersonsArea);
+  // landDialog.value.showDialog();
 }
 
 

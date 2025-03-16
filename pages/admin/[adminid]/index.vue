@@ -102,6 +102,7 @@ import type { Memberships } from '~/interface/Memberships.interface';
 
 const userInfoStore = useUserStore();
 const router = useRouter();
+const route = useRoute();
 const currentRoute = router.currentRoute.value;
 
 const switchMode = () => router.push('/user');
@@ -115,13 +116,12 @@ onMounted(() => {
 
 const checkAdminST = () => {
   //check if user is admin of ST
-  const route = useRoute();
-  return userInfoStore.currentUser.memberships ? userInfoStore.currentUser.memberships.filter((item: Memberships) => item.role.code === 'ROLE_P' && item.snt.id === Number(route.params.id)) : [];
+  
+  return userInfoStore.currentUser.memberships ? userInfoStore.currentUser.memberships.filter((item: Memberships) => item.role.code === 'ROLE_P' && item.snt.id === Number(route.params.adminid)) : [];
 }
 
 const navToSolujtion = (urlNavigateTo:string) => {
-  const currentRoute = router.currentRoute.value;
-  navigateTo(`/admin/${currentRoute.params.id}/${urlNavigateTo}`);
+  navigateTo(`/admin/${route.params.adminid}/${urlNavigateTo}`);
   /*   console.log({
       path: currentRoute.path,
       name: currentRoute.name,
@@ -153,7 +153,7 @@ const customColors = [
 const processedCount = ref(0);
 const getProcessedCount = async () => {
   try {
-    const data = await $fetch<number>(`/register-request/not-processed-count/${currentRoute.params.id}`, {
+    const data = await $fetch<number>(`/register-request/not-processed-count/${route.params.adminid}`, {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });

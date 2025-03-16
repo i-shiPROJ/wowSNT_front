@@ -53,8 +53,9 @@ interface ColumnType {
 
 const userInfoStore = useUserStore();
 
-const router = useRouter();
-const currentRoute = router.currentRoute.value;
+const route = useRoute();
+/* const router = useRouter();
+const currentRoute = router.currentRoute.value; */
 
 const solutionData = ref<SolutionInterface[]>([]);
 
@@ -65,7 +66,7 @@ onMounted(async () => {
 
 const loadData = async () => {
   try {
-    solutionData.value = await $fetch<SolutionInterface[]>(`/register-request/not-processed/${currentRoute.params.id}`, {
+    solutionData.value = await $fetch<SolutionInterface[]>(`/register-request/not-processed/${route.params.adminid}`, {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });

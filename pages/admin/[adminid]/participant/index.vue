@@ -6,15 +6,15 @@
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
-              <template #header><b>Все участки</b></template>
+              <template #header><b>Участники СТsss</b></template>
               <template #body>
 
-                <el-table :data="areas" stripe style="width: 100%" class="cur-pointer" @row-click="showLandInfo">
+<!--                 <el-table :data="areas" stripe style="width: 100%" class="cur-pointer" @row-click="showLandInfo">
                   <el-table-column prop="cadastralNum" label="Кад. номер" min-width="200" />
                   <el-table-column prop="address" label="Адрес" min-width="300" />
                   <el-table-column prop="square" label="Площадь" />
                   <el-table-column prop="residentsNum" label="Доля" />
-                </el-table>
+                </el-table> -->
 
               </template>
             </wow-card>
@@ -30,16 +30,18 @@
 
 <script setup lang="ts">
 useHead({
-  title: 'Участки'
+  title: 'Участники СТ'
 })
 
 import { ref } from 'vue';
+import type { Personinfo } from '~/interface/Personinfo.interface';
 import type { Area } from '~/interface/Area.interface';
 
 const landDialog = ref();
 
 const router = useRouter();
-const areas = ref<Area[]>([]);
+const route = useRoute();
+const persons = ref<Personinfo[]>([]);
 
 onMounted(async () => {
   getAllLend();
@@ -47,7 +49,8 @@ onMounted(async () => {
 
 const getAllLend = async () => {
   try {
-    areas.value = await $fetch<Area[]>(`area/${router.currentRoute.value.params.id}`, {
+    //TODO подправить данные под таблицу
+    persons.value = await $fetch<Personinfo[]>(`person/snt-members/${route.params.adminid}`, {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });

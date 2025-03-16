@@ -101,8 +101,8 @@ useHead({
 import { reactive, onMounted, ref } from 'vue';
 import type { SntInterface } from '~/interface/Snt.interface';
 
-const router = useRouter();
-const currentRoute = router.currentRoute.value;
+const route = useRoute();
+//const currentRoute = router.currentRoute.value;
 
 // Создайте реактивный объект, соответствующий SntInterface
 let dataSnt = reactive<SntInterface>({
@@ -125,7 +125,7 @@ const setDataSnt = async () => {
 }
 
 const loadInfoSnt = async () => {
-  const fetchedData = await $fetch<SntInterface>(`/snt/${currentRoute.params.id}`, {
+  const fetchedData = await $fetch<SntInterface>(`/snt/${route.params.adminid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
