@@ -1,14 +1,7 @@
+import type { SntInterface } from "./Snt.interface"
 export interface Memberships {
   id: number,
-  snt: {
-    id: number,
-    inn: number,
-    ogrn: number,
-    regDate: string,
-    title: string,
-    oktmoCode: number,
-    address: string
-  },
+  snt: SntInterface,
   role: {
     code: string,
     name: string

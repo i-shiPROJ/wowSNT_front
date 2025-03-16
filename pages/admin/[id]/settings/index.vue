@@ -6,8 +6,8 @@
         <el-row>
 
           <el-col :xs="24" :sm="24" :md="24" :lg="9" :xl="8">
-            <wow-card class="cur-pointer">
-              <template #header><b>Информация об товариществе {{ dataSnt.title }}</b></template>
+            <wow-card>
+              <template #header><b>Юридическая информация: {{ dataSnt.title }}</b></template>
               <template #body>
 
                 <div class="fc fc-col">
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="wow-card-footer">
-                  <el-button type="primary">Изменить</el-button>
+                  <el-button type="primary" @click="openFormLegalInform()">Изменить</el-button>
                 </div>
 
               </template>
@@ -53,7 +53,7 @@
           </el-col>
 
           <el-col :xs="24" :sm="24" :md="24" :lg="7" :xl="5">
-            <wow-card class="cur-pointer">
+            <wow-card>
               <template #header><b>Роли</b></template>
               <template #body>
 
@@ -70,7 +70,7 @@
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="7" :xl="5">
-            <wow-card class="cur-pointer">
+            <wow-card>
               <template #header><b>Тариф</b></template>
               <template #body>
 
@@ -87,6 +87,8 @@
         </el-row>
 
       </div>
+
+      <LegalInformEditDialog ref="solutiondialog" />
     </template>
   </NuxtLayout>
 </template>
@@ -96,14 +98,14 @@ useHead({
   title: 'Настройки'
 })
 
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref } from 'vue';
 import type { SntInterface } from '~/interface/Snt.interface';
 
 const router = useRouter();
 const currentRoute = router.currentRoute.value;
 
 // Создайте реактивный объект, соответствующий SntInterface
-const dataSnt = reactive<SntInterface>({
+let dataSnt = reactive<SntInterface>({
   id: 0,
   inn: '',
   ogrn: '',
@@ -113,20 +115,37 @@ const dataSnt = reactive<SntInterface>({
   address: ''
 });
 
-onMounted(() => {
-  loadInfoSnt();
+onMounted(async () => {
+  //const fetchedData = await loadInfoSnt(); // Дождитесь завершения загрузки данных
+  await setDataSnt(); // Передайте полученные данные в updDataSnt
 })
+
+const setDataSnt = async () => {
+  Object.assign(dataSnt, await loadInfoSnt());
+}
 
 const loadInfoSnt = async () => {
   const fetchedData = await $fetch<SntInterface>(`/snt/${currentRoute.params.id}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
-
-  // Обновите свойства dataSnt
-  Object.assign(dataSnt, fetchedData);
-  console.log(dataSnt);
+  return fetchedData;
 }
+
+const solutiondialog = ref();
+const openFormLegalInform = async () => {
+  const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)' });
+  try {
+    setDataSnt();
+    solutiondialog.value.parentFunctions.setDataSnt = setDataSnt;
+    solutiondialog.value.showDialog(dataSnt, setDataSnt); // Дождитесь завершения загрузки данных
+  } catch (error) {
+    console.error("Error:", error);
+    ElMessage.error("Ошибка запроса");
+  } finally {
+    loading.close();
+  }
+};
 </script>
 
 <style lang="less" scoped>
