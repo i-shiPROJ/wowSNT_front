@@ -1,14 +1,7 @@
+import type{ SntInterface } from "./Snt.interface"
 export interface Area{
   id: number,
-  snt: {
-      id: number,
-      inn: string,
-      ogrn: string,
-      regDate: string,
-      title: string,
-      oktmoCode: string,
-      address: string
-  },
+  snt: SntInterface,
   cadastralNum: string,
   square: number,
   residentsNum: number | 0,

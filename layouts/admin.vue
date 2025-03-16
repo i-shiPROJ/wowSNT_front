@@ -105,7 +105,6 @@ const getUserInfo = async () => {
     })
 
     userInfoStore.setUser(data);
-    console.log('store', userInfoStore.currentUser);
   } catch (error) {
     console.error("Error in getUserInfo:", error);
     ElMessage.error("Ошибка запроса");
