@@ -2,7 +2,16 @@
   <div>
     <el-dialog v-model="dialogFormVisible" title="Информация об участке" :width="getWidthDialog">
 
-      water fuck
+      <div>
+        <div class="f-w-900 tc-heading-blue">Таблица собственников по текущему участку</div>
+        <el-table :data="allPersonsArea" style="width: 100%">
+          <el-table-column prop="fio" label="ФИО" width="180" />
+          <el-table-column prop="part" label="Доля" width="180" />
+          <el-table-column prop="startDate" label="нач. собств" />
+          <el-table-column prop="endDate" label="оконч. собств" />
+        </el-table>
+      </div>
+
       <template #footer>
         <div class="dialog-footer">
           <el-button type="danger" @click="showDeclineDialog"> Отменить </el-button>
@@ -20,12 +29,15 @@ import { reactive, ref } from 'vue'
 import { useMobileStore } from '~/stores/mobileInfo';
 import type { FormInstance, FormRules } from 'element-plus';
 import type { SntInterface } from '~/interface/Snt.interface';
+import type { PersoneInfoSmall } from '~/interface/PersoneInfoSmall';
 
 import { ElMessage, ElLoading } from 'element-plus';
 
 const mobileStore = useMobileStore();
 const getWidthDialog = computed(() => { return mobileStore.isMobile ? '95%' : 800 });
 const dialogFormVisible = ref(false);
+
+const allPersonsArea = reactive<PersoneInfoSmall[]>([]);
 
 const parentFunctions = ref({ setDataSnt: () => { } });
 
@@ -67,7 +79,7 @@ const showConfirmDialog = async () => {
 };
 
 //экспорт функции для использования через ref
-defineExpose({ showDialog, dialogFormVisible, parentFunctions });
+defineExpose({ showDialog, dialogFormVisible, parentFunctions, allPersonsArea });
 
 </script>
 

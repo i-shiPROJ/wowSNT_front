@@ -88,6 +88,7 @@ import { v6 as uuidv6 } from 'uuid';
 import { useRouter } from 'vue-router';
 import mdi from '~/plugins/mdi';
 const router = useRouter();
+const route = useRoute();
 
 const userInfoStore = useUserStore();
 const mobileStore = useMobileStore();
@@ -172,7 +173,7 @@ interface MenuSettings {
 const setMenu = () => {
   const getArraySTRole_p = () => {
     // Возвращаем первую найденную запись для управления СНТ, где есть роль
-    const currentId = Number(router.currentRoute.value.params.id); 
+    const currentId = Number(route.params.adminid); 
     return userInfoStore.currentUser.memberships
       ? userInfoStore.currentUser.memberships.find((item: Memberships) =>
           item.role?.code === 'ROLE_P' && item.snt?.id === currentId
@@ -217,7 +218,7 @@ const setMenu = () => {
         name: 'Рабочий стол',
         icon: mdiNetworkPos,
         tooltip: 'Стол с основными виджетами',
-        url: `/admin/${router.currentRoute.value.params.id}`,
+        url: `/admin/${route.params.adminid}`,
         functions: {
           setActiveMenuItem
         }
@@ -230,7 +231,7 @@ const setMenu = () => {
         active: activeMenu('admin-id-solution'),
         name: 'Заявки на вступление',
         icon: mdiCheckboxMarkedCircleAutoOutline ,
-        url: `/admin/${router.currentRoute.value.params.id}/solution`,
+        url: `/admin/${route.params.adminid}/solution`,
         functions: {
           setActiveMenuItem
         }
@@ -243,7 +244,7 @@ const setMenu = () => {
         active: activeMenu('admin-id-messages'),
         name: 'Обращения садоводов',
         icon: mdiMessageReplyTextOutline  ,
-        url: `/admin/${router.currentRoute.value.params.id}/messages`,
+        url: `/admin/${route.params.adminid}/messages`,
         functions: {
           setActiveMenuItem
         }
@@ -256,7 +257,7 @@ const setMenu = () => {
         active: activeMenu('admin-id-settings'),
         name: 'Настройки СТ',
         icon: mdiCogOutline  ,
-        url: `/admin/${router.currentRoute.value.params.id}/settings`,
+        url: `/admin/${route.params.adminid}/settings`,
         functions: {
           setActiveMenuItem
         }
@@ -276,7 +277,7 @@ const setMenu = () => {
         active: activeMenu('admin-id-alllands'),
         name: 'Участки',
         icon: mdiTextureBox,
-        url: `/admin/${router.currentRoute.value.params.id}/alllands`,
+        url: `/admin/${route.params.adminid}/alllands`,
         functions: {
           setActiveMenuItem
         }
@@ -289,7 +290,7 @@ const setMenu = () => {
         active: activeMenu('admin-id-participant'),
         name: 'Участники',
         icon: mdiCardAccountDetailsOutline,
-        url: `/admin/${router.currentRoute.value.params.id}/participant`,
+        url: `/admin/${route.params.adminid}/participant`,
         functions: {
           setActiveMenuItem
         }
