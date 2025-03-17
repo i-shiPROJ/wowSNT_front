@@ -61,13 +61,7 @@ const getAllLend = async () => {
 
 const showLandInfo = async (row: Area) => {
   navigateTo(`${router.currentRoute.value.path}/${row.id}`)
-  // const allPersonsArea = await $fetch<PersoneInfoSmall[]>(`area_ownership/owners_descr/${row.id}`, {
-  //   baseURL: useRuntimeConfig().public.baseURL,
-  //   method: 'GET'
-  // });
-  // console.log(allPersonsArea, row);
-  // Object.assign(landDialog.value.allPersonsArea, allPersonsArea);
-  // landDialog.value.showDialog();
+
 }
 
 

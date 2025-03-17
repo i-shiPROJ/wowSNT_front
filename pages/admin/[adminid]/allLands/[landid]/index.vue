@@ -3,17 +3,21 @@
   <NuxtLayout name="admin">
     <template #main>
       <div>
-        <div class="info-page fc fc-col">
-          <div class="name-page"><b>Информация об участке - </b></div>
-          <div class="breadcrumb">{{ router.currentRoute.value.fullPath }}</div>
-        </div>
+
+        <wow-toppagetitle namePage="Информация об участке" />
+
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
               <template #header><b>Таблица собственников по текущему участку</b></template>
               <template #body>
 
-
+                <el-table :data="areaOwnershops" style="width: 100%">
+                  <el-table-column prop="fio" label="ФИО" width="180" />
+                  <el-table-column prop="part" label="Доля" width="180" />
+                  <el-table-column prop="startDate" label="нач. собств" />
+                  <el-table-column prop="endDate" label="оконч. собств"> </el-table-column>
+                </el-table>
 
               </template>
             </wow-card>
@@ -42,20 +46,29 @@
 
 <script setup lang="ts">
 useHead({
-  title: 'Участок'
+  title: 'Информация об участке'
 });
 
-const router = useRouter();
+import type { AreaOwnershipsDescr } from '~/interface/solution/AreaOwnershipsDescr.interface';
 
+const route = useRoute();
+let areaOwnershops = ref<AreaOwnershipsDescr[]>([]);
+
+onMounted(async () => {
+  getAreaOwnerships();
+});
+
+const getAreaOwnerships = async () => {
+  console.log(route.params.adminid);
+  areaOwnershops.value = await $fetch<AreaOwnershipsDescr[]>(`area_ownership/owners_descr/${route.params.landid}`, {
+    baseURL: useRuntimeConfig().public.baseURL,
+    method: 'GET'
+  });
+  //Object.assign(areaOwnershops, allPersonsArea);
+console.log(areaOwnershops);
+}
+
+///area_ownership/owners_descr/{area_id}
 </script>
 
-<style lang="less" scoped>
-.info-page {
-  margin: 12px;
-
-  .name-page {
-    font-size: 1.2rem;
-    padding-bottom: 15px;
-  }
-}
-</style>
+<style lang="less" scoped></style>
