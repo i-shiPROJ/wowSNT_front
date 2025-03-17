@@ -1,10 +1,4 @@
-interface existingAreaOwnershipsDescr {
-  endDate: string | null,
-  fio: string,
-  id: number,
-  part: string,
-  startDate: string,
-}
+import type { AreaOwnershipsDescr } from './AreaOwnershipsDescr.interface'
 export interface SolutionEdit {
   regRequest: {
     id: number | null,
@@ -49,6 +43,6 @@ export interface SolutionEdit {
     startDate: string,
     endDate: string | null
   },
-  existingAreaOwnershipsDescr: [existingAreaOwnershipsDescr]
+  existingAreaOwnershipsDescr: [AreaOwnershipsDescr]
 }
 

@@ -3,6 +3,8 @@
   <NuxtLayout name="admin">
     <template #main>
       <div>
+
+        <wow-toppagetitle namePage="Реестр участков" />
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
@@ -20,8 +22,6 @@
             </wow-card>
           </el-col>
         </el-row>
-
-        <LendInfoDialog ref="landDialog" />
 
       </div>
     </template>
@@ -49,10 +49,11 @@ onMounted(async () => {
 
 const getAllLend = async () => {
   try {
-    areas.value = await $fetch<Area[]>(`area/${route.params.adminid}`, {
+    areas.value = await $fetch<Area[]>(`area/snt/${route.params.adminid}`, {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });
+
   }
   catch (error) {
     console.error(error)
@@ -61,13 +62,7 @@ const getAllLend = async () => {
 
 const showLandInfo = async (row: Area) => {
   navigateTo(`${router.currentRoute.value.path}/${row.id}`)
-  // const allPersonsArea = await $fetch<PersoneInfoSmall[]>(`area_ownership/owners_descr/${row.id}`, {
-  //   baseURL: useRuntimeConfig().public.baseURL,
-  //   method: 'GET'
-  // });
-  // console.log(allPersonsArea, row);
-  // Object.assign(landDialog.value.allPersonsArea, allPersonsArea);
-  // landDialog.value.showDialog();
+
 }
 
 

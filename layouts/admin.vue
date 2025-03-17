@@ -212,9 +212,9 @@ const setMenu = () => {
     },
     {
       type: 'menuBtn',
-      id: 'admin-id',
+      id: 'admin-adminid',
       settings: {
-        active: activeMenu('admin-id'),
+        active: activeMenu('admin-adminid'),
         name: 'Рабочий стол',
         icon: mdiNetworkPos,
         tooltip: 'Стол с основными виджетами',
@@ -226,9 +226,9 @@ const setMenu = () => {
     },
     {
       type: 'menuBtn',
-      id: 'admin-id-solution',
+      id: 'admin-adminid-solution',
       settings: {
-        active: activeMenu('admin-id-solution'),
+        active: activeMenu('admin-adminid-solution'),
         name: 'Заявки на вступление',
         icon: mdiCheckboxMarkedCircleAutoOutline ,
         url: `/admin/${route.params.adminid}/solution`,
@@ -239,9 +239,9 @@ const setMenu = () => {
     },
     {
       type: 'menuBtn',
-      id: 'admin-id-messages',
+      id: 'admin-adminid-messages',
       settings: {
-        active: activeMenu('admin-id-messages'),
+        active: activeMenu('admin-adminid-messages'),
         name: 'Обращения садоводов',
         icon: mdiMessageReplyTextOutline  ,
         url: `/admin/${route.params.adminid}/messages`,
@@ -252,9 +252,9 @@ const setMenu = () => {
     },
     {
       type: 'menuBtn',
-      id: 'admin-id-settings',
+      id: 'admin-adminid-settings',
       settings: {
-        active: activeMenu('admin-id-settings'),
+        active: activeMenu('admin-adminid-settings'),
         name: 'Настройки СТ',
         icon: mdiCogOutline  ,
         url: `/admin/${route.params.adminid}/settings`,
@@ -272,12 +272,12 @@ const setMenu = () => {
     },
     {
       type: 'menuBtn',
-      id: 'admin-id-allLands',
+      id: 'admin-adminid-allLands',
       settings: {
-        active: activeMenu('admin-id-alllands'),
+        active: activeMenu('admin-adminid-allLands'),
         name: 'Участки',
         icon: mdiTextureBox,
-        url: `/admin/${route.params.adminid}/alllands`,
+        url: `/admin/${route.params.adminid}/allLands`,
         functions: {
           setActiveMenuItem
         }
@@ -285,9 +285,9 @@ const setMenu = () => {
     },
     {
       type: 'menuBtn',
-      id: 'admin-id-participant',
+      id: 'admin-adminid-participant',
       settings: {
-        active: activeMenu('admin-id-participant'),
+        active: activeMenu('admin-adminid-participant'),
         name: 'Участники',
         icon: mdiCardAccountDetailsOutline,
         url: `/admin/${route.params.adminid}/participant`,

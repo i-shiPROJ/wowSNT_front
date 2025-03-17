@@ -4,8 +4,6 @@
       :title="`Заявка на вступление #${currentSolutionObject.regRequest?.id} от ${currentSolutionObject.regRequest?.requestDate}`"
       :width="getWidthDialog">
 
-
-
       <el-form ref="formRef" style="width: 100%" :model="currentSolutionObject" label-width="auto" :rules="rules">
 
         <!-- <el-tooltip v-if="!!currentSolutionObject.area.id" content="Заменить нижнее поле старыми данными"
