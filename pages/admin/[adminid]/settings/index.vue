@@ -41,13 +41,10 @@
                       </div>
                     </el-col>
                   </el-row>
-
                 </div>
-
-                <div class="wow-card-footer">
-                  <el-button type="primary" @click="openFormLegalInform()">Изменить</el-button>
-                </div>
-
+              </template>
+              <template #footer>
+                <el-button type="primary" @click="openFormLegalInform()">Изменить</el-button>
               </template>
             </wow-card>
           </el-col>
@@ -58,10 +55,11 @@
               <template #body>
 
                 Всего ролей - 4шт.
-                <div class="wow-card-footer">
-                  <el-button type="primary">Изменить</el-button>
-                </div>
 
+
+              </template>
+              <template #footer>
+                <el-button type="primary">Изменить</el-button>
               </template>
             </wow-card>
           </el-col>
@@ -77,10 +75,11 @@
                 Ваш текущий Тариф><br />
                 Окончание
                 Оплата 100р в год
-                <div class="wow-card-footer">
-                  <el-button type="primary">Изменить</el-button>
-                </div>
 
+
+              </template>
+              <template #footer>
+                <el-button type="primary">Изменить</el-button>
               </template>
             </wow-card>
           </el-col>
@@ -136,7 +135,7 @@ const solutiondialog = ref();
 const openFormLegalInform = async () => {
   const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)' });
   try {
-    setDataSnt();
+    await setDataSnt();
     solutiondialog.value.parentFunctions.setDataSnt = setDataSnt;
     solutiondialog.value.showDialog(dataSnt, setDataSnt); // Дождитесь завершения загрузки данных
   } catch (error) {
@@ -158,9 +157,4 @@ const openFormLegalInform = async () => {
   }
 }
 
-
-.wow-card-footer {
-  display: flex;
-  justify-content: end;
-}
 </style>

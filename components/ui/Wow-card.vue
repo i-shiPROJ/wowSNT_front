@@ -7,12 +7,18 @@
       <div class="body">
         <slot name="body" />
       </div>
+      <div class="footer" :class="footerPosition">
+        <slot name="footer" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-
+const props = defineProps({
+  width: { type: String },
+  footerPosition: { type: String, default: 'right' },
+});
 </script>
 
 <style scoped>
@@ -30,6 +36,24 @@
 
     .body {
       padding: 1rem 0;
+    }
+
+    .footer {
+      display: flex;
+
+      &.left {
+        justify-content: start;
+      }
+
+      &.center {
+        justify-content: center;
+      }
+
+      &.right {
+        justify-content: end;
+      }
+
+
     }
   }
 }
