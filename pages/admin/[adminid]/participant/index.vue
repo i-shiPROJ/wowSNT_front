@@ -3,21 +3,30 @@
   <NuxtLayout name="admin">
     <template #main>
       <div>
+        <wow-toppagetitle namePage="Реестр участников" />
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <wow-card>
-              <template #header><b>Участники СТsss</b></template>
+            <Wow-card>
+              <template #header><b>Участники СТ</b></template>
               <template #body>
 
-<!--                 <el-table :data="areas" stripe style="width: 100%" class="cur-pointer" @row-click="showLandInfo">
-                  <el-table-column prop="cadastralNum" label="Кад. номер" min-width="200" />
-                  <el-table-column prop="address" label="Адрес" min-width="300" />
-                  <el-table-column prop="square" label="Площадь" />
-                  <el-table-column prop="residentsNum" label="Доля" />
-                </el-table> -->
+                <el-table :data="persons" stripe style="width: 100%" class="cur-pointer" @row-click="showPersonInfo">
+                  <el-table-column prop="lastName" label="Фамилия" min-width="170"/>
+                  <el-table-column prop="firstName" label="Имя" min-width="170"/>
+                  <el-table-column prop="patronymic" label="Отчество" min-width="170"/>
+                  <el-table-column prop="phoneNums" label="Телефон" width="170">
+                    <template #default="scope">
+                      <div class="fc fc-row fc-align-content-center">
+                        <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
+                        <a class="phone-link" :href="`tel:${scope.row.phoneNums}`"> {{ scope.row.phoneNums }}</a>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="email" label="email" width="250"/>
+                </el-table>
 
               </template>
-            </wow-card>
+            </Wow-card>
           </el-col>
         </el-row>
 
@@ -60,9 +69,8 @@ const getAllLend = async () => {
   }
 }
 
-const showLandInfo = (row: Area) => {
-  landDialog.value.showDialog();
-  console.log(row);
+const showPersonInfo = (row: Area) => {
+  navigateTo(`${router.currentRoute.value.path}/${row.id}`)
 }
 
 

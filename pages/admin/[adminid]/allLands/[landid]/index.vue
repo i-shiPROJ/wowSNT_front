@@ -20,7 +20,6 @@
                         <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
                         <a class="phone-link" :href="`tel:${scope.row.phoneNums}`"> {{ scope.row.phoneNums }}</a>
                       </div>
-
                     </template>
                   </el-table-column>
                   <el-table-column prop="part" label="Доля" width="70" />
@@ -95,11 +94,4 @@ const getArea = async () => {
 ///area_ownership/owners_descr/{area_id}
 </script>
 
-<style lang="less" scoped>
-
-.phone-link {
-  text-decoration: none;
-  color: inherit;
-  margin-left: 5px;
-}
-</style>
+<style lang="less" scoped></style>

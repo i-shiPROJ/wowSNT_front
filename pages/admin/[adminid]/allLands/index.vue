@@ -62,7 +62,6 @@ const getAllLend = async () => {
 
 const showLandInfo = async (row: Area) => {
   navigateTo(`${router.currentRoute.value.path}/${row.id}`)
-
 }
 
 
