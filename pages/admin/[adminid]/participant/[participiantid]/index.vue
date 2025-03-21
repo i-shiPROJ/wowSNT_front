@@ -19,7 +19,7 @@
                       </div>
                     </div>
                     <el-row>
-                      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+                      <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                         <div class="label-body fc fc-col">
                           <div>Телефон:</div>
                           <div class="area-naming-st">
@@ -30,7 +30,7 @@
                           </div>
                         </div>
                       </el-col>
-                      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+                      <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                         <div class="label-body fc fc-col">
                           <div>Email:</div>
                           <div class="area-naming-st">
@@ -47,7 +47,7 @@
                 </div>
               </template>
               <template #footer>
-                  <el-button type="primary">Изменить</el-button>
+                <el-button type="primary" @click="showPersonEdit()">Изменить</el-button>
               </template>
             </wow-card>
           </el-col>
@@ -68,7 +68,7 @@
                 </div>
               </template>
               <template #footer>
-                  <el-button type="primary">Изменить</el-button>
+                <el-button type="primary">Изменить</el-button>
               </template>
             </wow-card>
           </el-col>
@@ -87,7 +87,7 @@
                 </div>
               </template>
               <template #footer>
-                  <el-button type="primary">Изменить</el-button>
+                <el-button type="primary">Изменить</el-button>
               </template>
             </wow-card>
           </el-col>
@@ -113,6 +113,8 @@
           </el-col>
         </el-row>
 
+
+        <PersonInfoDialog ref="personDialog" />
       </div>
     </template>
   </NuxtLayout>
@@ -138,13 +140,11 @@ onMounted(async () => {
 });
 
 const getPerson = async () => {
-  console.log(route.params.participiantid);
   person.value = await $fetch<Personinfo>(`person/${route.params.participiantid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
   //Object.assign(areaOwnershops, allPersonsArea);
-  console.log(areaOwnerships);
 }
 
 const getArea = async () => {
@@ -156,6 +156,27 @@ const getArea = async () => {
   //Object.assign(areaOwnershops, allPersonsArea);
   console.log(areaOwnerships);
 }
+
+const personDialog = ref();
+
+
+
+const showPersonEdit = async () => {
+  const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)' });
+  try {
+    const person: Personinfo = await $fetch<Personinfo>(`person/${route.params.participiantid}`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'GET'
+    });
+    personDialog.value.parentFunctions.updatePersonInfo = getPerson();
+    personDialog.value.showDialog(person);
+  } catch (error) {
+    console.error("Error:", error);
+    ElMessage.error("Ошибка запроса");
+  } finally {
+    loading.close();
+  }
+};
 
 ///area_ownership/owners_descr/{area_id}
 </script>

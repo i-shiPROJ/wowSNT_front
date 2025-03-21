@@ -13,8 +13,8 @@
               <template #body>
 
                 <el-table :data="areaOwnerships" style="width: 100%">
-                  <el-table-column prop="fio" label="ФИО" width="auto" />
-                  <el-table-column label="Телефон" width="auto">
+                  <el-table-column prop="fio" label="ФИО" min-width="200" />
+                  <el-table-column label="Телефон" width="170">
                     <template #default="scope">
                       <div class="fc fc-row fc-align-content-center">
                         <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
@@ -23,8 +23,8 @@
                     </template>
                   </el-table-column>
                   <el-table-column prop="part" label="Доля" width="70" />
-                  <el-table-column prop="startDate" label="нач. собств" />
-                  <el-table-column prop="endDate" label="оконч. собств"> </el-table-column>
+                  <el-table-column prop="startDate" label="нач. собств" min-width="100"/>
+                  <el-table-column prop="endDate" label="оконч. собств" min-width="100"> </el-table-column>
                 </el-table>
 
               </template>
