@@ -94,17 +94,13 @@ const solutiondialog = ref();
 const showSolution = async (index: number, row: SolutionInterface) => {
   const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)' });
   try {
-    //TODO заменить метод fetch
-    const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request/solution/${row.id}`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${sessionStorage.authToken}`,
-      },
+    //TODO вставить в solutiondialog обновление из него данных в текущей таблице, а не через watch
+    const response:SolutionEdit = await $fetch<SolutionEdit>(`register-request/solution/${row.id}`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: "GET",
     });
 
-    const data: SolutionEdit = await response.json();
-    solutiondialog.value.showDialog(data);
+    solutiondialog.value.showDialog(response);
   } catch (error) {
     console.error("Error:", error);
     ElMessage.error("Ошибка запроса");

@@ -33,7 +33,7 @@
             <el-input v-model="registerForm.email" />
           </el-form-item>
 
-          <el-form-item prop="areaOwnershipDescr.startDate" label="Дата начала владения">
+          <el-form-item prop="startDate" label="Дата начала владения">
             <el-date-picker v-model="registerForm.startDate" type="date" aria-label="Pick a date"
               placeholder="Выберите дату" format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
           </el-form-item>
@@ -81,25 +81,28 @@
                 </el-form-item>
               </div>
             </div>
+
             <!-- files -->
             <div>
-              <el-upload ref="upload" class="upload-demo"
-                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1"
-                :on-exceed="handleExceed" :auto-upload="false">
+              <div class="wow-adress" @click="viewSelectedFile">
+                <span class="medium_brown_2 f-w-900"> Вы можете прикрепить копии документов, к примеру, выписка из
+                  ЕГРН:</span>
+              </div>
+              <el-upload v-model:file-list="fileList" :limit="10" :auto-upload="false" :file-size="500000"
+                accept=".jpg,.jpeg,.pdf"><!-- multiple -->
                 <template #trigger>
-                  <el-button type="primary">select file</el-button>
+                  <el-button type="primary">Выбрать файл</el-button>
                 </template>
-                <el-button class="ml-3" type="success" @click="submitUpload">
+                <!--                 <el-button class="ml-3" type="success" @click="submitUpload">
                   upload to server
-                </el-button>
+                </el-button> -->
                 <template #tip>
-                  <div class="el-upload__tip text-red">
-                    limit 1 file, new file will cover the old file
+                  <div class="wow-adress">
+                    Максимум 10 файлов. Разрешены только JPG и PDF. Размер одного файла не может превышать 500кб.
                   </div>
                 </template>
               </el-upload>
             </div>
-
 
           </div>
 
@@ -142,7 +145,6 @@ const { options, formRef, registerForm, rules, tabRegistration, submitBackForm, 
 
 
 const registerComplate = ref(false);
-// TODO добавить startDate
 
 interface SNTResponse {
   id: string;
@@ -250,33 +252,48 @@ const searchCadastrNumber = async () => {
 };
 
 
+// file
+import type { UploadUserFile } from 'element-plus';
+const fileList = ref<UploadUserFile[]>([]);
+
+const viewSelectedFile = () => {
+  if (fileList.value) {
+    console.log('Выбранные файлы:', fileList);
+  } else {
+    console.log('Загрузчик файлов не инициализирован');
+  }
+
+}
+
+
 const sendRegistration = async () => {
-
   try {
-
     registerForm.cadastralNum = cadastralModel.modelObject.cadastralNum;
-    console.log(registerForm);
 
-    const response = await fetch(`${useRuntimeConfig().public.baseURL}/register-request`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(registerForm),
+    // Создаем объект FormData
+    const formData = new FormData();
+
+    // Добавляем данные формы
+    formData.append('dto', JSON.stringify(registerForm));
+
+    // Добавляем файлы
+    fileList.value.forEach((file, index) => {
+      if (file.raw) {
+        //TODO работает один файл, несколько не поддерживает
+        formData.append(`file`, file.raw);
+      }
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message);
-    }
+    // Отправляем запрос
+    const data = await $fetch(`register-request`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: "POST",
+      body: formData,
+    });
 
-    const data = await response.json();
-    // Сохраните токен в sessionStorage
-    sessionStorage.setItem("authToken", data.token);
-    //const token = sessionStorage.getItem("authToken");
     ElMessage.success("Вы успешно Зарегистрировались");
     ElMessage.success("Заявка на вступление в СТ отправлена");
-    ElMessage.success("Пароль будет выслан Вам на элеткронную почту после вступления в СТ");
+    ElMessage.success("Пароль будет выслан Вам на электронную почту после вступления в СТ");
     registerComplate.value = true;
   } catch (error: any) {
     console.error("Error in signIn:", error);
@@ -284,19 +301,6 @@ const sendRegistration = async () => {
   }
 }
 
-// file
-const upload = ref<UploadInstance>()
-
-const handleExceed: UploadProps['onExceed'] = (files) => {
-  upload.value!.clearFiles()
-  const file = files[0] as UploadRawFile
-  file.uid = genFileId()
-  upload.value!.handleStart(file)
-}
-
-const submitUpload = () => {
-  upload.value!.submit()
-}
 
 //TODO ДОБАВИТЬ проверку на поиск по кадастровому номеру, если нет кадастра или снт нет в поиске снт то выдать выпадающий список с СНТ
 
@@ -316,6 +320,10 @@ const submitUpload = () => {
     padding: 20px 0;
 
   }
+}
+
+.label-metr {
+  padding-left: 15px;
 }
 
 .el-p {

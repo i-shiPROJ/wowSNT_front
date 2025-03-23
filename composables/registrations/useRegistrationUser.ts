@@ -94,9 +94,7 @@ export const useRegistrationUser = () => {
         } else {
           ElMessage.info('нормас');
           tabRegistration.value = 1;
-
         }
-
       } else {
         console.error('error submit!', fields)
       }
