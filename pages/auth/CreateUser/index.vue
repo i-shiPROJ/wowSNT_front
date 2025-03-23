@@ -81,6 +81,26 @@
                 </el-form-item>
               </div>
             </div>
+            <!-- files -->
+            <div>
+              <el-upload ref="upload" class="upload-demo"
+                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1"
+                :on-exceed="handleExceed" :auto-upload="false">
+                <template #trigger>
+                  <el-button type="primary">select file</el-button>
+                </template>
+                <el-button class="ml-3" type="success" @click="submitUpload">
+                  upload to server
+                </el-button>
+                <template #tip>
+                  <div class="el-upload__tip text-red">
+                    limit 1 file, new file will cover the old file
+                  </div>
+                </template>
+              </el-upload>
+            </div>
+
+
           </div>
 
         </div>
@@ -109,51 +129,20 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, computed } from 'vue';
-import type { FormInstance, FormRules } from 'element-plus';
+import { useRegistrationUser } from '~/composables/registrations/useRegistrationUser';
+import { reactive, ref, onMounted } from 'vue';
 import { ElMessage } from "element-plus";
 import type { cadastrInterface } from '~/interface/Cadastr.interface';
+import type { SntInterface } from '~/interface/Snt.interface';
 import moment from 'moment';
+import { genFileId } from 'element-plus'
+import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+
+const { options, formRef, registerForm, rules, tabRegistration, submitBackForm, submitNextForm } = useRegistrationUser();
 
 
 const registerComplate = ref(false);
 // TODO добавить startDate
-interface RegisterForm {
-  cadastralNum: string,
-  sntId: string,
-  lastName: string,
-  firstName: string,
-  patronymic: string,
-  phoneNum: string,
-  email: string,
-  square: number | 0,
-  residentsNum: number | 0,
-  part: number | 0,
-  startDate: string
-  // username: string,
-  // password: string,
-  // passwordConfirm: string,
-}
-
-const formRef = ref<FormInstance>()
-const registerForm = reactive<RegisterForm>({
-  cadastralNum: '',
-  sntId: '',
-  lastName: '',
-  firstName: '',
-  patronymic: '',
-  phoneNum: '',
-  email: '',
-  square: 0,
-  residentsNum: 0,
-  part: 1,
-  startDate: moment().format('YYYY-MM-DD')
-  // username: '',
-  // password: '',
-  // passwordConfirm: '',
-})
-
-const options = ref<Array<{ value: string, label: string }>>([]);
 
 interface SNTResponse {
   id: string;
@@ -161,7 +150,7 @@ interface SNTResponse {
 }
 
 onMounted(async () => {
-  console.log(moment().format('YYYY-MM-DD'));
+  // console.log(moment().format('YYYY-MM-DD'));
   const response = await $fetch<SNTResponse[]>(`/snt`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
@@ -194,90 +183,6 @@ onMounted(async () => {
 //   }
 // }
 
-const rules = reactive<FormRules<typeof registerForm>>({
-  sntId: [
-    { required: false, message: 'Выберите СТ', trigger: 'change', },
-  ],
-  lastName: [
-    { required: true, message: 'Введите Фамилию', trigger: 'blur' },
-    { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
-  ],
-  firstName: [
-    { required: true, message: 'Введите Имя', trigger: 'blur' },
-    { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
-  ],
-  patronymic: [
-    { required: true, message: 'Введите Отчество', trigger: 'blur' },
-    { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
-  ],
-  phoneNum: [
-    { required: true, message: 'Введите номер телефона', trigger: 'blur' },
-    { pattern: /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/, message: 'Неверный номер', trigger: 'blur' },
-  ],
-  email: [
-    { required: true, message: 'Введите e-mail вдрес', trigger: 'blur', },
-    { type: 'email', message: 'Please input correct email address', trigger: 'blur', },
-  ],
-  square: [
-    { required: true, message: 'Введите площадь участка', trigger: 'blur' },
-    { type: 'number', min: 0, max: 999, message: 'Длина поля от 0 - 999', trigger: 'blur' },
-  ],
-  residentsNum: [
-    { required: true, message: 'Введите кол-во проживающих', trigger: 'blur' },
-    { type: 'number', min: 0, max: 99, message: 'Длина поля от 0 - 99', trigger: 'blur' },
-  ],
-  part: [
-    { required: true, message: 'Введите долю', trigger: 'blur' },
-    { type: 'number', min: 0.01, max: 50, message: 'Длина поля от 0.01 - 1', trigger: 'blur' },
-  ],
-  startDate: [
-    { required: true, type: 'date', message: 'Введите дату начала владения', trigger: 'change' },
-  ],
-  // username: [
-  //   { required: true, message: 'Введите Логин', trigger: 'blur' },
-  //   { min: 3, max: 50, message: 'Длина поля от 3 - 50', trigger: 'blur' },
-  // ],
-  // password: [{ validator: validatePass, trigger: 'blur' }],
-  // passwordConfirm: [{ validator: validatePass2, trigger: 'blur' }],
-})
-
-let tabRegistration = ref(0);
-const submitBackForm = () => { tabRegistration.value = 0 };
-const submitNextForm = async (formEl: FormInstance | undefined) => {
-
-
-
-  if (!formEl) return
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      const checkEmail = await $fetch<Boolean>(`/person/email-exists/${registerForm.email}`, {
-        baseURL: useRuntimeConfig().public.baseURL,
-        method: 'GET'
-      });
-      if (checkEmail) {
-        ElMessage.error('Такой емейл уже существует');
-      } else {
-        ElMessage.info('нормас');
-        tabRegistration.value = 1;
-
-      }
-
-    } else {
-      console.error('error submit!', fields)
-    }
-  })
-};
-
-let btnRegisterView = ref(false);
-interface sntInterface {
-  address: string,
-  id: string,
-  inn: string,
-  ogrn: string,
-  oktmoCode: string,
-  regDate: string,
-  title: string,
-}
 
 let cadastralModel = reactive(
   {
@@ -285,7 +190,7 @@ let cadastralModel = reactive(
     modelObject: {} as cadastrInterface
   });
 
-let nameST = ref({} as sntInterface);
+let nameST = ref({} as SntInterface);
 
 const searchCadastrNumber = async () => {
   try {
@@ -295,16 +200,16 @@ const searchCadastrNumber = async () => {
     });
 
     if (cadastralModel.modelObject.sntId) {
-      nameST.value = await $fetch<sntInterface>(`/snt/${cadastralModel.modelObject.sntId}`, {
+      nameST.value = await $fetch<SntInterface>(`/snt/${cadastralModel.modelObject.sntId}`, {
         baseURL: useRuntimeConfig().public.baseURL,
         method: 'GET'
       });
       registerForm.sntId = nameST.value.id;
     } else {
-      registerForm.sntId = '';
+      registerForm.sntId = 0;
       nameST.value = {
         address: '',
-        id: '',
+        id: 0,
         inn: '',
         ogrn: '',
         oktmoCode: '',
@@ -318,7 +223,7 @@ const searchCadastrNumber = async () => {
     console.error("Ошибка:", error);
     if (error.response.status > 400 && error.response.status < 500) {
       ElMessage.error('Скорее всего, что Вы ошиблись, попробуйте ввести кадастровый номер еще раз');
-      registerForm.sntId = '';
+      registerForm.sntId = 0;
       cadastralModel.modelObject = {
         cadastralNum: '',
         square: 0,
@@ -329,10 +234,10 @@ const searchCadastrNumber = async () => {
 
     if (error.response.status > 500 && error.response.status < 600) {
       ElMessage.info('Не удалось получить информацию из Росреестра, выберите Садовое товарищество!');
-      registerForm.sntId = '';
+      registerForm.sntId = 0;
       nameST.value = {
         address: '',
-        id: '',
+        id: 0,
         inn: '',
         ogrn: '',
         oktmoCode: '',
@@ -379,14 +284,28 @@ const sendRegistration = async () => {
   }
 }
 
+// file
+const upload = ref<UploadInstance>()
+
+const handleExceed: UploadProps['onExceed'] = (files) => {
+  upload.value!.clearFiles()
+  const file = files[0] as UploadRawFile
+  file.uid = genFileId()
+  upload.value!.handleStart(file)
+}
+
+const submitUpload = () => {
+  upload.value!.submit()
+}
+
 //TODO ДОБАВИТЬ проверку на поиск по кадастровому номеру, если нет кадастра или снт нет в поиске снт то выдать выпадающий список с СНТ
 
 
 
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
+// const resetForm = (formEl: FormInstance | undefined) => {
+//   if (!formEl) return
+//   formEl.resetFields()
+// }
 </script>
 
 <style lang="less" scoped>
