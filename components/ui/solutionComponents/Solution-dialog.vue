@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog v-model="dialogFormVisible"
+    <el-dialog v-if="dialogFormVisible" v-model="dialogFormVisible"
       :title="`Заявка на вступление #${currentSolutionObject.regRequest?.id} от ${currentSolutionObject.regRequest?.requestDate}`"
       :width="getWidthDialog">
 
@@ -110,6 +110,15 @@
               </el-form-item>
             </el-col>
           </el-row>
+
+          <div class="f-w-900 tc-heading-blue">Приложенные файлы:</div>
+          <el-row>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+              здесь будут приложенные файлы паользователем
+            </el-col>
+
+          </el-row>
+
         </div>
 
 
@@ -202,10 +211,22 @@ const dialogFormVisible = ref(false);
 const fromCadastrNumber = ref('');
 
 const showDialog = (currentSolution: SolutionEdit) => {
-  currentSolutionObject = reactive({ ...currentSolution });//JSON.parse(JSON.stringify(currentSolution))
+  currentSolutionObject = reactive({ ...currentSolution });
   dialogFormVisible.value = true;
   debounceCadastrNumer();
 };
+
+const resetFields = () => {
+  formRef.value?.resetFields();
+  fromCadastrNumber.value = '';
+};
+
+// Добавим сброс полей при закрытии диалога
+watch(dialogFormVisible, (newVal) => {
+  if (!newVal) {
+    resetFields();
+  }
+});
 
 const formRef = ref<FormInstance>();
 //const solutionForm = reactive<SolutionInterface>({...currentSolutionObject});
@@ -329,7 +350,6 @@ const cadastrNumerInputTimeout = ref<NodeJS.Timeout | null>(null);
 
 //loader start
 const debounceCadastrNumer = async () => {
-  //TODO возникет ошибка Uncaught ResizeObserver loop completed with undelivered notifications. при повторном открытии формы
   if (cadastrNumerInputTimeout.value) {
     clearTimeout(cadastrNumerInputTimeout.value);
   }
