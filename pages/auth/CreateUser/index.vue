@@ -89,7 +89,7 @@
                   ЕГРН:</span>
               </div>
               <el-upload v-model:file-list="fileList" :limit="10" :auto-upload="false" :file-size="500000"
-                accept=".jpg,.jpeg,.pdf"><!-- multiple -->
+                accept=".png,.jpg,.jpeg,.pdf" multiple>
                 <template #trigger>
                   <el-button type="primary">Выбрать файл</el-button>
                 </template>
@@ -98,7 +98,8 @@
                 </el-button> -->
                 <template #tip>
                   <div class="wow-adress">
-                    Максимум 10 файлов. Разрешены только JPG и PDF. Размер одного файла не может превышать 500кб.
+                    Максимум 10 файлов. Разрешены только JPG, PNG и PDF. Общий размер файлов не должен превышать 5
+                    мегабайт.
                   </div>
                 </template>
               </el-upload>
@@ -270,31 +271,42 @@ const sendRegistration = async () => {
   try {
     registerForm.cadastralNum = cadastralModel.modelObject.cadastralNum;
 
-    // Создаем объект FormData
-    const formData = new FormData();
-
-    // Добавляем данные формы
-    formData.append('dto', JSON.stringify(registerForm));
-
-    // Добавляем файлы
-    fileList.value.forEach((file, index) => {
+    let totalFileSize = 0;
+    fileList.value.forEach(file => {
       if (file.raw) {
-        //TODO работает один файл, несколько не поддерживает
-        formData.append(`file`, file.raw);
+        totalFileSize += file.raw.size;
       }
     });
+    if (totalFileSize > 5000000) {
+      ElMessage.error('Общий размер файлов превышает 5 мегабайт');
+      return;
+    } else {
+      const formData = new FormData();
 
-    // Отправляем запрос
-    const data = await $fetch(`register-request`, {
-      baseURL: useRuntimeConfig().public.baseURL,
-      method: "POST",
-      body: formData,
-    });
+      // Добавляем данные формы
+      formData.append('dto', JSON.stringify(registerForm));
 
-    ElMessage.success("Вы успешно Зарегистрировались");
-    ElMessage.success("Заявка на вступление в СТ отправлена");
-    ElMessage.success("Пароль будет выслан Вам на электронную почту после вступления в СТ");
-    registerComplate.value = true;
+      // Добавляем файлы
+      fileList.value.forEach((file, index) => {
+        if (file.raw) {
+          formData.append(`file`, file.raw, file.name);
+        }
+      });
+
+      // Отправляем запрос
+      const data = await $fetch(`register-request`, {
+        baseURL: useRuntimeConfig().public.baseURL,
+        method: "POST",
+        body: formData,
+      });
+
+      ElMessage.success("Вы успешно Зарегистрировались");
+      ElMessage.success("Заявка на вступление в СТ отправлена");
+      ElMessage.success("Пароль будет выслан Вам на электронную почту после вступления в СТ");
+      registerComplate.value = true;
+    }
+
+
   } catch (error: any) {
     console.error("Error in signIn:", error);
     ElMessage.error(error.message);
