@@ -78,7 +78,7 @@ import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue
 import { menuObject } from '~/pages/admin/menuObject';
 import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
-import {mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox,mdiMessageReplyTextOutline, mdiCogOutline,  mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+import { mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox, mdiMessageReplyTextOutline, mdiCogOutline, mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
 
 
 import type { Memberships } from '~/interface/Memberships.interface';
@@ -173,11 +173,11 @@ interface MenuSettings {
 const setMenu = () => {
   const getArraySTRole_p = () => {
     // Возвращаем первую найденную запись для управления СНТ, где есть роль
-    const currentId = Number(route.params.adminid); 
+    const currentId = Number(route.params.adminid);
     return userInfoStore.currentUser.memberships
       ? userInfoStore.currentUser.memberships.find((item: Memberships) =>
-          item.role?.code === 'ROLE_P' && item.snt?.id === currentId
-        )
+        item.role?.code === 'ROLE_P' && item.snt?.id === currentId
+      )
       : null;
   };
 
@@ -230,7 +230,7 @@ const setMenu = () => {
       settings: {
         active: activeMenu('admin-adminid-solution'),
         name: 'Заявки на вступление',
-        icon: mdiCheckboxMarkedCircleAutoOutline ,
+        icon: mdiCheckboxMarkedCircleAutoOutline,
         url: `/admin/${route.params.adminid}/solution`,
         functions: {
           setActiveMenuItem
@@ -243,7 +243,7 @@ const setMenu = () => {
       settings: {
         active: activeMenu('admin-adminid-messages'),
         name: 'Обращения садоводов',
-        icon: mdiMessageReplyTextOutline  ,
+        icon: mdiMessageReplyTextOutline,
         url: `/admin/${route.params.adminid}/messages`,
         functions: {
           setActiveMenuItem
@@ -256,7 +256,7 @@ const setMenu = () => {
       settings: {
         active: activeMenu('admin-adminid-settings'),
         name: 'Настройки СТ',
-        icon: mdiCogOutline  ,
+        icon: mdiCogOutline,
         url: `/admin/${route.params.adminid}/settings`,
         functions: {
           setActiveMenuItem
@@ -364,6 +364,8 @@ onBeforeUnmount(() => {
       /* Полупрозрачный фон */
       backdrop-filter: blur(3px);
       z-index: 3;
+      border-bottom: 1px solid #f1f1f1;
+      box-shadow: -1px -3px 9px 0px #bdbdbd;
 
       .btn-menu {
         height: 50px;
@@ -417,6 +419,9 @@ onBeforeUnmount(() => {
     .main {
       flex: 1;
       width: 100%;
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .footer {

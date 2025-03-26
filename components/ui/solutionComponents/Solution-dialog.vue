@@ -21,9 +21,9 @@
           <div class="f-w-900 tc-heading-blue">Таблица собственников по текущему участку</div>
           <el-table :data="currentSolutionObject.existingAreaOwnershipsDescr" style="width: 100%">
             <el-table-column prop="fio" label="ФИО" width="180" />
-            <el-table-column prop="part" label="Доля" width="180" />
-            <el-table-column prop="startDate" label="нач. собств" />
-            <el-table-column label="оконч. собств">
+            <el-table-column prop="part" label="Доля" />
+            <el-table-column prop="startDate" label="нач. собств" width="180px"/>
+            <el-table-column label="оконч. собств" width="180px">
               <template #default="scope">
                 <el-date-picker v-if="!scope.row.endDate" v-model="scope.row.endDate" style="width: 100%;" type="date"
                   aria-label="Pick a date" placeholder="Дата окончания" :disabled="!!scope.row.endDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>

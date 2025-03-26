@@ -5,7 +5,7 @@
       <div>
         <el-row>
 
-          <el-col :xs="24" :sm="24" :md="24" :lg="9" :xl="8">
+          <el-col :xs="24" :sm="24" :md="24" :lg="9" :xl="9">
             <wow-card>
               <template #header><b>Юридическая информация: {{ dataSnt.title }}</b></template>
               <template #body>
@@ -49,7 +49,7 @@
             </wow-card>
           </el-col>
 
-          <el-col :xs="24" :sm="24" :md="24" :lg="7" :xl="5">
+          <el-col :xs="24" :sm="24" :md="24" :lg="7" :xl="7">
             <wow-card>
               <template #header><b>Роли</b></template>
               <template #body>
@@ -67,7 +67,7 @@
         </el-row>
 
         <el-row>
-          <el-col :xs="24" :sm="24" :md="24" :lg="7" :xl="5">
+          <el-col :xs="24" :sm="24" :md="24" :lg="7" :xl="7">
             <wow-card>
               <template #header><b>Тариф</b></template>
               <template #body>

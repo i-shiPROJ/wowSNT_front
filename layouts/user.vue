@@ -286,6 +286,8 @@ const menuObject = reactive([
       /* Полупрозрачный фон */
       backdrop-filter: blur(3px);
       z-index: 3;
+      border-bottom: 1px solid #f1f1f1;
+      box-shadow: -1px -3px 9px 0px #bdbdbd;
 
       .btn-menu {
         height: 50px;
@@ -339,6 +341,9 @@ const menuObject = reactive([
     .main {
       flex: 1;
       width: 100%;
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .footer {
