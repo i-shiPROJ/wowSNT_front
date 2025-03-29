@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog v-model="dialogFormVisible"
+    <el-dialog v-if="dialogFormVisible" v-model="dialogFormVisible"
       :title="`Заявка на вступление #${currentSolutionObject.regRequest?.id} от ${currentSolutionObject.regRequest?.requestDate}`"
       :width="getWidthDialog">
 
@@ -21,9 +21,9 @@
           <div class="f-w-900 tc-heading-blue">Таблица собственников по текущему участку</div>
           <el-table :data="currentSolutionObject.existingAreaOwnershipsDescr" style="width: 100%">
             <el-table-column prop="fio" label="ФИО" width="180" />
-            <el-table-column prop="part" label="Доля" width="180" />
-            <el-table-column prop="startDate" label="нач. собств" />
-            <el-table-column label="оконч. собств">
+            <el-table-column prop="part" label="Доля" />
+            <el-table-column prop="startDate" label="нач. собств" width="180px"/>
+            <el-table-column label="оконч. собств" width="180px">
               <template #default="scope">
                 <el-date-picker v-if="!scope.row.endDate" v-model="scope.row.endDate" style="width: 100%;" type="date"
                   aria-label="Pick a date" placeholder="Дата окончания" :disabled="!!scope.row.endDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
@@ -86,7 +86,7 @@
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-              <el-form-item prop="regRequest.phoneNums" label="Телефон">
+              <el-form-item prop="regRequest.phoneNum" label="Телефон">
                 <el-input v-model="currentSolutionObject.regRequest.phoneNum" v-mask="'+7 (###) ### ## ##'"
                   placeholder="+7 (999) 999 99 99" />
               </el-form-item>
@@ -110,6 +110,15 @@
               </el-form-item>
             </el-col>
           </el-row>
+
+          <div class="f-w-900 tc-heading-blue">Приложенные файлы:</div>
+          <el-row>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+              здесь будут приложенные файлы паользователем
+            </el-col>
+
+          </el-row>
+
         </div>
 
 
@@ -160,8 +169,8 @@
         <!-- <el-tooltip v-if="currentSolutionObject.existingAreaOwnershipsDescr.length > 0" content="Заменить нижнее поле старыми данными"
           placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
-            @click="updateField('phoneNum', currentSolutionObject.person.phoneNums)">
-            <span>{{ currentSolutionObject.person.phoneNums }}</span>
+            @click="updateField('phoneNum', currentSolutionObject.person.phoneNum)">
+            <span>{{ currentSolutionObject.person.phoneNum }}</span>
             <wow-icon type="mdi" :path="$mdi.mdiArrowDownRight" />
           </div>
         </el-tooltip> -->
@@ -202,10 +211,22 @@ const dialogFormVisible = ref(false);
 const fromCadastrNumber = ref('');
 
 const showDialog = (currentSolution: SolutionEdit) => {
-  currentSolutionObject = reactive({ ...currentSolution });//JSON.parse(JSON.stringify(currentSolution))
+  currentSolutionObject = reactive({ ...currentSolution });
   dialogFormVisible.value = true;
   debounceCadastrNumer();
 };
+
+const resetFields = () => {
+  formRef.value?.resetFields();
+  fromCadastrNumber.value = '';
+};
+
+// Добавим сброс полей при закрытии диалога
+watch(dialogFormVisible, (newVal) => {
+  if (!newVal) {
+    resetFields();
+  }
+});
 
 const formRef = ref<FormInstance>();
 //const solutionForm = reactive<SolutionInterface>({...currentSolutionObject});
@@ -329,7 +350,6 @@ const cadastrNumerInputTimeout = ref<NodeJS.Timeout | null>(null);
 
 //loader start
 const debounceCadastrNumer = async () => {
-  //TODO возникет ошибка Uncaught ResizeObserver loop completed with undelivered notifications. при повторном открытии формы
   if (cadastrNumerInputTimeout.value) {
     clearTimeout(cadastrNumerInputTimeout.value);
   }

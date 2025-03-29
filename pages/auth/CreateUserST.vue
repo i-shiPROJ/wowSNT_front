@@ -22,8 +22,8 @@
             <el-input v-model="registerForm.patronymic" />
           </el-form-item>
 
-          <el-form-item label="Телефон" prop="phoneNums">
-            <el-input v-model="registerForm.phoneNums" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (999) 999 99 99" />
+          <el-form-item label="Телефон" prop="phoneNum">
+            <el-input v-model="registerForm.phoneNum" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (999) 999 99 99" />
           </el-form-item>
           <el-form-item prop="email" label="email">
             <el-input v-model="registerForm.email" />
@@ -103,7 +103,7 @@ interface RegisterForm {
   lastName: string,
   firstName: string,
   patronymic: string,
-  phoneNums: string,
+  phoneNum: string,
   email: string,
   username: string,
   password: string,
@@ -127,7 +127,7 @@ const registerForm = reactive<RegisterForm>({
   lastName: '',
   firstName: '',
   patronymic: '',
-  phoneNums: '',
+  phoneNum: '',
   email: '',
   username: '',
   password: '',
@@ -179,7 +179,7 @@ const rulesstRegister = reactive<FormRules<typeof registerForm>>({
     { required: true, message: 'Введите Отчество', trigger: 'blur' },
     { min: 2, max: 50, message: 'Длина поля от 2 - 50', trigger: 'blur' },
   ],
-  phoneNums: [
+  phoneNum: [
     { required: true, message: 'Введите номер телефона', trigger: 'blur' },
     { pattern: /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/, message: 'Неверный номер', trigger: 'blur' },
   ],

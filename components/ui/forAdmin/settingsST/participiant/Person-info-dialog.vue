@@ -20,8 +20,8 @@
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <el-form-item label="Телефон" prop="phoneNums">
-              <el-input v-model="person.phoneNums" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (999) 999 99 99" />
+            <el-form-item label="Телефон" prop="phoneNum">
+              <el-input v-model="person.phoneNum" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (999) 999 99 99" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
@@ -70,7 +70,7 @@ const rules = reactive<FormRules<typeof person>>({
   patronymic: [
     { required: true, message: 'Введите Отчество', trigger: 'change', },
   ],
-  phoneNums: [
+  phoneNum: [
     { required: true, message: 'Введите номер телефона', trigger: 'blur' },
     { pattern: /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/, message: 'Неверный номер', trigger: 'blur' },
   ],

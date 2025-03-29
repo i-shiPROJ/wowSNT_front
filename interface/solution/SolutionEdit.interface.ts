@@ -33,6 +33,7 @@ export interface SolutionEdit {
     lastName: string,
     firstName: string,
     patronymic: string,
+    phoneNum: string,
     phoneNums: string,
     email: string
   },

@@ -12,7 +12,7 @@
               <template #header><b>Таблица собственников</b></template>
               <template #body>
 
-                <el-table :data="areaOwnerships" style="width: 100%">
+                <el-table :data="areaOwnerships" style="width: 100%" class="cur-pointer" @row-click="showParticipantInfo">
                   <el-table-column prop="fio" label="ФИО" min-width="200" />
                   <el-table-column label="Телефон" width="170">
                     <template #default="scope">
@@ -23,7 +23,7 @@
                     </template>
                   </el-table-column>
                   <el-table-column prop="part" label="Доля" width="70" />
-                  <el-table-column prop="startDate" label="нач. собств" min-width="100"/>
+                  <el-table-column prop="startDate" label="нач. собств" min-width="100" />
                   <el-table-column prop="endDate" label="оконч. собств" min-width="100"> </el-table-column>
                 </el-table>
 
@@ -74,13 +74,11 @@ onMounted(async () => {
 });
 
 const getAreaOwnerships = async () => {
-  console.log(route.params.adminid);
   areaOwnerships.value = await $fetch<AreaOwnershipsDescr[]>(`area_ownership/owners_descr/${route.params.landid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
   //Object.assign(areaOwnershops, allPersonsArea);
-  console.log(areaOwnerships);
 }
 
 const getArea = async () => {
@@ -89,6 +87,10 @@ const getArea = async () => {
     method: 'GET'
   }
   )
+}
+
+const showParticipantInfo = async (row: Area) => {
+  navigateTo(`/admin/${route.params.adminid}/participant/${row.id}`)
 }
 
 ///area_ownership/owners_descr/{area_id}
