@@ -14,11 +14,11 @@
                   <el-table-column prop="lastName" label="Фамилия" min-width="170"/>
                   <el-table-column prop="firstName" label="Имя" min-width="170"/>
                   <el-table-column prop="patronymic" label="Отчество" min-width="170"/>
-                  <el-table-column prop="phoneNums" label="Телефон" width="170">
+                  <el-table-column prop="phoneNum" label="Телефон" width="170">
                     <template #default="scope">
                       <div class="fc fc-row fc-align-content-center">
                         <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
-                        <a class="phone-link" :href="`tel:${scope.row.phoneNums}`"> {{ scope.row.phoneNums }}</a>
+                        <a class="phone-link" :href="`tel:${scope.row.phoneNum}`"> {{ scope.row.phoneNum }}</a>
                       </div>
                     </template>
                   </el-table-column>

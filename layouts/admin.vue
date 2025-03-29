@@ -78,7 +78,9 @@ import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue
 import { menuObject } from '~/pages/admin/menuObject';
 import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
-import { mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox, mdiMessageReplyTextOutline, mdiCogOutline, mdiCardAccountDetailsOutline, mdiSafeSquareOutline, mdiAccountGroup, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+import { mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox, mdiMessageReplyTextOutline, mdiCogOutline, mdiCardAccountDetailsOutline, mdiCashRegister, 
+  mdiAccountGroup, 
+  mdiSafeSquareOutline, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
 
 
 import type { Memberships } from '~/interface/Memberships.interface';
@@ -296,6 +298,39 @@ const setMenu = () => {
         }
       },
     },
+    {
+      type: 'labelGroup',
+      id: 'labelMoneyGroup',
+      settings: {
+        name: 'Расходы СТ', // Используем имя роли, если запись найдена
+      },
+    },
+    // {
+    //   type: 'menuBtn',
+    //   id: 'admin-adminid-allLands',
+    //   settings: {
+    //     active: activeMenu('admin-adminid-allLands'),
+    //     name: 'Перечень должностей',//Контроллер Штатных единиц
+    //     icon: mdiAccountGroup,
+    //     url: `/admin/${route.params.adminid}/allLands`,
+    //     functions: {
+    //       setActiveMenuItem
+    //     }
+    //   },
+    // },
+    // {
+    //   type: 'menuBtn',
+    //   id: 'admin-adminid-allLands',
+    //   settings: {
+    //     active: activeMenu('admin-adminid-allLands'),
+    //     name: 'Расходы',//Контроллер расходов
+    //     icon: mdiCashRegister,
+    //     url: `/admin/${route.params.adminid}/allLands`,
+    //     functions: {
+    //       setActiveMenuItem
+    //     }
+    //   },
+    // },
   );
 }
 

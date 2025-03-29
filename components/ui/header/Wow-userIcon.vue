@@ -50,7 +50,7 @@ return `${userInfoStore.currentUser?.lastName} ${userInfoStore.currentUser?.firs
 });
 
 const getPhone = computed(()=>{
-  return userInfoStore.currentUser.phoneNums
+  return userInfoStore.currentUser.phoneNum
 });
 
 const userExit = () => {

@@ -86,7 +86,7 @@
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-              <el-form-item prop="regRequest.phoneNums" label="Телефон">
+              <el-form-item prop="regRequest.phoneNum" label="Телефон">
                 <el-input v-model="currentSolutionObject.regRequest.phoneNum" v-mask="'+7 (###) ### ## ##'"
                   placeholder="+7 (999) 999 99 99" />
               </el-form-item>
@@ -169,8 +169,8 @@
         <!-- <el-tooltip v-if="currentSolutionObject.existingAreaOwnershipsDescr.length > 0" content="Заменить нижнее поле старыми данными"
           placement="bottom-end" effect="light">
           <div class="fc fc-row fc-justify-end  fc-align-start tc-dark-gray-5 cur-pointer"
-            @click="updateField('phoneNum', currentSolutionObject.person.phoneNums)">
-            <span>{{ currentSolutionObject.person.phoneNums }}</span>
+            @click="updateField('phoneNum', currentSolutionObject.person.phoneNum)">
+            <span>{{ currentSolutionObject.person.phoneNum }}</span>
             <wow-icon type="mdi" :path="$mdi.mdiArrowDownRight" />
           </div>
         </el-tooltip> -->

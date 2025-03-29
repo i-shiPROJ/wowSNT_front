@@ -74,13 +74,11 @@ onMounted(async () => {
 });
 
 const getAreaOwnerships = async () => {
-  console.log(route.params.adminid);
   areaOwnerships.value = await $fetch<AreaOwnershipsDescr[]>(`area_ownership/owners_descr/${route.params.landid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
   //Object.assign(areaOwnershops, allPersonsArea);
-  console.log(areaOwnerships);
 }
 
 const getArea = async () => {
