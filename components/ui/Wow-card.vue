@@ -1,8 +1,9 @@
 <template>
   <div class="wow-card-col">
     <div class="inside-block">
-      <div class="header">
+      <div class="header fc fc-justify-space-b">
         <slot name="header" />
+        <slot name="header-options" />
       </div>
       <div class="body">
         <slot name="body" />
