@@ -305,19 +305,19 @@ const setMenu = () => {
         name: 'Расходы СТ', // Используем имя роли, если запись найдена
       },
     },
-    // {
-    //   type: 'menuBtn',
-    //   id: 'admin-adminid-allLands',
-    //   settings: {
-    //     active: activeMenu('admin-adminid-allLands'),
-    //     name: 'Перечень должностей',//Контроллер Штатных единиц
-    //     icon: mdiAccountGroup,
-    //     url: `/admin/${route.params.adminid}/allLands`,
-    //     functions: {
-    //       setActiveMenuItem
-    //     }
-    //   },
-    // },
+    {
+      type: 'menuBtn',
+      id: 'admin-adminid-settings-staffunit',
+      settings: {
+        active: activeMenu('admin-adminid-settings-staffunit'),
+        name: 'Перечень должностей',//Контроллер Штатных единиц
+        icon: mdiAccountGroup,
+        url: `/admin/${route.params.adminid}/settings/staffunit`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
     // {
     //   type: 'menuBtn',
     //   id: 'admin-adminid-allLands',
