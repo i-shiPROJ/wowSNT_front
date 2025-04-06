@@ -26,9 +26,9 @@
                   @row-click="showStuffInfo">
                   <el-table-column prop="jobTitle" label="Должность" min-width="200" />
                   <el-table-column prop="ratesNum" label="Ставка" min-width="300" />
-                  <el-table-column prop="salary" label="Зарплата" >
+                  <el-table-column prop="salary" label="Зарплата">
                     <template #default="scope">
-                      {{ `${scope.row.salary.toLocaleString()} руб.`}}
+                      {{ `${scope.row.salary.toLocaleString()} руб.` }}
                     </template>
                   </el-table-column>
                 </el-table>
@@ -42,6 +42,8 @@
 
       </div>
 
+      <StuffUnitDialog ref="refStuffUnitDialog" />
+    
     </template>
   </NuxtLayout>
 </template>
@@ -57,6 +59,7 @@ import type { Stuff_unit } from '~/interface/Stuff_unit.interface';
 const route = useRoute();
 const router = useRouter();
 const allStuffUnit = ref<Stuff_unit[]>([]);
+const refStuffUnitDialog = ref();
 
 onMounted(() => {
   getStuffunit()
@@ -80,7 +83,10 @@ const showStuffInfo = async (row: Stuff_unit) => {
 }
 
 const addStuff = () => {
-  console.log('addstuff');
+  refStuffUnitDialog.value.parentFunctions.updateStuffUnit = getStuffunit;
+  refStuffUnitDialog.value.showDialog();
+  // solutiondialog.value.parentFunctions.setDataSnt = setDataSnt;
+  // solutiondialog.value.showDialog(dataSnt, setDataSnt); 
 }
 
 </script>

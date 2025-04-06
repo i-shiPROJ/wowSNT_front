@@ -171,7 +171,11 @@ const removeStuff = () => {
   confirmDialog.value.titleBody = `Удалить должность?`;
   confirmDialog.value.acceptFunction = async () => {
     confirmDialog.value.showCloseDialog();
-    console.log('удалили');
+    await $fetch(`/staff_unit/${route.params.staffunitid}`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'DELETE',
+    });
+    navigateTo(`/admin/${route.params.adminid}/settings/staffunit`);
   };
   confirmDialog.value.showConfirmDialog();
 }
