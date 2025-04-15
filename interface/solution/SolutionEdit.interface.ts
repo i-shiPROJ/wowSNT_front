@@ -1,7 +1,8 @@
 import type { AreaOwnershipsDescr } from './AreaOwnershipsDescr.interface'
+import type { Files } from '../Files'
 export interface SolutionEdit {
   regRequest: {
-    id: number | null,
+    id: number,
     snt: {
       id: number,
       inn: number,
@@ -19,7 +20,8 @@ export interface SolutionEdit {
     email: string,
     requestDate: string,
     isProcessed: boolean,
-    processDate: string | null
+    processDate: string | null,
+    files: [Files]
   },
   area: {
     id: number | null,

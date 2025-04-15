@@ -64,22 +64,31 @@
           <el-input v-model="cadastralModel.cadastr_nmber" style="width: 100%;"
             placeholder="Введите кадастровый номер" />
 
-          <div v-if="cadastralModel.modelObject.address">
-            <div class="wow-adress">
-              <span class="tc-bright_red f-w-900"> Адрес вашего участка:</span> <br />
-              <span class="medium_brown_2"> {{ cadastralModel.modelObject?.address }} </span>
-            </div>
-            <div>
-              <div v-if="nameST.id">
-                <span class="tc-bright_red f-w-900">Заявка на вступление будет отправлена в СТ:</span><br />
-                <span class="medium_brown_2">{{ nameST.title }}</span>
-
+          <div v-if="visibleFormSelectSnt">
+            <div v-if="cadastralModel.modelObject.address">
+              <div class="wow-adress">
+                <span class="tc-bright_red f-w-900"> Адрес вашего участка:</span> <br />
+                <span class="medium_brown_2"> {{ cadastralModel.modelObject?.address }} </span>
               </div>
-              <div v-else="!!nameST.id">
+              <div>
+                <div v-if="nameST.id">
+                  <span class="tc-bright_red f-w-900">Заявка на вступление будет отправлена в СТ:</span><br />
+                  <span class="medium_brown_2">{{ nameST.title }}</span>
+                </div>
+                <div v-else="!!nameST.id">
+                  <el-form-item label="Садовое товарищество" prop="sntId">
+                    <el-select-v2 v-model="registerForm.sntId" placeholder="Выбор СТ" :options="options" filterable />
+                  </el-form-item>
+                </div>
+              </div>
+            </div>
+
+            <div v-else>
+              <!-- <div v-if="!!nameST.id"> -->
                 <el-form-item label="Садовое товарищество" prop="sntId">
                   <el-select-v2 v-model="registerForm.sntId" placeholder="Выбор СТ" :options="options" filterable />
                 </el-form-item>
-              </div>
+              <!-- </div> -->
             </div>
 
             <!-- files -->
@@ -146,6 +155,7 @@ const { options, formRef, registerForm, rules, tabRegistration, submitBackForm, 
 
 
 const registerComplate = ref(false);
+const visibleFormSelectSnt = ref(false);
 
 interface SNTResponse {
   id: string;
@@ -220,15 +230,16 @@ const searchCadastrNumber = async () => {
         title: ''
       };
     }
-
+    visibleFormSelectSnt.value = true;
   } catch (error: any) {
 
     console.error("Ошибка:", error);
     if (error.response.status > 400 && error.response.status < 500) {
       ElMessage.error('Скорее всего, что Вы ошиблись, попробуйте ввести кадастровый номер еще раз');
       registerForm.sntId = 0;
+      //cadastralModel.modelObject.address
       cadastralModel.modelObject = {
-        cadastralNum: '',
+        cadastralNum: cadastralModel.modelObject.cadastralNum,
         square: 0,
         address: '',
         sntId: '',
@@ -237,6 +248,7 @@ const searchCadastrNumber = async () => {
 
     if (error.response.status > 500 && error.response.status < 600) {
       ElMessage.info('Не удалось получить информацию из Росреестра, выберите Садовое товарищество!');
+      visibleFormSelectSnt.value = true;
       registerForm.sntId = 0;
       nameST.value = {
         address: '',

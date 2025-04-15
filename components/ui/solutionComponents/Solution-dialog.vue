@@ -22,11 +22,12 @@
           <el-table :data="currentSolutionObject.existingAreaOwnershipsDescr" style="width: 100%">
             <el-table-column prop="fio" label="ФИО" width="180" />
             <el-table-column prop="part" label="Доля" />
-            <el-table-column prop="startDate" label="нач. собств" width="180px"/>
+            <el-table-column prop="startDate" label="нач. собств" width="180px" />
             <el-table-column label="оконч. собств" width="180px">
               <template #default="scope">
                 <el-date-picker v-if="!scope.row.endDate" v-model="scope.row.endDate" style="width: 100%;" type="date"
-                  aria-label="Pick a date" placeholder="Дата окончания" :disabled="!!scope.row.endDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
+                  aria-label="Pick a date" placeholder="Дата окончания" :disabled="!!scope.row.endDate"
+                  format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
                 <!-- {{ scope.row.endDate ? $moment(scope.row.endDate).format('YYYY-MM-DD') : '' }} -->
                 <div v-else>{{ $moment(scope.row.endDate).format('YYYY-MM-DD') }}</div>
 
@@ -77,7 +78,7 @@
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
               <el-form-item prop="areaOwnershipDescr.startDate" label="Дата начала владения">
                 <el-date-picker v-model="currentSolutionObject.areaOwnershipDescr.startDate" type="date"
-                  aria-label="Pick a date" placeholder="Выберите дату" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
+                  aria-label="Pick a date" placeholder="Выберите дату" format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
@@ -114,7 +115,11 @@
           <div class="f-w-900 tc-heading-blue">Приложенные файлы:</div>
           <el-row>
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-              здесь будут приложенные файлы паользователем
+              <Wow-file-viewer :files="currentSolutionObject.regRequest.files" :folder="currentSolutionObject.regRequest.id.toString()"/>
+              <!-- <div v-for="(file) in currentSolutionObject.regRequest.files" :key="file.id">
+                
+                {{ `${file.originalName}` }}
+              </div> -->
             </el-col>
 
           </el-row>
@@ -346,7 +351,7 @@ const updateField = (field: 'patronymic' | 'firstName' | 'lastName' | 'email' | 
   }
 };
 
-const cadastrNumerInputTimeout = ref<NodeJS.Timeout | null>(null);
+const cadastrNumerInputTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
 //loader start
 const debounceCadastrNumer = async () => {
@@ -357,9 +362,9 @@ const debounceCadastrNumer = async () => {
     // const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)', lock: true });
     try {
       const cadastr = await $fetch<cadastrInterface>(`/cadastral/${currentSolutionObject.regRequest.cadastralNum}`, {
-      baseURL: useRuntimeConfig().public.baseURL,
-      method: 'GET'
-    });
+        baseURL: useRuntimeConfig().public.baseURL,
+        method: 'GET'
+      });
       fromCadastrNumber.value = cadastr.address;
     } catch (error: any) {
       console.error("Error:", error);
