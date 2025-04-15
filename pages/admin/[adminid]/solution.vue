@@ -44,8 +44,6 @@ import type { SolutionInterface } from '~/components/widgets/admin/solution/inte
 import type { SolutionEdit } from '~/interface/solution/SolutionEdit.interface';
 import { ElMessage, ElLoading } from 'element-plus';
 
-
-
 interface ColumnType {
   prop: string;
   label: string;
@@ -99,6 +97,8 @@ const showSolution = async (index: number, row: SolutionInterface) => {
       baseURL: useRuntimeConfig().public.baseURL,
       method: "GET",
     });
+
+    console.log('response', response);
 
     solutiondialog.value.showDialog(response);
   } catch (error) {
