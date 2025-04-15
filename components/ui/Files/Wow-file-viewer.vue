@@ -58,7 +58,7 @@ const getIcoExtension = (originalName: string = '') => {
       return mdiFile;
   }
 }
-
+// TODO добавить отображение размера файла
 const downloadFile = async (filename: string) => {
   try {
     const response = await $fetch<Blob>(`${useRuntimeConfig().public.baseURL}/register-request/file/${props.folder}?filename=${filename}`, {
