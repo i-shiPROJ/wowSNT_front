@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog v-model="dialogFormVisible" title="Форма изменения данных участника" :width="getWidthDialog">
+    <el-dialog v-model="dialogFormVisible" :title="props.label" :width="getWidthDialog">
 
       <el-form ref="formRef" style="width: 100%" :model="person" label-width="auto" :rules="rules">
 
@@ -53,6 +53,12 @@ import type { Personinfo } from '~/interface/Personinfo.interface';
 
 import { ElMessage, ElLoading } from 'element-plus';
 
+const props = defineProps({
+  label: {
+    type: String,
+    default: 'Форма изменения данных участника'
+  }
+})
 
 const mobileStore = useMobileStore();
 const getWidthDialog = computed(() => { return mobileStore.isMobile ? '95%' : 800 });
@@ -92,7 +98,7 @@ const showDialog = (currentSolution: Personinfo) => {
 const confirmDialog = ref();
 const showDeclineDialog = () => {
   confirmDialog.value.title = 'Внимание!'
-  confirmDialog.value.titleBody = `Не сохранять изменения данных участника?`;
+  confirmDialog.value.titleBody = `Не сохранять участника?`;
   confirmDialog.value.acceptFunction = async () => {
     confirmDialog.value.showCloseDialog();
     dialogFormVisible.value = false;
@@ -107,7 +113,7 @@ const showConfirmDialog = async (formEl: FormInstance | undefined) => {
     if (valid) {
       //жмем батон на принятие
       confirmDialog.value.title = 'Внимание!'
-      confirmDialog.value.titleBody = `Принять изменения данных участника?`;
+      confirmDialog.value.titleBody = `Сохранить участника?`;
       confirmDialog.value.acceptFunction = async () => {
         try {
           await $fetch(`/person`, {

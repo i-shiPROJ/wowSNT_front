@@ -2,7 +2,9 @@
 
   <NuxtLayout name="admin">
     <template #main>
+
       <div>
+        <wow-toppagetitle namePage="Заявки на вступление" />
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card class="cur-pointer">
@@ -93,12 +95,11 @@ const showSolution = async (index: number, row: SolutionInterface) => {
   const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)' });
   try {
     //TODO вставить в solutiondialog обновление из него данных в текущей таблице, а не через watch
-    const response:SolutionEdit = await $fetch<SolutionEdit>(`register-request/solution/${row.id}`, {
+    const response: SolutionEdit = await $fetch<SolutionEdit>(`register-request/solution/${row.id}`, {
       baseURL: useRuntimeConfig().public.baseURL,
       method: "GET",
     });
 
-    console.log('response', response);
 
     solutiondialog.value.showDialog(response);
   } catch (error) {

@@ -12,7 +12,7 @@
               <template #header><b>Таблица участков</b></template>
               <template #body>
 
-                <!-- <el-table :data="distrincts" style="width: 100%" class="cur-pointer" @row-click="showParticipantInfo">
+                <!-- <el-table :data="distriсts" style="width: 100%" class="cur-pointer" @row-click="showParticipantInfo">
                   <el-table-column prop="fio" label="ФИО" min-width="200" />
                   <el-table-column label="Телефон" width="170">
                     <template #default="scope">
@@ -61,27 +61,25 @@
 useHead({
   title: 'Информация об районе'
 });
-
-import type { Distrinct } from '~/interface/District.interface';
+//TODO остановился здесь
+import type { District } from '~/interface/District.interface';
 
 import type { AreaOwnershipsDescr } from '~/interface/solution/AreaOwnershipsDescr.interface';
 import type { Area } from '~/interface/Area.interface';
 
 const route = useRoute();
-let distrincts = ref<Distrinct[]>([]);
+let distriсts = ref<District[]>([]);
 let area = ref<Area>();
 
 onMounted(async () => {
-  getDistrincts();
+  getdistriсts();
 });
 
-const getDistrincts = async () => {
-  distrincts.value = await $fetch<Distrinct[]>(`district/${route.params.districtid}`, {
+const getdistriсts = async () => {
+  distriсts.value = await $fetch<District[]>(`district/${route.params.districtid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
-  console.log(distrincts);
-  //Object.assign(areaOwnershops, allPersonsArea);
 }
 
 const getArea = async () => {

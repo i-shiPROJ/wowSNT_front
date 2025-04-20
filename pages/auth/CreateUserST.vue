@@ -159,7 +159,6 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
   if (value === '') {
     callback(new Error('Введите повтор пароля'))
   } else if (value !== registerForm.password) {
-    console.log(value, registerForm.password);
     callback(new Error("Пароль и повтор не совпадают!"))
   } else {
     callback()
@@ -232,10 +231,10 @@ const submitCreateUser = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log('submit! submitCreateUser')
+      ('submit! submitCreateUser')
       stateCreateForm.value = !stateCreateForm.value;
     } else {
-      console.log('error submit!', fields)
+      console.error('error submit!', fields)
     }
   })
 }
@@ -244,11 +243,10 @@ const submitCreateST = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log('submit! submitCreateST')
-      console.log('stRegisterForm', stRegisterForm);
+
       stateCreateForm.value = !stateCreateForm.value;
     } else {
-      console.log('error submit!', fields)
+      console.error('error submit!', fields)
     }
   })
 }

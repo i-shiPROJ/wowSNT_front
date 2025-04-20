@@ -167,7 +167,6 @@ import type { Ownerships } from '~/interface/Ownerships.interface';
 onMounted(async () => {
   //await getUserInfo();
   //loadMounInfo();
-  //console.log('useCounterStore', userInfo.currentUser);
 });
 
 const getArraySTRole_p = computed(() => {

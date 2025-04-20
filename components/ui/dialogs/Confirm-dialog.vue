@@ -42,7 +42,7 @@ const showConfirmDialog = () => { centerDialogVisible.value = true };
 const showCloseDialog = () => { centerDialogVisible.value = false };
 const title = ref('Заголовок');
 const titleBody = ref('Текст тела');
-const acceptFunction = ref(() => { console.log('accept'); });
+const acceptFunction = ref(() => {  });
 
 //экспорт функции для использования через ref
 defineExpose({ showConfirmDialog, showCloseDialog, title, titleBody, acceptFunction, formVisible, ruleFormRef, form });

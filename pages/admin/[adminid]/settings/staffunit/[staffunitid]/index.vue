@@ -181,7 +181,6 @@ const removeStuff = () => {
 }
 
 const addPersone = () => {
-  console.log('add person');
 }
 
 

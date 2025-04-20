@@ -3,6 +3,7 @@
   <NuxtLayout name="admin">
     <template #main>
       <div>
+        <wow-toppagetitle namePage="Заявки на вступление" />
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card class="cur-pointer">

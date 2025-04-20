@@ -18,7 +18,7 @@
                     <template #default="scope">
                       <div class="fc fc-row fc-align-content-center">
                         <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
-                        <a class="phone-link" :href="`tel:${scope.row.phoneNums}`"> {{ scope.row.phoneNums }}</a>
+                        <a class="phone-link" :href="`tel:${scope.row.phoneNums}`" @click.stop> {{ scope.row.phoneNums }}</a>
                       </div>
                     </template>
                   </el-table-column>

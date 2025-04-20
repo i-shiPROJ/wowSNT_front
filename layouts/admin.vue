@@ -149,7 +149,7 @@ const handleClickOutside = (event: MouseEvent) => {
 let objectMenu: Array<MenuSettings> = reactive(menuObject);
 
 onMounted(() => {
-  //console.log('sss', router.currentRoute.value);
+
   checkMobile();
   window.addEventListener('resize', checkMobile);
   document.addEventListener('click', handleClickOutside); // Добавляем обработчик клика
