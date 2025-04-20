@@ -40,7 +40,7 @@ const toPageRegister = () => {
   navigateTo('/auth/registerQuestion');
   //router.push('/auth/registerQuestion');
   //const data = getDataTest();
-  // console.log(data);
+
 };
 // const toPageRegisterSt = () => router.push('/auth/registerSt');
 
@@ -61,7 +61,6 @@ const toPageRegister = () => {
 
 //     // Assuming response is JSON
 //     const jsonResponse = await response.json();
-//     console.log(jsonResponse);
 //     return jsonResponse;
 
 //   } catch (error) {

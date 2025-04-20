@@ -23,7 +23,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       try {
         return await originalFetch(request, options)
       } catch (error: unknown) {
-        console.log('fuck');
         if ((error as FetchError).response?.status === 401 && !isRefreshing) {
           const auth = useAuth()
           try {

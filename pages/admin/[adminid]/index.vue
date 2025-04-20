@@ -122,16 +122,7 @@ const checkAdminST = () => {
 
 const navToSolujtion = (urlNavigateTo:string) => {
   navigateTo(`/admin/${route.params.adminid}/${urlNavigateTo}`);
-  /*   console.log({
-      path: currentRoute.path,
-      name: currentRoute.name,
-      params: currentRoute.params,
-      query: currentRoute.query,
-      fullPath: currentRoute.fullPath,
-      hash: currentRoute.hash,
-      matched: currentRoute.matched,
-      redirectedFrom: currentRoute.redirectedFrom
-    }); */
+
 
   //navigateTo(router.'/admin/solution');
 }

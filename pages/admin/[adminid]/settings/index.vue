@@ -3,6 +3,7 @@
   <NuxtLayout name="admin">
     <template #main>
       <div>
+        <wow-toppagetitle namePage="Настройки садового товарищества" />
         <el-row>
 
           <el-col :xs="24" :sm="24" :md="24" :lg="9" :xl="9">

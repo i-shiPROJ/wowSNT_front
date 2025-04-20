@@ -1,15 +1,14 @@
 
-import type { Userinfo } from "~/stores/interface/userInfo";
+// import type { Userinfo } from "~/stores/interface/";
 export default defineNuxtPlugin(() => {
 
-  const checkMemberShip = (userInfo: Userinfo) => {
-    console.log('hhhhhhh', userInfo);
-  };
+  // const checkMemberShip = (userInfo: Userinfo) => {
+  // };
 
   return {
     provide: {
       utils: {
-        checkMemberShip: (userInfo: Userinfo) => { checkMemberShip(userInfo) }
+        // checkMemberShip: (userInfo: Userinfo) => { checkMemberShip(userInfo) }
       }
     }
   }

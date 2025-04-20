@@ -163,7 +163,6 @@ interface SNTResponse {
 }
 
 onMounted(async () => {
-  // console.log(moment().format('YYYY-MM-DD'));
   const response = await $fetch<SNTResponse[]>(`/snt`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
@@ -271,9 +270,8 @@ const fileList = ref<UploadUserFile[]>([]);
 
 const viewSelectedFile = () => {
   if (fileList.value) {
-    console.log('Выбранные файлы:', fileList);
   } else {
-    console.log('Загрузчик файлов не инициализирован');
+    console.error('Загрузчик файлов не инициализирован');
   }
 
 }

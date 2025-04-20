@@ -79,7 +79,7 @@ import { menuObject } from '~/pages/admin/menuObject';
 import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
 import { mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox, mdiMessageReplyTextOutline, mdiCogOutline, mdiCardAccountDetailsOutline, mdiCashRegister, 
-  mdiAccountGroup, 
+  mdiAccountGroup, mdiCitySwitch,
   mdiSafeSquareOutline, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
 
 
@@ -149,7 +149,7 @@ const handleClickOutside = (event: MouseEvent) => {
 let objectMenu: Array<MenuSettings> = reactive(menuObject);
 
 onMounted(() => {
-  //console.log('sss', router.currentRoute.value);
+
   checkMobile();
   window.addEventListener('resize', checkMobile);
   document.addEventListener('click', handleClickOutside); // Добавляем обработчик клика
@@ -293,6 +293,19 @@ const setMenu = () => {
         name: 'Участники',
         icon: mdiCardAccountDetailsOutline,
         url: `/admin/${route.params.adminid}/participant`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-adminid-districts',
+      settings: {
+        active: activeMenu('admin-adminid-districts'),
+        name: 'Районы',
+        icon: mdiCitySwitch,
+        url: `/admin/${route.params.adminid}/districts`,
         functions: {
           setActiveMenuItem
         }

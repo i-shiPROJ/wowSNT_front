@@ -4,28 +4,28 @@
     <template #main>
       <div>
 
-        <wow-toppagetitle namePage="Информация об участке" />
+        <wow-toppagetitle namePage="Информация об районе" />
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
-              <template #header><b>Таблица собственников</b></template>
+              <template #header><b>Таблица участков</b></template>
               <template #body>
 
-                <el-table :data="areaOwnerships" style="width: 100%" class="cur-pointer" @row-click="showParticipantInfo">
+                <!-- <el-table :data="distriсts" style="width: 100%" class="cur-pointer" @row-click="showParticipantInfo">
                   <el-table-column prop="fio" label="ФИО" min-width="200" />
                   <el-table-column label="Телефон" width="170">
                     <template #default="scope">
                       <div class="fc fc-row fc-align-content-center">
                         <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
-                        <a class="phone-link" :href="`tel:${scope.row.phoneNums}`" @click.stop> {{ scope.row.phoneNums }}</a>
+                        <a class="phone-link" :href="`tel:${scope.row.phoneNums}`"> {{ scope.row.phoneNums }}</a>
                       </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="part" label="Доля" width="70" />
                   <el-table-column prop="startDate" label="нач. собств" min-width="100" />
                   <el-table-column prop="endDate" label="оконч. собств" min-width="100"> </el-table-column>
-                </el-table>
+                </el-table> -->
 
               </template>
             </wow-card>
@@ -35,7 +35,7 @@
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
             <wow-card>
-              <template #header><b>История оплат</b></template>
+              <template #header><b>Старшие по району</b></template>
               <template #body>
 
               </template>
@@ -59,26 +59,27 @@
 
 <script setup lang="ts">
 useHead({
-  title: 'Информация об участке'
+  title: 'Информация об районе'
 });
+//TODO остановился здесь
+import type { District } from '~/interface/District.interface';
 
 import type { AreaOwnershipsDescr } from '~/interface/solution/AreaOwnershipsDescr.interface';
 import type { Area } from '~/interface/Area.interface';
 
 const route = useRoute();
-let areaOwnerships = ref<AreaOwnershipsDescr[]>([]);
+let distriсts = ref<District[]>([]);
 let area = ref<Area>();
 
 onMounted(async () => {
-  getAreaOwnerships();
+  getdistriсts();
 });
 
-const getAreaOwnerships = async () => {
-  areaOwnerships.value = await $fetch<AreaOwnershipsDescr[]>(`area_ownership/owners_descr/${route.params.landid}`, {
+const getdistriсts = async () => {
+  distriсts.value = await $fetch<District[]>(`district/${route.params.districtid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
-  //Object.assign(areaOwnershops, allPersonsArea);
 }
 
 const getArea = async () => {

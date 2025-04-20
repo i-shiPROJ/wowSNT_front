@@ -71,7 +71,6 @@ const getStuffunit = async () => {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });
-    console.log(allStuffUnit);
   }
   catch (error) {
     console.error(error)
