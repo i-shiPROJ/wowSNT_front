@@ -31,7 +31,7 @@ definePageMeta({
 
 const route = useRoute();
 const idHouse = computed(() => {
-  return route.params.id
+  return route.params.houseid
 });
 
 </script>
