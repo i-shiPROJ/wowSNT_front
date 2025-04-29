@@ -56,7 +56,7 @@
 
       </div>
 
-      <land-add-dialog ref="addDialog" />
+      <Land-add-edit-dialog ref="addDialog" />
       <Confirm-dialog ref="confirmDialog" />
     </template>
   </NuxtLayout>

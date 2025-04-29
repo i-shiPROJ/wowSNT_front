@@ -46,7 +46,7 @@
           </el-col>
         </el-row>
 
-        <Distrinct-add-edit-dialog ref="dialogDistrinct" />
+        <District-add-edit-dialog ref="dialogDistrinct" />
         <Confirm-dialog ref="confirmDialog" />
 
       </div>
