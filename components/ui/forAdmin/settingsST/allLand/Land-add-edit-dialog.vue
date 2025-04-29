@@ -29,6 +29,9 @@
             <el-form-item prop="residentsNum" label="Количество проживающих">
               <el-input-number v-model="area.residentsNum" :min="0" :step="1" :max="999" />
             </el-form-item>
+            <el-form-item label="Район" prop="districtId">
+              <el-select-v2 v-model="area.districtId" placeholder="Выберите район для участка" :options="optionsDistricts" filterable />
+            </el-form-item>
           </el-col>
         </el-row>
 
@@ -47,10 +50,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useMobileStore } from '~/stores/mobileInfo';
 import type { Area } from '~/interface/Area.interface';
 import type { cadastrInterface } from '~/interface/Cadastr.interface';
+import type { District } from '~/interface/District.interface';
 import type { FormInstance, FormRules } from 'element-plus';
 
 import { ElMessage, ElLoading } from 'element-plus';
@@ -78,7 +82,9 @@ const rules = reactive<FormRules<typeof area>>({
     { required: true, message: 'Введите кол-во проживающих', trigger: 'blur' },
     { type: 'number', min: 0, max: 99, message: 'Длина поля от 0 - 99', trigger: 'blur' }
   ],
-
+  districtId: [
+    { required: false, message: 'Выберите СТ', trigger: 'change' }
+  ],
 })
 
 const dialogFormVisible = ref(false);
@@ -155,6 +161,24 @@ const searchCadastrNumber = async () => {
 
   }
 };
+
+const optionsDistricts = ref<{ value: number; label: string; }[]>([]);
+
+const fetchOptionsDistricts = async () => {
+  const response = await $fetch<District[]>(`district/snt/${route.params.adminid}`, {
+    baseURL: useRuntimeConfig().public.baseURL,
+    method: 'GET'
+  });
+  optionsDistricts.value = response.map(item => ({
+    value: item.id,
+    label: item.title
+  }));
+};
+
+// Вызовите эту функцию, когда компонент будет смонтирован
+onMounted(() => {
+  fetchOptionsDistricts();
+});
 
 //экспорт функции для использования через ref
 defineExpose({ showDialog, dialogFormVisible, parentFunctions });

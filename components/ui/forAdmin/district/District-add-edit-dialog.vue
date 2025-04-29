@@ -7,8 +7,8 @@
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 
-            <el-form-item prop="title" label="Адрес участка">
-              <el-input v-model="district.title" style="width: 100%;" placeholder="Название района" />
+            <el-form-item prop="title" label="Название района">
+              <el-input v-model="district.title" style="width: 100%;" placeholder="ул. Первомайская" />
             </el-form-item>
             <el-form-item prop="seniorId" label="Ответственный">
               <el-select v-model="district.seniorId" placeholder="Выберите ответственного" filterable>
