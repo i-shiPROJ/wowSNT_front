@@ -2,7 +2,7 @@
   <div>
     <el-dialog v-model="dialogFormVisible" :title="labelHeaderDialog" :width="getWidthDialog">
 
-      <el-form ref="formRef" style="width: 100%" :model="area" label-width="auto" :rules="rules">
+      <el-form ref="formRef" style="width: 100%" :model="area" :label-position="labelPosition" label-width="auto" :rules="rules">
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -70,6 +70,7 @@ const props = defineProps({
 const route = useRoute();
 const mobileStore = useMobileStore();
 const getWidthDialog = computed(() => { return mobileStore.isMobile ? '95%' : 800 });
+const labelPosition = computed(() => { return mobileStore.isMobile ? 'top' : 'right' });
 
 let area = reactive(<Area>{});
 
@@ -102,7 +103,7 @@ const labelHeaderDialog = computed(() => {
 });
 
 const showDialog = () => {
-  if(!props.edit){
+  if (!props.edit) {
     area = reactive(<Area>{});
   }
   dialogFormVisible.value = true;
