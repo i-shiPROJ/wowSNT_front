@@ -1,11 +1,11 @@
 
-export interface Area{
+export interface Area {
   id: number,
   sntId: number,
   cadastralNum: string,
   square: number,
   residentsNum: number | 0,
   address: string,
-  districtId:number
-
+  districtId: number,
+  districtTitle: string
 }

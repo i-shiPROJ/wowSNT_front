@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog v-model="dialogFormVisible" title="Форма добавления участка" :width="getWidthDialog">
+    <el-dialog v-model="dialogFormVisible" :title="labelHeaderDialog" :width="getWidthDialog">
 
       <el-form ref="formRef" style="width: 100%" :model="area" label-width="auto" :rules="rules">
 
@@ -30,7 +30,8 @@
               <el-input-number v-model="area.residentsNum" :min="0" :step="1" :max="999" />
             </el-form-item>
             <el-form-item label="Район" prop="districtId">
-              <el-select-v2 v-model="area.districtId" placeholder="Выберите район для участка" :options="optionsDistricts" filterable />
+              <el-select-v2 v-model="area.districtId" placeholder="Выберите район для участка"
+                :options="optionsDistricts" filterable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -58,6 +59,13 @@ import type { District } from '~/interface/District.interface';
 import type { FormInstance, FormRules } from 'element-plus';
 
 import { ElMessage, ElLoading } from 'element-plus';
+
+const props = defineProps({
+  edit: {
+    type: Boolean,
+    default: false
+  }
+});
 
 const route = useRoute();
 const mobileStore = useMobileStore();
@@ -89,16 +97,21 @@ const rules = reactive<FormRules<typeof area>>({
 
 const dialogFormVisible = ref(false);
 const parentFunctions = ref({ updateParrentTable: () => { } });
+const labelHeaderDialog = computed(() => {
+  return props.edit ? 'Форма редактирования участка' : 'Форма добавления участка'
+});
 
 const showDialog = () => {
-  area = reactive(<Area>{});
+  if(!props.edit){
+    area = reactive(<Area>{});
+  }
   dialogFormVisible.value = true;
 };
 
 const confirmDialog = ref();
 const showDeclineDialog = () => {
   confirmDialog.value.title = 'Внимание!'
-  confirmDialog.value.titleBody = `Не добавлять участок?`;
+  confirmDialog.value.titleBody = props.edit ? 'Не сохранять участок?' : `Не добавлять участок?`;
   confirmDialog.value.acceptFunction = async () => {
     confirmDialog.value.showCloseDialog();
     dialogFormVisible.value = false;
@@ -113,7 +126,7 @@ const showConfirmDialog = async (formEl: FormInstance | undefined) => {
     if (valid) {
       //жмем батон на принятие
       confirmDialog.value.title = 'Внимание!'
-      confirmDialog.value.titleBody = `Добавить участок?`;
+      confirmDialog.value.titleBody = props.edit ? 'Сохранять участок?' : `Добавить участок?`;
       confirmDialog.value.acceptFunction = async () => {
         area.sntId = parseInt(String(route.params.adminid));
         try {
@@ -181,7 +194,7 @@ onMounted(() => {
 });
 
 //экспорт функции для использования через ref
-defineExpose({ showDialog, dialogFormVisible, parentFunctions });
+defineExpose({ showDialog, dialogFormVisible, parentFunctions, labelHeaderDialog, area });
 
 </script>
 
