@@ -2,7 +2,8 @@
   <div>
     <el-dialog v-model="dialogFormVisible" :title="labelHeaderDialog" :width="getWidthDialog">
 
-      <el-form ref="formRef" style="width: 100%" :model="area" :label-position="labelPosition" label-width="auto" :rules="rules">
+      <el-form ref="formRef" style="width: 100%" :model="area" :label-position="labelPosition" label-width="auto"
+        :rules="rules">
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -161,18 +162,12 @@ const searchCadastrNumber = async () => {
 
     area.address = modelObject.address;
     area.square = modelObject.square;
-
   } catch (error: any) {
-
-    console.error("Ошибка:", error);
-    if (error.response.status > 400 && error.response.status < 500) {
-      ElMessage.error('Скорее всего, что Вы ошиблись, попробуйте ввести кадастровый номер еще раз');
-    }
-
-    if (error.response.status > 500 && error.response.status < 600) {
-      ElMessage.info('Не удалось получить информацию из Росреестра, вбейте адрес вручную');
-    }
-
+    ElMessage({
+      message: error.data.message,
+      type: 'error',
+      appendTo: '.el-overlay',
+    });
   }
 };
 
@@ -189,7 +184,6 @@ const fetchOptionsDistricts = async () => {
   }));
 };
 
-// Вызовите эту функцию, когда компонент будет смонтирован
 onMounted(() => {
   fetchOptionsDistricts();
 });
