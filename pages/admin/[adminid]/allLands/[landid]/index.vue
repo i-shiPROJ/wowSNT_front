@@ -26,47 +26,20 @@
                   <div class="fc fc-col">
                     <el-row>
                       <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <div class="label-body fc fc-col">
-                          <div>Кадастровый номер:</div>
-                          <div class="area-naming-st">{{ `${area?.cadastralNum}` }} </div>
-                        </div>
+                        <wow-label-text label="Кадастровый номер:" :text="area?.cadastralNum" color="coral" />
                       </el-col>
                       <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <div class="label-body fc fc-col">
-                          <div>Район:</div>
-                          <div class="area-naming-st">
-                            <div class="fc fc-row fc-align-content-center">
-                              {{ area?.sntId }}
-                            </div>
-                          </div>
-                        </div>
+                        <wow-label-text label="Район:" :text="area?.districtTitle" color="coral" />
                       </el-col>
                     </el-row>
-                    <div class="label-body fc fc-col">
-                      <div>Адрес:</div>
-                      <div class="area-naming-st">{{ `${area?.address}` }} </div>
-                    </div>
+                    <wow-label-text label="Адрес:" :text="area?.address" color="coral" />
                     <el-row>
                       <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <div class="label-body fc fc-col">
-                          <div>Площадь участка:</div>
-                          <div class="area-naming-st">
-                            <div class="fc fc-row fc-align-content-center">
-                              {{ area?.square }}
-                            </div>
-                          </div>
-                        </div>
+                        <wow-label-text label="Площадь участка:" :text="String(area?.square ?? '')" color="coral" />
                       </el-col>
                       <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <div class="label-body fc fc-col">
-                          <div>Кол-во проживающих:</div>
-                          <div class="area-naming-st">
-                            <div class="fc fc-row fc-align-content-center">
-                              {{ `${area?.residentsNum} чел.` }}
-                            </div>
-
-                          </div>
-                        </div>
+                        <wow-label-text label="Кол-во проживающих:" :text="String(area?.residentsNum ?? '')"
+                          color="coral" />
                       </el-col>
                     </el-row>
                   </div>
@@ -96,8 +69,9 @@
                     <template #default="scope">
                       <div class="fc fc-row fc-align-content-center">
                         <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
-                        <a class="phone-link" :href="`tel:${scope.row.phoneNums}`" @click.stop> {{ scope.row.phoneNums
-                        }}</a>
+                        <a class="phone-link" :href="`tel:${scope.row.phoneNums}`" @click.stop>
+                          {{ scope.row.phoneNums }}
+                        </a>
                       </div>
                     </template>
                   </el-table-column>
@@ -120,9 +94,10 @@
               </template>
             </wow-card>
           </el-col>
-
-
         </el-row>
+
+
+        <land-add-edit-dialog ref="editDialog" edit />
 
       </div>
     </template>
@@ -138,8 +113,9 @@ import type { AreaOwnershipsDescr } from '~/interface/solution/AreaOwnershipsDes
 import type { Area } from '~/interface/Area.interface';
 
 const route = useRoute();
+const editDialog = ref();
 let areaOwnerships = ref<AreaOwnershipsDescr[]>([]);
-let area = ref<Area>();
+let area = reactive(<Area>{});
 
 onMounted(async () => {
   getAreaOwnerships();
@@ -155,31 +131,24 @@ const getAreaOwnerships = async () => {
 }
 
 const getArea = async () => {
-  area.value = await $fetch<Area>(`area/${route.params.landid}`, {
+  const data = await $fetch<Area>(`area/${route.params.landid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
-  }
-  )
-}
+  });
+  Object.assign(area, data);
+};
 
 const showParticipantInfo = async (row: Area) => {
   navigateTo(`/admin/${route.params.adminid}/participant/${row.id}`)
 }
 
-const editArea = ()=>{
-  console.log('edit Area');
-}
+const editArea = () => {
+  Object.assign(editDialog.value.area, area);
+  editDialog.value.showDialog();
+  editDialog.value.parentFunctions.updateParrentTable = getArea;
+};
 
 ///area_ownership/owners_descr/{area_id}
 </script>
 
-<style lang="less" scoped>
-.label-body {
-  padding: 10px 0;
-
-  .area-naming-st {
-    padding: 10px;
-    border-left: 4px solid #F56C6C;
-  }
-}
-</style>
+<style lang="less" scoped></style>
