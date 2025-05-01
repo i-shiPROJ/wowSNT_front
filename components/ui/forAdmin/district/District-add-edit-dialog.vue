@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-dialog v-model="dialogFormVisible" title="Форма добавления района" :width="getWidthDialog">
+    <el-dialog v-model="dialogFormVisible" :title="labelHeaderDialog" :width="getWidthDialog">
 
-      <el-form ref="formRef" style="width: 100%" :model="district" label-width="auto" :rules="rules">
+      <el-form ref="formRef" style="width: 100%" :model="district" :label-position="labelPosition" label-width="auto" :rules="rules">
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -11,10 +11,8 @@
               <el-input v-model="district.title" style="width: 100%;" placeholder="ул. Первомайская" />
             </el-form-item>
             <el-form-item prop="seniorId" label="Ответственный">
-              <el-select v-model="district.seniorId" placeholder="Выберите ответственного" filterable>
-                <el-option v-for="person in persons"
-                  :label="`${person.lastName} ${person.firstName} ${person.patronymic}`" :value="person.id" />
-              </el-select>
+              <el-select-v2 v-model="district.seniorId" placeholder="Выберите ответственного" :options="optionsPersons"
+                filterable />
             </el-form-item>
 
           </el-col>
@@ -43,10 +41,18 @@ import type { FormInstance, FormRules } from 'element-plus';
 
 import { ElMessage, ElLoading } from 'element-plus';
 
+const props = defineProps({
+  edit: {
+    type: Boolean,
+    default: false
+  }
+});
+
 const route = useRoute();
 const mobileStore = useMobileStore();
 const getWidthDialog = computed(() => { return mobileStore.isMobile ? '95%' : 800 });
-const persons = ref(<Personinfo[]>[]);
+const labelPosition = computed(() => { return mobileStore.isMobile ? 'top' : 'right' });
+
 
 let district = reactive(<District>{});
 
@@ -65,16 +71,13 @@ const rules = reactive<FormRules<typeof district>>({
 const dialogFormVisible = ref(false);
 const parentFunctions = ref({ updateParrentTable: () => { } });
 
+const labelHeaderDialog = computed(() => {
+  return props.edit ? 'Форма редактирования района' : 'Форма добавления района'
+});
+
 const showDialog = async () => {
-  district = reactive(<District>{});
-  try {
-    persons.value = await $fetch<Personinfo[]>(`person/snt-members/${route.params.adminid}`, {
-      baseURL: useRuntimeConfig().public.baseURL,
-      method: 'GET'
-    });
-  }
-  catch (error) {
-    console.error(error)
+  if (!props.edit) {
+    district = reactive(<District>{});
   }
   dialogFormVisible.value = true;
 };
@@ -82,7 +85,7 @@ const showDialog = async () => {
 const confirmDialog = ref();
 const showDeclineDialog = () => {
   confirmDialog.value.title = 'Внимание!'
-  confirmDialog.value.titleBody = `Не сохранять район?`;
+  confirmDialog.value.titleBody = props.edit ? 'Не сохранять район?' : `Не добавлять район?`;
   confirmDialog.value.acceptFunction = async () => {
     confirmDialog.value.showCloseDialog();
     dialogFormVisible.value = false;
@@ -97,7 +100,7 @@ const showConfirmDialog = async (formEl: FormInstance | undefined) => {
     if (valid) {
       //жмем батон на принятие
       confirmDialog.value.title = 'Внимание!'
-      confirmDialog.value.titleBody = `Сохранить район?`;
+      confirmDialog.value.titleBody = props.edit ? 'Сохранять район?' : `Не сохранять район?`;
       confirmDialog.value.acceptFunction = async () => {
         district.sntId = parseInt(String(route.params.adminid));
         try {
@@ -122,9 +125,26 @@ const showConfirmDialog = async (formEl: FormInstance | undefined) => {
 
 };
 
+const optionsPersons = ref<{ value: number; label: string; }[]>([]);
+
+const fetchOptionsPersons = async () => {
+  const response = await $fetch<Personinfo[]>(`person/snt-members/${route.params.adminid}`, {
+    baseURL: useRuntimeConfig().public.baseURL,
+    method: 'GET'
+  });
+
+  optionsPersons.value = response.map(item => ({
+    value: item.id,
+    label: `${item.lastName} ${item.firstName} ${item.patronymic}`
+  }));
+};
+
+onMounted(() => {
+  fetchOptionsPersons();
+});
 
 //экспорт функции для использования через ref
-defineExpose({ showDialog, dialogFormVisible, parentFunctions });
+defineExpose({ showDialog, dialogFormVisible, parentFunctions, district });
 
 </script>
 

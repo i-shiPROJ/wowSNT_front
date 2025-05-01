@@ -54,7 +54,7 @@
           </el-col>
         </el-row>
 
-        <PersonInfoDialog ref="personAddDialog" label="Форма добавления участника"/>
+        <Person-add-edit-dialog ref="personAddDialog" label="Форма добавления участника"/>
         <Confirm-dialog ref="confirmDialog" />
       </div>
     </template>

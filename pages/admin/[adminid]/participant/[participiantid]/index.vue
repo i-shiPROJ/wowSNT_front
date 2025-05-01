@@ -10,44 +10,45 @@
           <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
             <wow-card>
               <template #header><b>Данные участника</b></template>
+              <template #header-options>
+                <div>
+                  <el-tooltip content="Редактировать участника" placement="bottom-end" effect="light">
+                    <el-button type="primary" @click="editParticipiant" circle>
+                      <el-icon style="vertical-align: middle">
+                        <wow-icon type="mdi" :path="$mdi.mdiPencilOutline" />
+                      </el-icon>
+                    </el-button>
+                  </el-tooltip>
+                </div>
+              </template>
+
               <template #body>
                 <div class="info-user-view">
                   <div class="fc fc-col">
-                    <div class="label-body fc fc-col">
-                      <div>ФИО:</div>
-                      <div class="area-naming-st">{{ `${person?.lastName} ${person?.firstName} ${person?.patronymic}` }}
-                      </div>
-                    </div>
+                    <wow-label-text label="ФИО:"
+                      :text="`${person?.lastName} ${person?.firstName} ${person?.patronymic}`" color="coral" />
                     <el-row>
                       <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <div class="label-body fc fc-col">
-                          <div>Телефон:</div>
-                          <div class="area-naming-st">
-                            <div class="fc fc-row fc-align-content-center">
-                              <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
-                              <a class="phone-link" :href="`tel:${person?.phoneNum}`"> {{ person?.phoneNum }}</a>
-                            </div>
-                          </div>
-                        </div>
+                        <wow-label-text label="Телефон:" color="coral">
+                          <template #body>
+                            <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
+                            <a class="phone-link" :href="`tel:${person?.phoneNum}`"> {{ person?.phoneNum }}</a>
+                          </template>
+                        </wow-label-text>
                       </el-col>
                       <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <div class="label-body fc fc-col">
-                          <div>Email:</div>
-                          <div class="area-naming-st">
-                            <div class="fc fc-row fc-align-content-center">
-                              <wow-icon :size="20" type="mdi" :path="$mdi.mdiEmailFastOutline" />
-                              <a class="phone-link" :href="`mailto:${person?.email}`"> {{ person?.email }}</a>
-                            </div>
-
-                          </div>
-                        </div>
+                        <wow-label-text label="Email:" color="coral">
+                          <template #body>
+                            <wow-icon :size="20" type="mdi" :path="$mdi.mdiEmailFastOutline" />
+                            <a class="phone-link" :href="`mailto:${person?.email}`"> {{ person?.email }}</a>
+                          </template>
+                        </wow-label-text>
                       </el-col>
                     </el-row>
                   </div>
                 </div>
               </template>
               <template #footer>
-                <el-button type="primary" @click="showPersonEdit()">Изменить</el-button>
               </template>
             </wow-card>
           </el-col>
@@ -80,7 +81,7 @@
                 <div class="info-user-view">
                   <div class="fc fc-col">
                     <div class="label-body fc fc-col">
-                      <div v-if="(person?.memberships.length ?? 0) === 0">
+                      <!-- <div v-if="(person?.memberships.length ?? 0) === 0">
                         <div class="area-naming-st">Садовод</div>
                       </div>
 
@@ -89,18 +90,39 @@
                         <div class="area-naming-st">
                           здесь роли
                         </div>
-
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
               </template>
-              <template #footer>
-                <el-button type="primary">Изменить</el-button>
-              </template>
+              <template #footer> </template>
             </wow-card>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="19" :xl="19">
+          <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
+            <wow-card>
+              <template #header><b>Закрепленный район</b></template>
+              <template #body>
+                <div class="info-user-view">
+                  <div class="fc fc-col">
+                    <div class="label-body fc fc-col">
+                      <!-- <div v-if="(person?.memberships.length ?? 0) === 0">
+                        <div class="area-naming-st">Садовод</div>
+                      </div>
+
+                      <div v-else>
+                        <div>Роли:</div>
+                        <div class="area-naming-st">
+                          здесь роли
+                        </div>
+                      </div> -->
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template #footer> </template>
+            </wow-card>
+          </el-col>
+          <el-col :xs="24" :sm="24" :md="24" :lg="14" :xl="14">
             <wow-card>
               <template #header><b>Документы</b></template>
               <template #body>
@@ -121,7 +143,7 @@
           </el-col>
         </el-row>
 
-        <PersonInfoDialog ref="personDialog" />
+        <Person-add-edit-dialog ref="personDialog" edit />
       </div>
     </template>
   </NuxtLayout>
@@ -133,24 +155,26 @@ useHead({
 });
 
 import type { Personinfo } from '~/interface/Personinfo.interface';
-
 import type { Area_ownerships } from '~/interface/Area_ownerships';
+import type { Memberships } from '~/interface/Memberships.interface';
 
 const route = useRoute();
-const person = ref<Personinfo>();
+const person = reactive(<Personinfo>{});
 const area_ownerships = ref<Area_ownerships[]>([]);
+const memberships = reactive(<Memberships>{});
 
 onMounted(async () => {
   getPerson();
   getArea_ownerships();
+  // getMemberShips();
 });
 
 const getPerson = async () => {
-  person.value = await $fetch<Personinfo>(`person/${route.params.participiantid}`, {
+  const data = await $fetch<Personinfo>(`person/${route.params.participiantid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
-  //Object.assign(areaOwnershops, allPersonsArea);
+  Object.assign(person, data);
 }
 
 const getArea_ownerships = async () => {
@@ -160,24 +184,39 @@ const getArea_ownerships = async () => {
   });
 }
 
+const getMemberShips = async () => {
+  const data = await $fetch<Area_ownerships[]>(`area_ownership/${route.params.participiantid}?sntId=${route.params.adminid}`, {
+    baseURL: useRuntimeConfig().public.baseURL,
+    method: 'GET'
+  });
+  Object.assign(memberships, data);
+  console.log(memberships);
+}
+
 const personDialog = ref();
 
-const showPersonEdit = async () => {
-  const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)' });
-  try {
-    const person: Personinfo = await $fetch<Personinfo>(`person/${route.params.participiantid}`, {
-      baseURL: useRuntimeConfig().public.baseURL,
-      method: 'GET'
-    });
-    personDialog.value.parentFunctions.updatePersonInfo = getPerson();
-    personDialog.value.showDialog(person);
-  } catch (error) {
-    console.error("Error:", error);
-    ElMessage.error("Ошибка запроса");
-  } finally {
-    loading.close();
-  }
-};
+// const showPersonEdit = async () => {
+//   const loading = ElLoading.service({ text: 'Загрузка...', fullscreen: true, background: 'rgba(0, 0, 0, 0.7)' });
+//   try {
+//     const person: Personinfo = await $fetch<Personinfo>(`person/${route.params.participiantid}`, {
+//       baseURL: useRuntimeConfig().public.baseURL,
+//       method: 'GET'
+//     });
+//     personDialog.value.parentFunctions.updatePersonInfo = getPerson();
+//     personDialog.value.showDialog(person);
+//   } catch (error) {
+//     console.error("Error:", error);
+//     ElMessage.error("Ошибка запроса");
+//   } finally {
+//     loading.close();
+//   }
+// };
+
+const editParticipiant = () => {
+  Object.assign(personDialog.value.person, person);
+  personDialog.value.showDialog();
+  personDialog.value.parentFunctions.updateParrentTable = getPerson;
+}
 
 ///area_ownership/owners_descr/{area_id}
 </script>

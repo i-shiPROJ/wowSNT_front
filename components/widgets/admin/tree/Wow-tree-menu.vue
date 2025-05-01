@@ -42,7 +42,7 @@ const getComponets = (type: string) => {
 
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 /* .menu-tree-widget {
   margin: 5px 5px;
 } */

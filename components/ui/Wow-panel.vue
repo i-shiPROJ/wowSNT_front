@@ -110,6 +110,7 @@ const close = () => {
 
     .body {
       height: calc(100% - 50px);
+      overflow-y: auto;
       /* padding: 10px; */
     }
   }
