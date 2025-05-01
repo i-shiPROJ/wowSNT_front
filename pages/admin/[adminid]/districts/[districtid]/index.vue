@@ -5,6 +5,49 @@
       <div>
 
         <wow-toppagetitle namePage="Информация об районе" />
+        <el-row>
+
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <wow-card>
+              <template #header><b>О районе:</b></template>
+              <template #header-options>
+                <div>
+                  <el-tooltip content="Редактировать район" placement="bottom-end" effect="light">
+                    <el-button type="primary" @click="editDistrinct()" circle>
+                      <el-icon style="vertical-align: middle">
+                        <wow-icon type="mdi" :path="$mdi.mdiPencilOutline" />
+                      </el-icon>
+                    </el-button>
+                  </el-tooltip>
+
+                </div>
+              </template>
+              <template #body>
+                <div class="fc fc-col">
+                  <el-row>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                      <wow-label-text label="Название:" :text="district?.title" color="coral" />
+                    </el-col>
+
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                      <wow-label-text label="Старший:" :text="personFullName" color="coral" />
+                    </el-col>
+                  </el-row>
+                </div>
+              </template>
+            </wow-card>
+          </el-col>
+
+          <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+  <wow-card>
+    <template #header><b>Старшие по району</b></template>
+    <template #body>
+
+    </template>
+  </wow-card>
+</el-col> -->
+
+        </el-row>
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -21,36 +64,20 @@
                         <a class="phone-link" :href="`tel:${scope.row.phoneNums}`"> {{ scope.row.phoneNums }}</a>
                       </div>
                     </template>
-                  </el-table-column>
-                  <el-table-column prop="part" label="Доля" width="70" />
-                  <el-table-column prop="startDate" label="нач. собств" min-width="100" />
-                  <el-table-column prop="endDate" label="оконч. собств" min-width="100"> </el-table-column>
-                </el-table> -->
+      </el-table-column>
+      <el-table-column prop="part" label="Доля" width="70" />
+      <el-table-column prop="startDate" label="нач. собств" min-width="100" />
+      <el-table-column prop="endDate" label="оконч. собств" min-width="100"> </el-table-column>
+      </el-table> -->
 
               </template>
             </wow-card>
           </el-col>
         </el-row>
 
-        <el-row>
-          <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-            <wow-card>
-              <template #header><b>Старшие по району</b></template>
-              <template #body>
 
-              </template>
-            </wow-card>
-          </el-col>
 
-          <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-            <wow-card>
-              <template #header><b>Документы</b></template>
-              <template #body>
-
-              </template>
-            </wow-card>
-          </el-col>
-        </el-row>
+        <District-add-edit-dialog ref="dialogDistrinct" edit />
 
       </div>
     </template>
@@ -66,21 +93,49 @@ import type { District } from '~/interface/District.interface';
 
 import type { AreaOwnershipsDescr } from '~/interface/solution/AreaOwnershipsDescr.interface';
 import type { Area } from '~/interface/Area.interface';
+import type { Personinfo } from '~/interface/Personinfo.interface';
 
+const dialogDistrinct = ref();
+
+const router = useRouter();
 const route = useRoute();
-let distriсts = ref<District[]>([]);
+const district = reactive(<District>{});
+const personFullName = ref('');
+
 let area = ref<Area>();
 
 onMounted(async () => {
-  getdistriсts();
+  await refreshData();
 });
 
-const getdistriсts = async () => {
-  distriсts.value = await $fetch<District[]>(`district/${route.params.districtid}`, {
+const refreshData = async () => {
+  await getDistrict();
+  await getNameSenior();
+}
+const getDistrict = async () => {
+  const data = await $fetch<District>(`district/${route.params.districtid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
+
+  Object.assign(district, data);
 }
+
+const editDistrinct = () => {
+  Object.assign(dialogDistrinct.value.district, district);
+  dialogDistrinct.value.showDialog();
+  dialogDistrinct.value.parentFunctions.updateParrentTable = refreshData;
+}
+
+const getNameSenior = async () => {
+  const data = await $fetch<Personinfo>(`person/${district.seniorId}`, {
+    baseURL: useRuntimeConfig().public.baseURL,
+    method: 'GET'
+  });
+
+  personFullName.value = `${data.lastName} ${data.firstName} ${data.patronymic}`;
+}
+
 
 const getArea = async () => {
   area.value = await $fetch<Area>(``, {

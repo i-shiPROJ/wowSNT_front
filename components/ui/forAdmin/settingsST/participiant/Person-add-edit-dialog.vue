@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-dialog v-model="dialogFormVisible" :title="props.label" :width="getWidthDialog">
+    <el-dialog v-model="dialogFormVisible" :title="labelHeaderDialog" :width="getWidthDialog">
 
-      <el-form ref="formRef" style="width: 100%" :model="person" label-width="auto" :rules="rules">
+      <el-form ref="formRef" style="width: 100%" :model="person" :label-position="labelPosition" label-width="auto" :rules="rules">
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -54,14 +54,15 @@ import type { Personinfo } from '~/interface/Personinfo.interface';
 import { ElMessage, ElLoading } from 'element-plus';
 
 const props = defineProps({
-  label: {
-    type: String,
-    default: 'Форма изменения данных участника'
+  edit: {
+    type: Boolean,
+    default: false
   }
-})
+});
 
 const mobileStore = useMobileStore();
 const getWidthDialog = computed(() => { return mobileStore.isMobile ? '95%' : 800 });
+const labelPosition = computed(() => { return mobileStore.isMobile ? 'top' : 'right' });
 
 let person = reactive(<Personinfo>{});
 const formRef = ref<FormInstance>();
@@ -89,16 +90,24 @@ const rules = reactive<FormRules<typeof person>>({
 
 const dialogFormVisible = ref(false);
 const parentFunctions = ref({ updatePersonInfo: () => { } });
+const labelHeaderDialog = computed(() => {
+  return props.edit ? 'Форма редактирования участника' : 'Форма добавления участника'
+});
 
 const showDialog = (currentSolution: Personinfo) => {
-  person = reactive({ ...currentSolution });//JSON.parse(JSON.stringify(currentSolution))
+  if (!props.edit) {
+    person = reactive(<Personinfo>{});
+  }
+  dialogFormVisible.value = true;
+
+  // person = reactive({ ...currentSolution });//JSON.parse(JSON.stringify(currentSolution))
   dialogFormVisible.value = true;
 };
 
 const confirmDialog = ref();
 const showDeclineDialog = () => {
   confirmDialog.value.title = 'Внимание!'
-  confirmDialog.value.titleBody = `Не сохранять участника?`;
+  confirmDialog.value.titleBody = props.edit ? 'Не сохранять участника?' : `Не добавлять участника?`;
   confirmDialog.value.acceptFunction = async () => {
     confirmDialog.value.showCloseDialog();
     dialogFormVisible.value = false;
@@ -113,7 +122,7 @@ const showConfirmDialog = async (formEl: FormInstance | undefined) => {
     if (valid) {
       //жмем батон на принятие
       confirmDialog.value.title = 'Внимание!'
-      confirmDialog.value.titleBody = `Сохранить участника?`;
+      confirmDialog.value.titleBody = props.edit ? 'Сохранить участника?' : `Добавить участника?`;
       confirmDialog.value.acceptFunction = async () => {
         try {
           await $fetch(`/person`, {
@@ -138,7 +147,7 @@ const showConfirmDialog = async (formEl: FormInstance | undefined) => {
 };
 
 //экспорт функции для использования через ref
-defineExpose({ showDialog, dialogFormVisible, parentFunctions });
+defineExpose({ showDialog, dialogFormVisible, parentFunctions, person });
 
 </script>
 

@@ -381,7 +381,7 @@ onBeforeUnmount(() => {
 
   .aside {
     height: 100%;
-
+    overflow-y: auto;
     .logo {
       height: 70px;
     }

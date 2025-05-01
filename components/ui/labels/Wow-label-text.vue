@@ -4,6 +4,7 @@
     <div class="area-naming-st" :class="color">
       <div class="fc fc-row fc-align-content-center">
         {{ props.text }}
+        <slot name="body"/>
       </div>
     </div>
   </div>
