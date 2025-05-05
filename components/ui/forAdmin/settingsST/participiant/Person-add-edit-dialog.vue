@@ -89,7 +89,7 @@ const rules = reactive<FormRules<typeof person>>({
 })
 
 const dialogFormVisible = ref(false);
-const parentFunctions = ref({ updatePersonInfo: () => { } });
+const parentFunctions = ref({ updateTable: () => { } });
 const labelHeaderDialog = computed(() => {
   return props.edit ? 'Форма редактирования участника' : 'Форма добавления участника'
 });
@@ -130,7 +130,7 @@ const showConfirmDialog = async (formEl: FormInstance | undefined) => {
             method: 'POST',
             body: JSON.stringify(person),
           });
-          parentFunctions.value.updatePersonInfo();
+          parentFunctions.value.updateTable();
           confirmDialog.value.showCloseDialog();
           dialogFormVisible.value = false;
         } catch (error) {

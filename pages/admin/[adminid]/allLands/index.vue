@@ -20,7 +20,7 @@
                   </el-tooltip>
 
                   <el-tooltip content="Импортировать участки(не активно)" placement="bottom-end" effect="light">
-                    <el-button type="info" @click="addLand" circle>
+                    <el-button type="info" circle>
                       <el-icon style="vertical-align: middle">
                         <wow-icon type="mdi" :path="$mdi.mdiFileImport" />
                       </el-icon>
