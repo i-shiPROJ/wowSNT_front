@@ -1,6 +1,7 @@
-export interface District{
+export interface District {
   id: number,
   sntId: number,
   title: string,
-  seniorId: number
+  seniorId: number,
+  seniorFullName: string
 }

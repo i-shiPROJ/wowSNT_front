@@ -7,7 +7,7 @@
         <wow-toppagetitle namePage="Информация об участнике" />
 
         <el-row>
-          <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+          <el-col :xs="24" :sm="24" :md="24" :lg="9" :xl="9">
             <wow-card>
               <template #header><b>Данные участника</b></template>
               <template #header-options>
@@ -53,34 +53,54 @@
             </wow-card>
           </el-col>
 
-          <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+          <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
             <wow-card>
-              <template #header><b>Данные об участках</b></template>
-              <template #body>
-                <div class="info-user-view">
-                  <div class="fc fc-col">
-                    <div v-for="area in area_ownerships" :key="area.id" class="label-body fc fc-col">
-                      <div>{{ area.area.cadastralNum }}</div>
-                      <div class="area-naming-st">{{ area.area.address }}
-                        {{ `Владеет с ${area.startDate}` }}
-                      </div>
-                    </div>
-
-                  </div>
+              <template #header><b>Доп. телефоны</b></template>
+              <template #header-options>
+                <div>
+                  <el-tooltip content="Редактировать номера  телефонов" placement="bottom-end" effect="light">
+                    <el-button type="primary" @click="editParticipiant" circle>
+                      <el-icon style="vertical-align: middle">
+                        <wow-icon type="mdi" :path="$mdi.mdiPencilOutline" />
+                      </el-icon>
+                    </el-button>
+                  </el-tooltip>
                 </div>
               </template>
-              <template #footer>
-                <el-button type="primary">Изменить</el-button>
+
+              <template #body>
+                <wow-label-text color="coral">
+                  <template #body>
+                    <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
+                    <a class="phone-link" :href="`tel:${person?.phoneNum}`"> {{ person?.phoneNum }}</a>
+                  </template>
+                </wow-label-text>
+                <wow-label-text color="coral">
+                  <template #body>
+                    <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
+                    <a class="phone-link" :href="`tel:${person?.phoneNum}`"> {{ person?.phoneNum }}</a>
+                  </template>
+                </wow-label-text>
+                <wow-label-text color="coral">
+                  <template #body>
+                    <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
+                    <a class="phone-link" :href="`tel:${person?.phoneNum}`"> {{ person?.phoneNum }}</a>
+                  </template>
+                </wow-label-text>
               </template>
             </wow-card>
           </el-col>
+
           <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
             <wow-card>
-              <template #header><b>Имеет роли</b></template>
+              <template #header><b>Имеет доступ</b></template>
               <template #body>
                 <div class="info-user-view">
                   <div class="fc fc-col">
                     <div class="label-body fc fc-col">
+                      <div>К участкам закрепленного района</div>
+                      <div>К долгам по закреп. району</div>
+                      <div>К номерам телефонов собственников закреп. района</div>
                       <!-- <div v-if="(person?.memberships.length ?? 0) === 0">
                         <div class="area-naming-st">Садовод</div>
                       </div>
@@ -122,25 +142,49 @@
               <template #footer> </template>
             </wow-card>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="14" :xl="14">
+        </el-row>
+
+        <el-row>
+          <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+            <wow-card>
+              <template #header><b>Данные об участках</b></template>
+              <template #body>
+                <div class="info-user-view">
+                  <div class="fc fc-col">
+                    <wow-label-text v-for="area in area_ownerships" :key="area.id" :label="area.area.cadastralNum"
+                      color="coral">
+                      <template #body>
+                        <div class="fc fc-col wow-w-100" style="">
+                          <div>{{ area.area.address }}</div>
+                          <div class="fc padding-15-0 fc-justify-space-b fc-align-center">
+                            <div>
+                              {{ `Владеет с ${area.startDate}` }}
+                            </div>
+                            <div>долг: 4500</div>
+                          </div>
+                          <div class="fc fc-justify-end">
+                            <el-button @click="viewLand(area.area.id)" type="primary">Просмотр</el-button>
+                          </div>
+                        </div>
+                      </template>
+                    </wow-label-text>
+
+                  </div>
+                </div>
+              </template>
+              <template #footer>
+              </template>
+            </wow-card>
+          </el-col>
+
+          <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
             <wow-card>
               <template #header><b>Документы</b></template>
               <template #body>
 
               </template>
             </wow-card>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-            <wow-card>
-              <template #header><b>История оплат</b></template>
-              <template #body>
-
-              </template>
-            </wow-card>
-          </el-col>
+          </el-col> -->
         </el-row>
 
         <Person-add-edit-dialog ref="personDialog" edit />
@@ -184,14 +228,6 @@ const getArea_ownerships = async () => {
   });
 }
 
-const getMemberShips = async () => {
-  const data = await $fetch<Area_ownerships[]>(`area_ownership/${route.params.participiantid}?sntId=${route.params.adminid}`, {
-    baseURL: useRuntimeConfig().public.baseURL,
-    method: 'GET'
-  });
-  Object.assign(memberships, data);
-  console.log(memberships);
-}
 
 const personDialog = ref();
 
@@ -215,10 +251,13 @@ const personDialog = ref();
 const editParticipiant = () => {
   Object.assign(personDialog.value.person, person);
   personDialog.value.showDialog();
-  personDialog.value.parentFunctions.updateParrentTable = getPerson;
+  personDialog.value.parentFunctions.updateTable = getPerson;
 }
 
-///area_ownership/owners_descr/{area_id}
+const viewLand = (landId: number) => {
+  navigateTo(`/admin/${route.params.adminid}/allLands/${landId}`)
+}
+
 </script>
 
 <style lang="less" scoped>

@@ -30,7 +30,7 @@
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                      <wow-label-text label="Старший:" :text="personFullName" color="coral" />
+                      <wow-label-text label="Старший:" :text="district?.seniorFullName" color="coral" />
                     </el-col>
                   </el-row>
                 </div>
@@ -88,19 +88,17 @@
 useHead({
   title: 'Информация об районе'
 });
-//TODO остановился здесь
+
 import type { District } from '~/interface/District.interface';
 
 import type { AreaOwnershipsDescr } from '~/interface/solution/AreaOwnershipsDescr.interface';
 import type { Area } from '~/interface/Area.interface';
-import type { Personinfo } from '~/interface/Personinfo.interface';
 
 const dialogDistrinct = ref();
 
 const router = useRouter();
 const route = useRoute();
 const district = reactive(<District>{});
-const personFullName = ref('');
 
 let area = ref<Area>();
 
@@ -110,7 +108,6 @@ onMounted(async () => {
 
 const refreshData = async () => {
   await getDistrict();
-  await getNameSenior();
 }
 const getDistrict = async () => {
   const data = await $fetch<District>(`district/${route.params.districtid}`, {
@@ -126,16 +123,6 @@ const editDistrinct = () => {
   dialogDistrinct.value.showDialog();
   dialogDistrinct.value.parentFunctions.updateParrentTable = refreshData;
 }
-
-const getNameSenior = async () => {
-  const data = await $fetch<Personinfo>(`person/${district.seniorId}`, {
-    baseURL: useRuntimeConfig().public.baseURL,
-    method: 'GET'
-  });
-
-  personFullName.value = `${data.lastName} ${data.firstName} ${data.patronymic}`;
-}
-
 
 const getArea = async () => {
   area.value = await $fetch<Area>(``, {
