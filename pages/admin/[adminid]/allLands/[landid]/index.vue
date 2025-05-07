@@ -78,7 +78,37 @@
                   <el-table-column prop="part" label="Доля" width="70" />
                   <el-table-column prop="startDate" label="нач. собств" min-width="100" />
                   <el-table-column prop="endDate" label="оконч. собств" min-width="100"> </el-table-column>
+                  <el-table-column width="120">
+              <template #default="scope">
+                <div class="fc fc-row fc-align-content-center">
+                  <el-button v-if="editingIndex === scope.$index" type="success" @click="savePersone(scope.$index)"
+                    circle>
+                    <el-icon style="vertical-align: middle">
+                      <wow-icon type="mdi" :path="$mdi.mdiContentSave" />
+                    </el-icon>
+                  </el-button>
+                  <el-button v-else type="primary" @click="editPersone(scope.$index)" circle>
+                    <el-icon style="vertical-align: middle">
+                      <wow-icon type="mdi" :path="$mdi.mdiPencilOutline" />
+                    </el-icon>
+                  </el-button>
+                  <el-button type="danger" @click.stop="deletePersone(scope.$index)" circle>
+                    <el-icon style="vertical-align: middle">
+                      <wow-icon type="mdi" :path="$mdi.mdiTrashCanOutline" />
+                    </el-icon>
+                  </el-button>
+                </div>
+
+              </template>
+            </el-table-column>
                 </el-table>
+
+                <div class="fc fc-justify-center mt-15">
+                  <el-button @click="addPersone">
+                    <wow-icon :size="20" type="mdi" :path="$mdi.mdiPlus" />
+                    Добавить собственника участка
+                  </el-button>
+                </div>
 
               </template>
             </wow-card>
@@ -147,6 +177,43 @@ const editArea = () => {
   editDialog.value.showDialog();
   editDialog.value.parentFunctions.updateParrentTable = getArea;
 };
+
+const editingIndex = ref(-1);
+const editingPhone = ref('');
+
+const addPersone = () => {
+  // if (!person.addPhoneNums) {
+  //   person.addPhoneNums = [];
+  // }
+  // person.addPhoneNums.push('');
+  // editingIndex.value = person.addPhoneNums.length - 1;
+  // editingPhone.value = '';
+};
+
+const editPersone = (index: number) => {
+  // editingIndex.value = index;
+  // editingPhone.value = person.addPhoneNums[index];
+};
+
+const deletePersone = (index: number) => {
+  // person.addPhoneNums.splice(index);
+}
+
+const savePersone = (index: number) => {
+  // if (editingPhone.value && /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/.test(editingPhone.value)) {
+  //   person.addPhoneNums[index] = editingPhone.value;
+  //   editingIndex.value = -1;
+  //   editingPhone.value = '';
+  // }else{
+  //   ElMessage({
+  //     message: 'Неправильный номер телефона!',
+  //     type: 'error',
+  //     appendTo: '.el-overlay',
+  //   });
+  // }
+
+};
+
 //TODO таблица собтсвенников кнопка редактирования и кнопка просмотр исторических данных, необходимо добавить в таблицу для каждой строки кнопку 
 // редактировани/сохранения, так-же кнопку + для добавления нового собственника
 // в документах на участках только доки на участок, а в каждом пользователе есть свои док-ты на участок(выписка из егрн о собтсвенности)

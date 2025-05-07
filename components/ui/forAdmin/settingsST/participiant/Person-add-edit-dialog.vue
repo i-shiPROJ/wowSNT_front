@@ -54,7 +54,7 @@
                   <el-button v-if="editingIndex === scope.$index" type="success" @click="savePhone(scope.$index)"
                     circle>
                     <el-icon style="vertical-align: middle">
-                      <wow-icon type="mdi" :path="$mdi.mdiContentSave" />
+                      <wow-icon type="mdi" :path="$mdi.mdiCheckBold" />
                     </el-icon>
                   </el-button>
                   <el-button v-else type="primary" @click="editPhone(scope.$index)" circle>
