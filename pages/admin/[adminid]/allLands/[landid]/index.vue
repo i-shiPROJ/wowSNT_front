@@ -49,7 +49,7 @@
           </el-col>
           <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
             <wow-card>
-              <template #header><b>Документы</b></template>
+              <template #header><b>Документы участка</b></template>
               <template #body>
 
               </template>
@@ -64,47 +64,96 @@
 
                 <el-table :data="areaOwnerships" style="width: 100%" class="cur-pointer"
                   @row-click="showParticipantInfo">
-                  <el-table-column prop="fio" label="ФИО" min-width="200" />
+                  <el-table-column prop="fio" label="ФИО" min-width="200">
+                    <template #default="scope">
+                      <div v-if="editingIndex !== scope.$index">{{ scope.row.fio }}</div>
+                      <div v-else>
+                        <el-select-v2 @click.stop @change="selectPerson" v-model="editingPersone.id"
+                          placeholder="Выберите ответственного" :options="optionsPersons" filterable />
+                      </div>
+                    </template>
+                  </el-table-column>
+
                   <el-table-column label="Телефон" width="170">
                     <template #default="scope">
-                      <div class="fc fc-row fc-align-content-center">
+                      <div v-if="editingIndex !== scope.$index" class="fc fc-row fc-align-content-center">
                         <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
                         <a class="phone-link" :href="`tel:${scope.row.phoneNums}`" @click.stop>
                           {{ scope.row.phoneNums }}
                         </a>
                       </div>
+                      <div v-else>{{ editingPersone.phoneNum }}</div>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="part" label="Доля" width="70" />
-                  <el-table-column prop="startDate" label="нач. собств" min-width="100" />
-                  <el-table-column prop="endDate" label="оконч. собств" min-width="100"> </el-table-column>
-                  <el-table-column width="120">
-              <template #default="scope">
-                <div class="fc fc-row fc-align-content-center">
-                  <el-button v-if="editingIndex === scope.$index" type="success" @click="savePersone(scope.$index)"
-                    circle>
-                    <el-icon style="vertical-align: middle">
-                      <wow-icon type="mdi" :path="$mdi.mdiContentSave" />
-                    </el-icon>
-                  </el-button>
-                  <el-button v-else type="primary" @click="editPersone(scope.$index)" circle>
-                    <el-icon style="vertical-align: middle">
-                      <wow-icon type="mdi" :path="$mdi.mdiPencilOutline" />
-                    </el-icon>
-                  </el-button>
-                  <el-button type="danger" @click.stop="deletePersone(scope.$index)" circle>
-                    <el-icon style="vertical-align: middle">
-                      <wow-icon type="mdi" :path="$mdi.mdiTrashCanOutline" />
-                    </el-icon>
-                  </el-button>
-                </div>
 
-              </template>
-            </el-table-column>
+                  <el-table-column prop="part" label="Доля">
+                    <template #default="scope">
+                      <div v-if="editingIndex !== scope.$index">{{ scope.row.part }}</div>
+                      <div v-else>
+                        <el-input-number @click.stop v-model="editingPersone.part" :min="0.1" :step="0.01" :max="1" />
+                      </div>
+                    </template>
+                  </el-table-column>
+
+                  <el-table-column prop="startDate" label="нач. собств">
+                    <template #default="scope">
+                      <div v-if="editingIndex !== scope.$index">{{ scope.row.startDate }}</div>
+                      <div v-else>
+                        <el-date-picker @click.stop v-model="editingPersone.startDate" type="date"
+                          placeholder="Выберите дату" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+                          style="width: 100%;" />
+                      </div>
+                    </template>
+                  </el-table-column>
+
+                  <el-table-column prop="endDate" label="оконч. собств">
+                    <template #default="scope">
+                      <div v-if="editingIndex !== scope.$index">{{ scope.row.endDate }}</div>
+                      <div v-else>
+                        <el-date-picker @click.stop v-model="editingPersone.endDate" type="date"
+                          placeholder="Выберите дату" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+                          style="width: 100%;" />
+                      </div>
+                    </template>
+                  </el-table-column>
+
+                  <el-table-column width="120">
+                    <template #default="scope">
+                      <div class="fc fc-row fc-align-content-center">
+                        <el-button v-if="editingIndex !== scope.$index" type="primary"
+                          @click.stop="editPersoneInLand(scope.$index, scope.row)" circle>
+                          <el-icon style="vertical-align: middle">
+                            <wow-icon type="mdi" :path="$mdi.mdiPencilOutline" />
+                          </el-icon>
+                        </el-button>
+
+                        <el-button v-else type="success" @click.stop="savePersone()" circle>
+                          <el-icon style="vertical-align: middle">
+                            <wow-icon type="mdi" :path="$mdi.mdiContentSave" />
+                          </el-icon>
+                        </el-button>
+
+                        <el-button v-if="editingIndex !== scope.$index" type="danger"
+                          @click.stop="deletePersoneInLand(scope.$index)" circle>
+                          <el-icon style="vertical-align: middle">
+                            <wow-icon type="mdi" :path="$mdi.mdiTrashCanOutline" />
+                          </el-icon>
+                        </el-button>
+
+                        <el-button v-else type="warning" @click.stop="cancelEdit()" circle>
+                          <el-icon style="vertical-align: middle">
+                            <wow-icon type="mdi" :path="$mdi.mdiCancel" />
+                          </el-icon>
+                        </el-button>
+
+                      </div>
+
+                    </template>
+                  </el-table-column>
                 </el-table>
 
                 <div class="fc fc-justify-center mt-15">
-                  <el-button @click="addPersone">
+                  <el-button @click="addPersoneInLand">
                     <wow-icon :size="20" type="mdi" :path="$mdi.mdiPlus" />
                     Добавить собственника участка
                   </el-button>
@@ -141,6 +190,8 @@ useHead({
 
 import type { AreaOwnershipsDescr } from '~/interface/solution/AreaOwnershipsDescr.interface';
 import type { Area } from '~/interface/Area.interface';
+import type { Personinfo } from '~/interface/Personinfo.interface';
+
 
 const route = useRoute();
 const editDialog = ref();
@@ -179,27 +230,77 @@ const editArea = () => {
 };
 
 const editingIndex = ref(-1);
-const editingPhone = ref('');
+const editingPersone = ref<AreaOwnershipsDescr>({
+  fio: '',
+  phoneNum: '',
+  phoneNums: '',
+  id: 0,
+  part: 0,
+  startDate: '',
+  endDate: '',
+});
+const optionsPersons = ref<{ value: number; label: string; }[]>([]);
+const allPersonInfo = reactive<Personinfo[]>([]);
 
-const addPersone = () => {
-  // if (!person.addPhoneNums) {
-  //   person.addPhoneNums = [];
-  // }
-  // person.addPhoneNums.push('');
-  // editingIndex.value = person.addPhoneNums.length - 1;
-  // editingPhone.value = '';
+
+const addPersoneInLand = () => {
+  let newAreaOwnership: AreaOwnershipsDescr = {
+    fio: '',
+    phoneNum: '',
+    phoneNums: '',
+    id: 0,
+    part: 0,
+    startDate: '',
+    endDate: '',
+  };
+  areaOwnerships.value.push(newAreaOwnership);
+  editPersoneInLand(areaOwnerships.value.length - 1, newAreaOwnership);
+  console.log('object, ', areaOwnerships.value);
 };
 
-const editPersone = (index: number) => {
-  // editingIndex.value = index;
-  // editingPhone.value = person.addPhoneNums[index];
+const editPersoneInLand = (index: number, row: AreaOwnershipsDescr) => {
+  editingPersone.value = { ...row };
+  fetchOptionsPersons();
+  editingIndex.value = index;
 };
 
-const deletePersone = (index: number) => {
-  // person.addPhoneNums.splice(index);
+const fetchOptionsPersons = async () => {
+  const response = await $fetch<Personinfo[]>(`person/snt-members/${route.params.adminid}`, {
+    baseURL: useRuntimeConfig().public.baseURL,
+    method: 'GET'
+  });
+
+  Object.assign(allPersonInfo, response);
+
+  optionsPersons.value = response.map(item => ({
+    value: item.id,
+    label: `${item.lastName} ${item.firstName} ${item.patronymic}`
+  }));
+};
+
+const selectPerson = () => {
+  const changePersone = allPersonInfo.find(item => item.id === editingPersone.value.id)!;
+  editingPersone.value.fio = `${changePersone.lastName} ${changePersone.firstName} ${changePersone.patronymic}`;
+  editingPersone.value.part = 0;
+  editingPersone.value.phoneNum = changePersone.phoneNum;
+  editingPersone.value.startDate = '';
+  editingPersone.value.endDate = '';
 }
 
-const savePersone = (index: number) => {
+const deletePersoneInLand = (index: number) => {
+  //TODO еще в разработке на беке
+  areaOwnerships.value.splice(index);
+}
+
+const cancelEdit = () => {
+  editingIndex.value = -1;
+}
+
+const savePersone = () => {
+  console.log(editingPersone.value);
+
+  // POST: /area_ownership
+
   // if (editingPhone.value && /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/.test(editingPhone.value)) {
   //   person.addPhoneNums[index] = editingPhone.value;
   //   editingIndex.value = -1;
