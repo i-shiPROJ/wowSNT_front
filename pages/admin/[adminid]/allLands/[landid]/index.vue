@@ -68,7 +68,7 @@
                     <template #default="scope">
                       <div v-if="editingIndex !== scope.$index">{{ scope.row.fio }}</div>
                       <div v-else>
-                        <el-select-v2 @click.stop @change="selectPerson" v-model="editingPersone.id"
+                        <el-select-v2 @click.stop @change="selectPerson" v-model="editingPersone.personId"
                           placeholder="Выберите ответственного" :options="optionsPersons" filterable />
                       </div>
                     </template>
@@ -177,6 +177,8 @@
 
 
         <land-add-edit-dialog ref="editDialog" edit />
+        <Confirm-dialog ref="confirmDialog" />
+
 
       </div>
     </template>
@@ -195,6 +197,7 @@ import type { Personinfo } from '~/interface/Personinfo.interface';
 
 const route = useRoute();
 const editDialog = ref();
+const confirmDialog = ref();
 let areaOwnerships = ref<AreaOwnershipsDescr[]>([]);
 let area = reactive(<Area>{});
 
@@ -219,8 +222,8 @@ const getArea = async () => {
   Object.assign(area, data);
 };
 
-const showParticipantInfo = async (row: Area) => {
-  navigateTo(`/admin/${route.params.adminid}/participant/${row.id}`)
+const showParticipantInfo = async (row: AreaOwnershipsDescr) => {
+  if (editingIndex.value === -1) navigateTo(`/admin/${route.params.adminid}/participant/${row.personId}`);
 }
 
 const editArea = () => {
@@ -235,6 +238,7 @@ const editingPersone = ref<AreaOwnershipsDescr>({
   phoneNum: '',
   phoneNums: '',
   id: 0,
+  personId: 0,
   part: 0,
   startDate: '',
   endDate: '',
@@ -249,13 +253,13 @@ const addPersoneInLand = () => {
     phoneNum: '',
     phoneNums: '',
     id: 0,
+    personId: 1,
     part: 0,
     startDate: '',
     endDate: '',
   };
   areaOwnerships.value.push(newAreaOwnership);
   editPersoneInLand(areaOwnerships.value.length - 1, newAreaOwnership);
-  console.log('object, ', areaOwnerships.value);
 };
 
 const editPersoneInLand = (index: number, row: AreaOwnershipsDescr) => {
@@ -279,7 +283,7 @@ const fetchOptionsPersons = async () => {
 };
 
 const selectPerson = () => {
-  const changePersone = allPersonInfo.find(item => item.id === editingPersone.value.id)!;
+  const changePersone = allPersonInfo.find(item => item.id === editingPersone.value.personId)!;
   editingPersone.value.fio = `${changePersone.lastName} ${changePersone.firstName} ${changePersone.patronymic}`;
   editingPersone.value.part = 0;
   editingPersone.value.phoneNum = changePersone.phoneNum;
@@ -287,39 +291,62 @@ const selectPerson = () => {
   editingPersone.value.endDate = '';
 }
 
-const deletePersoneInLand = (index: number) => {
-  //TODO еще в разработке на беке
-  areaOwnerships.value.splice(index);
+const deletePersoneInLand = async (index: number) => {
+  confirmDialog.value.title = 'Внимание!'
+  confirmDialog.value.titleBody = `Удалить собственника с участка?`;
+  confirmDialog.value.acceptFunction = async () => {
+    try {
+      await $fetch(`/area_ownership/${areaOwnerships.value[index].id}`, {
+        baseURL: useRuntimeConfig().public.baseURL,
+        method: 'DELETE',
+      });
+    } catch (error: any) {
+      console.error("Error:", error);
+      ElMessage({
+        message: error.data.message,
+        type: 'error',
+      });
+    }
+    confirmDialog.value.showCloseDialog();
+    getAreaOwnerships();
+  };
+  confirmDialog.value.showConfirmDialog();
 }
 
 const cancelEdit = () => {
+  if (areaOwnerships.value[areaOwnerships.value.length - 1].id === 0) {
+    areaOwnerships.value.pop();
+  }
   editingIndex.value = -1;
 }
 
-const savePersone = () => {
-  console.log(editingPersone.value);
-
-  // POST: /area_ownership
-
-  // if (editingPhone.value && /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/.test(editingPhone.value)) {
-  //   person.addPhoneNums[index] = editingPhone.value;
-  //   editingIndex.value = -1;
-  //   editingPhone.value = '';
-  // }else{
-  //   ElMessage({
-  //     message: 'Неправильный номер телефона!',
-  //     type: 'error',
-  //     appendTo: '.el-overlay',
-  //   });
-  // }
-
+const savePersone = async () => {
+  try {
+    await $fetch(`/area_ownership`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'POST',
+      body: JSON.stringify({
+        id: editingPersone.value.id === 0 ? null : editingPersone.value.id,
+        personId: editingPersone.value.personId,
+        areaId: route.params.landid,
+        part: editingPersone.value.part,
+        startDate: editingPersone.value.startDate,
+        endDate: editingPersone.value.endDate
+      }),
+    });
+    editingIndex.value = -1;
+    getAreaOwnerships();
+  } catch (error: any) {
+    console.error("Error:", error);
+    ///TODO с бека приходит валидатор со свойствами, где ошибка, необходимо написать функцию для возврата ошибок
+    ElMessage({
+      message: error.data.message,
+      type: 'error',
+    });
+  }
 };
 
-//TODO таблица собтсвенников кнопка редактирования и кнопка просмотр исторических данных, необходимо добавить в таблицу для каждой строки кнопку 
-// редактировани/сохранения, так-же кнопку + для добавления нового собственника
-// в документах на участках только доки на участок, а в каждом пользователе есть свои док-ты на участок(выписка из егрн о собтсвенности)
-
-///area_ownership/owners_descr/{area_id}
+//TODO в документах на участках только доки на участок, а в каждом пользователе есть свои док-ты на участок(выписка из егрн о собтсвенности)
 </script>
 
 <style lang="less" scoped></style>
