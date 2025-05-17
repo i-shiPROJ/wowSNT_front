@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@/assets/less/global.less',
     '@/assets/less/flexclasses.less',
     '@/assets/less/padding.less',
+    '@/assets/less/margin-padding.less',
   ],
 
   vite: {

@@ -56,37 +56,12 @@
           <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
             <wow-card>
               <template #header><b>Доп. телефоны</b></template>
-              <template #header-options>
-                <div>
-                  <el-tooltip content="Редактировать номера  телефонов" placement="bottom-end" effect="light">
-                    <el-button type="primary" @click="editParticipiant" circle>
-                      <el-icon style="vertical-align: middle">
-                        <wow-icon type="mdi" :path="$mdi.mdiPencilOutline" />
-                      </el-icon>
-                    </el-button>
-                  </el-tooltip>
-                </div>
-              </template>
 
               <template #body>
-                <wow-label-text color="coral">
-                  <template #body>
-                    <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
-                    <a class="phone-link" :href="`tel:${person?.phoneNum}`"> {{ person?.phoneNum }}</a>
-                  </template>
-                </wow-label-text>
-                <wow-label-text color="coral">
-                  <template #body>
-                    <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
-                    <a class="phone-link" :href="`tel:${person?.phoneNum}`"> {{ person?.phoneNum }}</a>
-                  </template>
-                </wow-label-text>
-                <wow-label-text color="coral">
-                  <template #body>
-                    <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
-                    <a class="phone-link" :href="`tel:${person?.phoneNum}`"> {{ person?.phoneNum }}</a>
-                  </template>
-                </wow-label-text>
+                <div v-for="otherPhone in person.addPhoneNums" class="fc fc-row mt-10">
+                  <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
+                  <a class="phone-link" :href="`tel:${person?.phoneNum}`">{{ otherPhone }}</a>
+                </div>
               </template>
             </wow-card>
           </el-col>
@@ -248,7 +223,8 @@ const personDialog = ref();
 //   }
 // };
 
-const editParticipiant = () => {
+const editParticipiant = async () => {
+  await getPerson();
   Object.assign(personDialog.value.person, person);
   personDialog.value.showDialog();
   personDialog.value.parentFunctions.updateTable = getPerson;

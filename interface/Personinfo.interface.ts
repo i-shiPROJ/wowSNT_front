@@ -7,7 +7,7 @@ export interface Personinfo{
   firstName: string,
   patronymic: string,
   phoneNum: string,
-  phoneNums: string[],
+  addPhoneNums: string[],
   email: string,
   username: string,
   memberships: Memberships[],

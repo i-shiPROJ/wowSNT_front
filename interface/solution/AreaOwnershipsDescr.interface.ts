@@ -1,9 +1,10 @@
 export interface AreaOwnershipsDescr {
-  endDate: string | null,
   fio: string,
   phoneNum: string,
   phoneNums: string,
   id: number,
-  part: string,
+  personId:number,
+  part: number,
   startDate: string,
+  endDate: string,
 }

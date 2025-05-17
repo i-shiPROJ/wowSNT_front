@@ -2,7 +2,8 @@
   <div>
     <el-dialog v-model="dialogFormVisible" :title="labelHeaderDialog" :width="getWidthDialog">
 
-      <el-form ref="formRef" style="width: 100%" :model="person" :label-position="labelPosition" label-width="auto" :rules="rules">
+      <el-form ref="formRef" style="width: 100%" :model="person" :label-position="labelPosition" label-width="auto"
+        :rules="rules">
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -32,6 +33,54 @@
         </el-row>
 
       </el-form>
+
+      <el-row>
+        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+          <el-table :data="person.addPhoneNums" style="width: 100%" class="cur-pointer">
+            <el-table-column label="Дополнительные телефоны">
+              <template #default="scope">
+                <div v-if="editingIndex === scope.$index" class="fc fc-row fc-align-content-center">
+                  <el-input v-model="editingPhone" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (999) 999 99 99" />
+                </div>
+                <div v-else class="fc fc-row fc-align-content-center">
+                  <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
+                  <span class="ml-2">{{ scope.row }}</span>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="120">
+              <template #default="scope">
+                <div class="fc fc-row fc-align-content-center">
+                  <el-button v-if="editingIndex === scope.$index" type="success" @click="savePhone(scope.$index)"
+                    circle>
+                    <el-icon style="vertical-align: middle">
+                      <wow-icon type="mdi" :path="$mdi.mdiCheckBold" />
+                    </el-icon>
+                  </el-button>
+                  <el-button v-else type="primary" @click="editPhone(scope.$index)" circle>
+                    <el-icon style="vertical-align: middle">
+                      <wow-icon type="mdi" :path="$mdi.mdiPencilOutline" />
+                    </el-icon>
+                  </el-button>
+                  <el-button type="danger" @click.stop="deletePhone(scope.$index)" circle>
+                    <el-icon style="vertical-align: middle">
+                      <wow-icon type="mdi" :path="$mdi.mdiTrashCanOutline" />
+                    </el-icon>
+                  </el-button>
+                </div>
+
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="fc fc-justify-center mt-15">
+            <el-button @click="addNewPhone">
+              <wow-icon :size="20" type="mdi" :path="$mdi.mdiPlus" />
+              Добавить телефон
+            </el-button>
+          </div>
+        </el-col>
+
+      </el-row>
 
       <template #footer>
         <div class="dialog-footer">
@@ -99,9 +148,6 @@ const showDialog = (currentSolution: Personinfo) => {
     person = reactive(<Personinfo>{});
   }
   dialogFormVisible.value = true;
-
-  // person = reactive({ ...currentSolution });//JSON.parse(JSON.stringify(currentSolution))
-  dialogFormVisible.value = true;
 };
 
 const confirmDialog = ref();
@@ -146,25 +192,47 @@ const showConfirmDialog = async (formEl: FormInstance | undefined) => {
 
 };
 
+const editingIndex = ref(-1);
+const editingPhone = ref('');
+
+const addNewPhone = () => {
+  if (!person.addPhoneNums) {
+    person.addPhoneNums = [];
+  }
+  person.addPhoneNums.push('');
+  editingIndex.value = person.addPhoneNums.length - 1;
+  editingPhone.value = '';
+};
+
+const editPhone = (index: number) => {
+  editingIndex.value = index;
+  editingPhone.value = person.addPhoneNums[index];
+};
+
+const deletePhone = (index: number) => {
+  person.addPhoneNums.splice(index);
+}
+
+const savePhone = (index: number) => {
+  if (editingPhone.value && /^\+7 \(\d{3}\) \d{3} \d{2} \d{2}$/.test(editingPhone.value)) {
+    person.addPhoneNums[index] = editingPhone.value;
+    editingIndex.value = -1;
+    editingPhone.value = '';
+  }else{
+    ElMessage({
+      message: 'Неправильный номер телефона!',
+      type: 'error',
+      appendTo: '.el-overlay',
+    });
+  }
+
+};
+
 //экспорт функции для использования через ref
 defineExpose({ showDialog, dialogFormVisible, parentFunctions, person });
 
 </script>
 
 <style type="less" scoped>
-.text-cadastnum {
-  line-height: 20px;
-  text-align: center;
-}
 
-.area-cadastr-number {
-  padding: 0 5px;
-  margin-bottom: 18px;
-
-  .title {
-    padding: 0 12px 0 0;
-  }
-
-
-}
 </style>
