@@ -31,7 +31,7 @@
 
               <template #body>
 
-                <el-table :data="areas" stripe style="width: 100%" class="cur-pointer" @row-click="showLandInfo">
+                <el-table :data="areas?.items" stripe style="width: 100%" class="cur-pointer" @row-click="showLandInfo">
                   <el-table-column prop="cadastralNum" label="Кад. номер" width="200" />
                   <el-table-column prop="address" label="Адрес" min-width="300" />
                   <el-table-column prop="square" label="Площадь м²" width="120" />
@@ -48,6 +48,11 @@
                     </template>
                   </el-table-column>
                 </el-table>
+
+                
+                <el-pagination class="mt-20 mb-5" v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[1, 2, 100]"
+                  layout="sizes, prev, pager, next" :total="areas?.totalItems || 0" @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange" />
 
               </template>
             </wow-card>
@@ -69,15 +74,19 @@ useHead({
 
 import { ref } from 'vue';
 import type { Area } from '~/interface/Area.interface';
+import type { Pagination } from '~/interface/Pagination.interface';
 import type { PersoneInfoSmall } from '~/interface/PersoneInfoSmall';
 
 const landDialog = ref();
 
 const router = useRouter();
 const route = useRoute();
-const areas = ref<Area[]>([]);
+const areas = ref<Pagination<Area[]>>();
 const addDialog = ref();
 const confirmDialog = ref();
+
+const currentPage = ref(1);
+const pageSize = ref(100);
 
 onMounted(async () => {
   getAllLend();
@@ -85,11 +94,10 @@ onMounted(async () => {
 
 const getAllLend = async () => {
   try {
-    areas.value = await $fetch<Area[]>(`area/snt/${route.params.adminid}`, {
+    areas.value = await $fetch<Pagination<Area[]>>(`area/snt/${route.params.adminid}?page_num=${currentPage.value}&page_size=${pageSize.value}`, {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });
-
   }
   catch (error) {
     console.error(error)
@@ -123,6 +131,16 @@ const deleteArea = (row: Area) => {
   confirmDialog.value.showConfirmDialog();
 }
 
+const handleSizeChange = (newSize: number) => {
+  pageSize.value = newSize;
+  currentPage.value = 1; // сбрасываем на первую страницу
+  getAllLend();
+}
+
+const handleCurrentChange = (newPage: number) => {
+  currentPage.value = newPage;
+  getAllLend();
+}
 
 </script>
 
