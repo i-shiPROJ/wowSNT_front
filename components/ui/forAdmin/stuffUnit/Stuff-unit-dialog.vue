@@ -2,7 +2,7 @@
   <div>
     <el-dialog v-model="dialogFormVisible" title="Форма добавиления новой должности" :width="getWidthDialog">
 
-      <el-form ref="formRef" style="width: 100%" :model="stuffUnit" label-width="auto" :rules="rules">
+      <el-form ref="formRef" style="width: 100%" :model="stuffUnit" :label-position="labelPosition" label-width="auto" :rules="rules">
 
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -58,6 +58,7 @@ import type { FormInstance, FormRules } from 'element-plus';
 const route = useRoute();
 const mobileStore = useMobileStore();
 const getWidthDialog = computed(() => { return mobileStore.isMobile ? '95%' : 800 });
+const labelPosition = computed(() => { return mobileStore.isMobile ? 'top' : 'right' });
 
 let stuffUnit = reactive(<Stuff_unit>{});
 const formRef = ref<FormInstance>();

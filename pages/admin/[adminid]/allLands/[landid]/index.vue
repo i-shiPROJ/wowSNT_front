@@ -193,6 +193,7 @@ useHead({
 import type { AreaOwnershipsDescr } from '~/interface/solution/AreaOwnershipsDescr.interface';
 import type { Area } from '~/interface/Area.interface';
 import type { Personinfo } from '~/interface/Personinfo.interface';
+import type { Pagination } from '~/interface/Pagination.interface';
 
 
 const route = useRoute();
@@ -269,14 +270,14 @@ const editPersoneInLand = (index: number, row: AreaOwnershipsDescr) => {
 };
 
 const fetchOptionsPersons = async () => {
-  const response = await $fetch<Personinfo[]>(`person/snt-members/${route.params.adminid}`, {
+  const response = await $fetch<Pagination<Personinfo>>(`person/snt/${route.params.adminid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
 
   Object.assign(allPersonInfo, response);
 
-  optionsPersons.value = response.map(item => ({
+  optionsPersons.value = response.items.map((item: Personinfo) => ({
     value: item.id,
     label: `${item.lastName} ${item.firstName} ${item.patronymic}`
   }));

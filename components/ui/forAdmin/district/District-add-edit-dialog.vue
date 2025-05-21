@@ -38,6 +38,7 @@ import { useMobileStore } from '~/stores/mobileInfo';
 import type { District } from '~/interface/District.interface';
 import type { Personinfo } from '~/interface/Personinfo.interface';
 import type { FormInstance, FormRules } from 'element-plus';
+import type { Pagination } from '~/interface/Pagination.interface';
 
 import { ElMessage, ElLoading } from 'element-plus';
 
@@ -128,12 +129,12 @@ const showConfirmDialog = async (formEl: FormInstance | undefined) => {
 const optionsPersons = ref<{ value: number; label: string; }[]>([]);
 
 const fetchOptionsPersons = async () => {
-  const response = await $fetch<Personinfo[]>(`person/snt-members/${route.params.adminid}`, {
+  const response = await $fetch<Pagination<Personinfo>>(`person/snt/${route.params.adminid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
 
-  optionsPersons.value = response.map(item => ({
+  optionsPersons.value = response.items.map((item: Personinfo) => ({
     value: item.id,
     label: `${item.lastName} ${item.firstName} ${item.patronymic}`
   }));
