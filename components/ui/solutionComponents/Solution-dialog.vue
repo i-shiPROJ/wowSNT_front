@@ -4,7 +4,7 @@
       :title="`Заявка на вступление #${currentSolutionObject.regRequest?.id} от ${currentSolutionObject.regRequest?.requestDate}`"
       :width="getWidthDialog">
 
-      <el-form ref="formRef" style="width: 100%" :model="currentSolutionObject" label-width="auto" :rules="rules">
+      <el-form ref="formRef" style="width: 100%" :model="currentSolutionObject" :label-position="labelPosition" label-width="auto" :rules="rules">
 
         <!-- <el-tooltip v-if="!!currentSolutionObject.area.id" content="Заменить нижнее поле старыми данными"
           placement="bottom-end" effect="light">
@@ -210,6 +210,8 @@ const cadastrNumberComputed = computed(() => { return !fromCadastrNumber.value; 
 const mobileStore = useMobileStore();
 let currentSolutionObject = reactive(<SolutionEdit>{});
 const getWidthDialog = computed(() => { return mobileStore.isMobile ? '95%' : 800 });
+const labelPosition = computed(() => { return mobileStore.isMobile ? 'top' : 'right' });
+
 
 const dialogFormVisible = ref(false);
 

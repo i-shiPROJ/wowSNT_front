@@ -21,15 +21,17 @@
               </template>
               <template #body>
 
-                <el-table :data="persons" stripe style="width: 100%" class="cur-pointer" @row-click="showPersonInfo">
+                <el-table :data="persons?.items" stripe style="width: 100%" class="cur-pointer" @row-click="showPersonInfo">
                   <el-table-column prop="lastName" label="Фамилия" min-width="170" />
                   <el-table-column prop="firstName" label="Имя" min-width="170" />
                   <el-table-column prop="patronymic" label="Отчество" min-width="170" />
-                  <el-table-column prop="phoneNum" label="Телефон" width="170">
+                  <el-table-column prop="phoneNum" label="Телефон" width="230">
                     <template #default="scope">
                       <div class="fc fc-row fc-align-content-center">
-                        <wow-icon :size="20" type="mdi" :path="$mdi.mdiCellphone" />
-                        <a class="phone-link" :href="`tel:${scope.row.phoneNum}`" @click.stop>
+                        <a :href="`tel:${scope.row.phoneNum}`" class="el-button el-button--info a-txt-dec-none no-select" @click.stop>
+                          <el-icon style="vertical-align: middle">
+                            <wow-icon type="mdi" :path="$mdi.mdiCellphone" />
+                          </el-icon>
                           {{ scope.row.phoneNum }}
                         </a>
                       </div>
@@ -48,6 +50,10 @@
                     </template>
                   </el-table-column>
                 </el-table>
+
+                <el-pagination class="mt-20 mb-5" v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[1, 2, 100]"
+                  layout="sizes, prev, pager, next" :total="persons?.totalItems || 0" @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange" />
 
               </template>
             </Wow-card>
@@ -69,13 +75,14 @@ useHead({
 import { ref } from 'vue';
 import type { Personinfo } from '~/interface/Personinfo.interface';
 import type { Area } from '~/interface/Area.interface';
+import type { Pagination } from '~/interface/Pagination.interface';
 
 const personAddDialog = ref();
 const confirmDialog = ref();
 
 const router = useRouter();
 const route = useRoute();
-const persons = ref<Personinfo[]>([]);
+const persons = ref<Pagination<Personinfo[]>>();
 
 onMounted(async () => {
   getAllPerson();
@@ -83,7 +90,7 @@ onMounted(async () => {
 
 const getAllPerson = async () => {
   try {
-    persons.value = await $fetch<Personinfo[]>(`person/snt-members/${route.params.adminid}`, {
+    persons.value = await $fetch<Pagination<Personinfo[]>>(`person/snt/${route.params.adminid}?page_num=${currentPage.value}&page_size=${pageSize.value}`, {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });
@@ -119,6 +126,20 @@ const deletePerson = (row: Personinfo) => {
     }
   };
   confirmDialog.value.showConfirmDialog();
+}
+
+const currentPage = ref(1);
+const pageSize = ref(100);
+
+const handleSizeChange = (newSize: number) => {
+  pageSize.value = newSize;
+  currentPage.value = 1; // сбрасываем на первую страницу
+  getAllPerson();
+}
+
+const handleCurrentChange = (newPage: number) => {
+  currentPage.value = newPage;
+  getAllPerson();
 }
 
 
