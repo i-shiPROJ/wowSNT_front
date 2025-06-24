@@ -49,7 +49,7 @@
                   </el-table-column>
                 </el-table>
                 
-                <el-pagination class="mt-20 mb-5" v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[1, 2, 100]"
+                <el-pagination class="mt-20 mb-5" v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[10, 50, 100]"
                   layout="sizes, prev, pager, next" :total="areas?.totalItems || 0" @size-change="handleSizeChange"
                   @current-change="handleCurrentChange" />
 
