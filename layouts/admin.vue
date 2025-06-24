@@ -80,7 +80,7 @@ import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
 import { mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox, mdiMessageReplyTextOutline, mdiCogOutline, mdiCardAccountDetailsOutline, mdiCashRegister, 
   mdiAccountGroup, mdiCitySwitch,
-  mdiSafeSquareOutline, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu } from '@mdi/js';
+  mdiSafeSquareOutline, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu, mdiLeak } from '@mdi/js';
 
 
 import type { Memberships } from '~/interface/Memberships.interface';
@@ -260,6 +260,19 @@ const setMenu = () => {
         name: 'Настройки СТ',
         icon: mdiCogOutline,
         url: `/admin/${route.params.adminid}/settings`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'admin-adminid-meetingvoting',
+      settings: {
+        active: activeMenu('admin-adminid-meetingvoting'),
+        name: 'Собрания и голосование',
+        icon: mdiLeak,
+        url: `/admin/${route.params.adminid}/meetingvoting`,
         functions: {
           setActiveMenuItem
         }
