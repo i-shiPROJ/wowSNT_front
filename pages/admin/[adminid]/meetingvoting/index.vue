@@ -54,6 +54,18 @@
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
               <template #header><b>Все собрания:</b></template>
+              <template #header-options>
+                <div>
+                  <el-tooltip content="Добавить собрание" placement="bottom-end" effect="light">
+                    <el-button type="primary" @click="addMeeting()" circle>
+                      <el-icon style="vertical-align: middle">
+                        <wow-icon type="mdi" :path="$mdi.mdiPlus" />
+                      </el-icon>
+                    </el-button>
+                  </el-tooltip>
+
+                </div>
+              </template>
               <template #body>
                 <el-table :data="meetings?.items" stripe style="width: 100%" class="cur-pointer" @row-click="showInfo">
                   <el-table-column prop="meetingDate" label="Дата собрания" width="200" />
@@ -101,7 +113,7 @@ import { reactive, onMounted, ref } from 'vue';
 import type { Meeting } from '~/interface/meeting/Meeting';
 import type { Pagination } from '~/interface/Pagination.interface';
 
-
+const router = useRouter();
 const route = useRoute();
 //const currentRoute = router.currentRoute.value;
 
@@ -119,15 +131,18 @@ const getMeetings = async () => {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });
-    console.log(meetings.value);
   }
   catch (error) {
     console.error(error)
   }
 }
 
-const showInfo = () => {
-  console.log('show');
+const addMeeting = () => {
+  console.log('add');
+}
+
+const showInfo = (row: Meeting) => {
+  router.push(`/admin/${route.params.adminid}/meetingvoting/${row.id}`);
 }
 
 const deleteRow = (row: Meeting) => {
