@@ -1,8 +1,4 @@
-interface votingOptions{
-  id: number,
-  ordNum: number,
-  wording: string
-}
+import type { VotingOptions } from "./VotingOptions"
 
 export interface Voitingitem {
 
@@ -10,6 +6,6 @@ export interface Voitingitem {
   ordNum: number,
   wording: string,
     membersOnly: boolean,
-      votingOptions: [votingOptions]
+      votingOptions: VotingOptions[]
             
 }

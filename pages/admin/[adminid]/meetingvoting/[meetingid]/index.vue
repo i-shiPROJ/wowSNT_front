@@ -19,7 +19,6 @@
                       </el-icon>
                     </el-button>
                   </el-tooltip>
-
                 </div>
               </template>
               <template #body>
@@ -56,30 +55,54 @@
         </el-row>
 
 
-        <el-row v-for="item in dataMeeting.votingItems" :key="item.id">
+        <el-row>
 
-          <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
-              <template #header><b>{{ item.wording }}:</b></template>
+              <template #header><b>Приложения к голосованию:</b></template>
               <template #header-options>
                 <div> </div>
               </template>
               <template #body>
-                <div class="fc fc-col">
-                  <el-row>
-
-                  </el-row>
-                </div>
+                
               </template>
             </wow-card>
           </el-col>
 
         </el-row>
 
+        <el-row>
 
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <wow-card>
+              <template #header><b>Вопросы голосования:</b></template>
+              <template #header-options>
+                <div> </div>
+              </template>
+              <template #body>
+                <el-table :data="dataMeeting.votingItems" stripe style="width: 100%" class="cur-pointer">
+                  <el-table-column prop="id" label="" width="50">
+                    <template #default="scope">
+                      <div class="fc fc-justify-center tc-bright-red-1">
+                        <wow-icon :size="20" type="mdi" :path="$mdi.mdiProgressQuestion" />
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="wording" label="Название пункта" min-width="400" />
+<!--                   <el-table-column prop="votingEndDate" label="" width="300">
+                    <template #default="scope">
+                      <el-radio-group v-model="scope.row.ordNum" disabled>
+                        <el-radio-button v-for="item in scope.row.votingOptions"
+                          :key="`${scope.row.id}point${item.key}`" :label="item.wording" :value="item.ordNum" />
+                      </el-radio-group>
+                    </template>
+                  </el-table-column> -->
+                </el-table>
+              </template>
+            </wow-card>
+          </el-col>
 
-
-        <!-- <District-add-edit-dialog ref="dialogDistrinct" edit /> -->
+        </el-row>
 
       </div>
     </template>

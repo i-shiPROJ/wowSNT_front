@@ -19,7 +19,13 @@
                       </el-icon>
                     </el-button>
                   </el-tooltip>
-
+                  <el-tooltip content="Отменить редактирование" placement="bottom-end" effect="light">
+                    <el-button type="danger" @click="cancelEdit()" circle>
+                      <el-icon style="vertical-align: middle">
+                        <wow-icon type="mdi" :path="$mdi.mdiClose" />
+                      </el-icon>
+                    </el-button>
+                  </el-tooltip>
                 </div>
               </template>
               <template #body>
@@ -56,27 +62,78 @@
         </el-row>
 
 
-        <el-row v-for="item in dataMeeting.votingItems" :key="item.id">
+        <el-row>
 
-          <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
+          <el-col v-for="(item, index) in dataMeeting.votingItems" :key="item.id" :xs="24" :sm="24" :md="24" :lg="6"
+            :xl="6">
             <wow-card>
-              <template #header><b>{{ item.wording }}:</b></template>
+              <template #header><b> Вопрос {{ index + 1 }}:</b></template>
               <template #header-options>
-                <div> </div>
+                <el-tooltip content="Удалить пункт" placement="bottom-end" effect="light">
+                  <el-button type="danger" @click="deleteQuestion(index)" circle>
+                    <el-icon style="vertical-align: middle">
+                      <wow-icon type="mdi" :path="$mdi.mdiClose" />
+                    </el-icon>
+                  </el-button>
+                </el-tooltip>
               </template>
               <template #body>
                 <div class="fc fc-col">
-                  <el-row>
+                  <el-input v-model="item.wording" :rows="2" type="textarea" placeholder="Введите вопрос" />
+                </div>
+              </template>
+              <template #footer>
+                <div class="fc fc-col">
+                  <div><span>Варианты ответов:</span></div>
+                  <div>
+                    <div v-for="(voting, voitindex) in item.votingOptions" :id="`${index} ${voitindex}`"
+                      class="fc fc-row fc-align-center mb-5">
+                      <el-input v-model="voting.wording" placeholder="Введите вариант" style="width: 100%">
+                        <template #append>
+                          <el-button type="danger" @click="deleteVoting(item.votingOptions, voitindex)">
+                            <el-icon style="vertical-align: middle">
+                              <wow-icon type="mdi" :path="$mdi.mdiClose" />
+                            </el-icon>
+                          </el-button>
+                        </template>
+                      </el-input>
+                    </div>
 
-                  </el-row>
+                    <el-tooltip content="Добавить вариант ответа" placement="bottom-end" effect="light" >
+                      <el-button type="info" @click="addVoting(item.votingOptions)"  style="width: 100%">
+                        <el-icon style="vertical-align: middle">
+                          <wow-icon type="mdi" :path="$mdi.mdiPlus" />
+                        </el-icon>
+                      </el-button>
+                    </el-tooltip>
+
+                  </div>
                 </div>
               </template>
             </wow-card>
           </el-col>
 
+          <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
+            <wow-card>
+              <template #header><b></b></template>
+              <template #header-options>
+                <div> </div>
+              </template>
+              <template #body>
+                <div class="fc fc-justify-center">
+                  <el-tooltip content="Добавить вопрос" placement="bottom-end" effect="light">
+                    <el-button type="primary" @click="addQuestions()" circle>
+                      <el-icon style="vertical-align: middle">
+                        <wow-icon type="mdi" :path="$mdi.mdiPlus" />
+                      </el-icon>
+                    </el-button>
+                  </el-tooltip>
+                </div>
+
+              </template>
+            </wow-card>
+          </el-col>
         </el-row>
-
-
 
 
         <!-- <District-add-edit-dialog ref="dialogDistrinct" edit /> -->
@@ -96,6 +153,8 @@ import type { District } from '~/interface/District.interface';
 import type { AreaOwnershipsDescr } from '~/interface/solution/AreaOwnershipsDescr.interface';
 import type { Area } from '~/interface/Area.interface';
 import type { Meeting } from '~/interface/meeting/Meeting';
+import type { Voitingitem } from '~/interface/meeting/VoitingItem';
+import type { VotingOptions } from '~/interface/meeting/VotingOptions';
 
 const dialogDistrinct = ref();
 
@@ -117,8 +176,42 @@ const getCurrentMeeting = async () => {
   Object.assign(dataMeeting, data);
 }
 
+const addQuestions = () => {
+  const voiting = reactive(<Voitingitem>{
+    id: 0,
+    ordNum: 0,
+    wording: '',
+    membersOnly: false,
+    votingOptions: [
+      { id: 0, ordNum: 0, wording: 'За' },
+      { id: 1, ordNum: 1, wording: 'Против' },
+      { id: 2, ordNum: 2, wording: 'Воздержался' }
+    ]
+  });
+  dataMeeting.votingItems.push(voiting);
+}
+
 const saveMeeting = async () => {
   console.log('save');
+}
+
+const cancelEdit = () => {
+  router.push(`/admin/${route.params.adminid}/meetingvoting/${route.params.meetingid}`);
+}
+
+const deleteQuestion = (index: number) => {
+  dataMeeting.votingItems.splice(index, 1);
+  console.log('remove');
+}
+
+const deleteVoting = (item: VotingOptions[], index: number) => {
+  console.log(index);
+  item.splice(index, 1);
+}
+
+const addVoting = (item: VotingOptions[]) => {
+  
+  item.push({ id: 0, ordNum: 0, wording: '' });
 }
 
 // const refreshData = async () => {
