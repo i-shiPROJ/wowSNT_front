@@ -12,7 +12,7 @@
               <template #header><b>О собрании:</b></template>
               <template #header-options>
                 <div>
-                  <el-tooltip content="Редактировать район" placement="bottom-end" effect="light">
+                  <el-tooltip content="Редактировать собрание" placement="bottom-end" effect="light">
                     <el-button type="primary" @click="editMeeting()" circle>
                       <el-icon style="vertical-align: middle">
                         <wow-icon type="mdi" :path="$mdi.mdiPencilOutline" />

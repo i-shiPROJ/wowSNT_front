@@ -1,5 +1,5 @@
 export interface VotingOptions{
-  id: number,
+  id: number|null,
   ordNum: number,
   wording: string
 }

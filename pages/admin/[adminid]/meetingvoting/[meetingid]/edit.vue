@@ -12,7 +12,7 @@
               <template #header><b>Редактировать собрание:</b></template>
               <template #header-options>
                 <div>
-                  <el-tooltip content="Редактировать район" placement="bottom-end" effect="light">
+                  <el-tooltip content="Сохранить собрание" placement="bottom-end" effect="light">
                     <el-button type="primary" @click="saveMeeting()" circle>
                       <el-icon style="vertical-align: middle">
                         <wow-icon type="mdi" :path="$mdi.mdiContentSave" />
@@ -99,8 +99,8 @@
                       </el-input>
                     </div>
 
-                    <el-tooltip content="Добавить вариант ответа" placement="bottom-end" effect="light" >
-                      <el-button type="info" @click="addVoting(item.votingOptions)"  style="width: 100%">
+                    <el-tooltip content="Добавить вариант ответа" placement="bottom-end" effect="light">
+                      <el-button type="info" @click="addVoting(item.votingOptions)" style="width: 100%">
                         <el-icon style="vertical-align: middle">
                           <wow-icon type="mdi" :path="$mdi.mdiPlus" />
                         </el-icon>
@@ -173,6 +173,11 @@ const getCurrentMeeting = async () => {
     baseURL: useRuntimeConfig().public.baseURL,
     method: 'GET'
   });
+  if (data.votingItems) {
+    data.votingItems.sort((a, b) => a.ordNum - b.ordNum);
+    data.votingItems.forEach(item => item.votingOptions.sort((a, b) => a.ordNum - b.ordNum));
+  }
+
   Object.assign(dataMeeting, data);
 }
 
@@ -192,7 +197,26 @@ const addQuestions = () => {
 }
 
 const saveMeeting = async () => {
-  console.log('save');
+  try {
+    await $fetch<Meeting>(`meeting`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'POST',
+      body: dataMeeting
+    });
+
+    ElMessage({
+      message: 'Сохранено',
+      type: 'success',
+    });
+  }
+  catch (error: any) {
+    throw new Error(String(error));
+
+    ElMessage({
+      message: error.data.message,
+      type: 'error',
+    });
+  }
 }
 
 const cancelEdit = () => {
@@ -209,9 +233,10 @@ const deleteVoting = (item: VotingOptions[], index: number) => {
   item.splice(index, 1);
 }
 
-const addVoting = (item: VotingOptions[]) => {
-  
-  item.push({ id: 0, ordNum: 0, wording: '' });
+const addVoting = (items: VotingOptions[]) => {
+  items.push({ id: null, ordNum: 0, wording: '' });
+  items.forEach((item, index) => item.ordNum = index);
+  console.log(items);
 }
 
 // const refreshData = async () => {
