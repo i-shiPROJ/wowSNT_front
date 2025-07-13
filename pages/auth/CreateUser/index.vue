@@ -148,8 +148,6 @@ import { ElMessage } from "element-plus";
 import type { cadastrInterface } from '~/interface/Cadastr.interface';
 import type { SntInterface } from '~/interface/Snt.interface';
 import moment from 'moment';
-import { genFileId } from 'element-plus'
-import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
 const { options, formRef, registerForm, rules, tabRegistration, submitBackForm, submitNextForm } = useRegistrationUser();
 

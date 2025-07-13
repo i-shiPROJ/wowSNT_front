@@ -68,19 +68,19 @@
               </template>
               <template #body>
                 <el-table :data="meetings?.items" stripe style="width: 100%" class="cur-pointer" @row-click="showInfo">
-                  <el-table-column label="Дата собрания" width="200" >
+                  <el-table-column label="Дата собрания" width="200">
                     <template #default="scope">
                       <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column prop="protocolNum" label="Протокол №" width="200" />
                   <el-table-column prop="venue" label="Место проведения" min-width="200" />
-                  <el-table-column label="Начало" width="200" >
+                  <el-table-column label="Начало" width="200">
                     <template #default="scope">
                       <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="Конец" width="200" >
+                  <el-table-column label="Конец" width="200">
                     <template #default="scope">
                       <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
                     </template>
@@ -110,6 +110,8 @@
           </el-col>
         </el-row>
 
+        <Confirm-dialog ref="confirmDialog" />
+
       </div>
 
     </template>
@@ -130,6 +132,7 @@ const router = useRouter();
 const route = useRoute();
 //const currentRoute = router.currentRoute.value;
 
+const confirmDialog = ref();
 const meetings = ref<Pagination<Meeting[]>>();
 const currentPage = ref(1);
 const pageSize = ref(100);
@@ -158,9 +161,31 @@ const showInfo = (row: Meeting) => {
   router.push(`/admin/${route.params.adminid}/meetingvoting/${row.id}/edite`);
 }
 
-const deleteRow = (row: Meeting) => {
-  console.log('delete');
+const deleteRow = async (row: Meeting) => {
+  confirmDialog.value.title = 'Внимание!'
+  confirmDialog.value.titleBody = `Удалить выбранное собрание?`;
+
+  confirmDialog.value.acceptFunction = async () => {
+    try {
+      await $fetch<Meeting>(`meeting/${row.id}`, {
+        baseURL: useRuntimeConfig().public.baseURL,
+        method: 'DELETE',
+      });
+      getMeetings();
+      confirmDialog.value.showCloseDialog();
+    } catch (error: any) {
+      ElMessage({
+        message: error.data.message,
+        type: 'error',
+      });
+      throw new Error(String(error));
+    }
+  };
+
+  confirmDialog.value.showConfirmDialog();
+
 }
+
 
 const handleSizeChange = (newSize: number) => {
   pageSize.value = newSize;

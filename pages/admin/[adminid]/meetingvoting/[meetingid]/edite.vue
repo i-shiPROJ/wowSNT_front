@@ -207,7 +207,6 @@ interface selected {
   value: number; label: string;
 }
 
-const dialogDistrinct = ref();
 
 const router = useRouter();
 const route = useRoute();
