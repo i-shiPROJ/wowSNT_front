@@ -54,14 +54,38 @@
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
               <template #header><b>Все собрания:</b></template>
+              <template #header-options>
+                <div>
+                  <el-tooltip content="Добавить собрание" placement="bottom-end" effect="light">
+                    <el-button type="primary" @click="addMeeting()" circle>
+                      <el-icon style="vertical-align: middle">
+                        <wow-icon type="mdi" :path="$mdi.mdiPlus" />
+                      </el-icon>
+                    </el-button>
+                  </el-tooltip>
+
+                </div>
+              </template>
               <template #body>
                 <el-table :data="meetings?.items" stripe style="width: 100%" class="cur-pointer" @row-click="showInfo">
-                  <el-table-column prop="meetingDate" label="Дата собрания" width="200" />
+                  <el-table-column label="Дата собрания" width="200">
+                    <template #default="scope">
+                      <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="protocolNum" label="Протокол №" width="200" />
-                  <el-table-column prop="venue" label="Название" min-width="200" />
-                  <el-table-column prop="votingStartDate" label="Начало" width="200" />
-                  <el-table-column prop="votingEndDate" label="Конец" width="200" />
-                  <el-table-column prop="votingEndDate" label="" width="70">
+                  <el-table-column prop="venue" label="Место проведения" min-width="200" />
+                  <el-table-column label="Начало" width="200">
+                    <template #default="scope">
+                      <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="Конец" width="200">
+                    <template #default="scope">
+                      <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="" width="70">
                     <template #default="scope">
                       <el-tooltip content="Удалить собрание" placement="bottom-end" effect="light">
                         <el-button type="danger" @click.stop="deleteRow(scope.row)" circle>
@@ -86,6 +110,8 @@
           </el-col>
         </el-row>
 
+        <Confirm-dialog ref="confirmDialog" />
+
       </div>
 
     </template>
@@ -98,13 +124,15 @@ useHead({
 })
 
 import { reactive, onMounted, ref } from 'vue';
+import moment from 'moment';
 import type { Meeting } from '~/interface/meeting/Meeting';
 import type { Pagination } from '~/interface/Pagination.interface';
 
-
+const router = useRouter();
 const route = useRoute();
 //const currentRoute = router.currentRoute.value;
 
+const confirmDialog = ref();
 const meetings = ref<Pagination<Meeting[]>>();
 const currentPage = ref(1);
 const pageSize = ref(100);
@@ -119,20 +147,45 @@ const getMeetings = async () => {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     });
-    console.log(meetings.value);
   }
   catch (error) {
     console.error(error)
   }
 }
 
-const showInfo = () => {
-  console.log('show');
+const addMeeting = () => {
+  router.push(`/admin/${route.params.adminid}/meetingvoting/add`);
 }
 
-const deleteRow = (row: Meeting) => {
-  console.log('delete');
+const showInfo = (row: Meeting) => {
+  router.push(`/admin/${route.params.adminid}/meetingvoting/${row.id}/edite`);
 }
+
+const deleteRow = async (row: Meeting) => {
+  confirmDialog.value.title = 'Внимание!'
+  confirmDialog.value.titleBody = `Удалить выбранное собрание?`;
+
+  confirmDialog.value.acceptFunction = async () => {
+    try {
+      await $fetch<Meeting>(`meeting/${row.id}`, {
+        baseURL: useRuntimeConfig().public.baseURL,
+        method: 'DELETE',
+      });
+      getMeetings();
+      confirmDialog.value.showCloseDialog();
+    } catch (error: any) {
+      ElMessage({
+        message: error.data.message,
+        type: 'error',
+      });
+      throw new Error(String(error));
+    }
+  };
+
+  confirmDialog.value.showConfirmDialog();
+
+}
+
 
 const handleSizeChange = (newSize: number) => {
   pageSize.value = newSize;
@@ -144,7 +197,6 @@ const handleCurrentChange = (newPage: number) => {
   currentPage.value = newPage;
   getMeetings();
 }
-
 
 </script>
 
