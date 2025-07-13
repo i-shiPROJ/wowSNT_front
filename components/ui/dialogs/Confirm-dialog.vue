@@ -15,8 +15,8 @@
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">Отмена</el-button>
-        <el-button type="primary" @click="acceptFunction"> Да </el-button>
+        <el-button @click="onDecline">{{ declineLabel }}</el-button>
+        <el-button type="primary" @click="acceptFunction">{{ acceptLabel }}</el-button>
       </div>
     </template>
   </el-dialog>
@@ -32,7 +32,7 @@ interface Form {
 
 const ruleFormRef = ref<FormInstance>()
 const form = ref<Form>({ comment: '' });
-const rules = ref<FormRules>({ comment: [{ required: true, min:5, message: 'Пожалуйста, введите текст', trigger: 'blur' }] });
+const rules = ref<FormRules>({ comment: [{ required: true, min: 5, message: 'Пожалуйста, введите текст', trigger: 'blur' }] });
 
 
 const centerDialogVisible = ref(false);
@@ -42,10 +42,21 @@ const showConfirmDialog = () => { centerDialogVisible.value = true };
 const showCloseDialog = () => { centerDialogVisible.value = false };
 const title = ref('Заголовок');
 const titleBody = ref('Текст тела');
-const acceptFunction = ref(() => {  });
+const acceptLabel = ref('Да');
+const declineLabel = ref('Отмена');
+const acceptFunction = ref(() => { });
+const declineFunction = ref(() => { });
 
 //экспорт функции для использования через ref
-defineExpose({ showConfirmDialog, showCloseDialog, title, titleBody, acceptFunction, formVisible, ruleFormRef, form });
+defineExpose({ showConfirmDialog, showCloseDialog, title, titleBody, acceptLabel, declineLabel, acceptFunction, declineFunction, formVisible, ruleFormRef, form });
+
+const onDecline = () => {
+  if (typeof declineFunction.value === 'function') {
+    declineFunction.value();
+  } else {
+    centerDialogVisible.value = false;
+  }
+};
 
 </script>
 

@@ -68,12 +68,24 @@
               </template>
               <template #body>
                 <el-table :data="meetings?.items" stripe style="width: 100%" class="cur-pointer" @row-click="showInfo">
-                  <el-table-column prop="meetingDate" label="Дата собрания" width="200" />
+                  <el-table-column label="Дата собрания" width="200" >
+                    <template #default="scope">
+                      <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="protocolNum" label="Протокол №" width="200" />
-                  <el-table-column prop="venue" label="Название" min-width="200" />
-                  <el-table-column prop="votingStartDate" label="Начало" width="200" />
-                  <el-table-column prop="votingEndDate" label="Конец" width="200" />
-                  <el-table-column prop="votingEndDate" label="" width="70">
+                  <el-table-column prop="venue" label="Место проведения" min-width="200" />
+                  <el-table-column label="Начало" width="200" >
+                    <template #default="scope">
+                      <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="Конец" width="200" >
+                    <template #default="scope">
+                      <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="" width="70">
                     <template #default="scope">
                       <el-tooltip content="Удалить собрание" placement="bottom-end" effect="light">
                         <el-button type="danger" @click.stop="deleteRow(scope.row)" circle>
@@ -110,6 +122,7 @@ useHead({
 })
 
 import { reactive, onMounted, ref } from 'vue';
+import moment from 'moment';
 import type { Meeting } from '~/interface/meeting/Meeting';
 import type { Pagination } from '~/interface/Pagination.interface';
 
@@ -138,11 +151,11 @@ const getMeetings = async () => {
 }
 
 const addMeeting = () => {
-  console.log('add');
+  router.push(`/admin/${route.params.adminid}/meetingvoting/add`);
 }
 
 const showInfo = (row: Meeting) => {
-  router.push(`/admin/${route.params.adminid}/meetingvoting/${row.id}`);
+  router.push(`/admin/${route.params.adminid}/meetingvoting/${row.id}/edite`);
 }
 
 const deleteRow = (row: Meeting) => {
@@ -159,7 +172,6 @@ const handleCurrentChange = (newPage: number) => {
   currentPage.value = newPage;
   getMeetings();
 }
-
 
 </script>
 

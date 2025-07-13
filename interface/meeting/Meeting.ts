@@ -2,7 +2,7 @@ import type { Voitingitem } from "./VoitingItem"
 
 export interface Meeting {
 
-  id: number,
+  id: number | null,
   sntId: number,
   meetingDate: string,
   protocolNum: string,
@@ -12,7 +12,7 @@ export interface Meeting {
   votingTypeCode: string,
   votingStartDate: string,
   votingEndDate: string,
-  votingItems: [Voitingitem]
+  votingItems: Voitingitem[]
 }
 
 
