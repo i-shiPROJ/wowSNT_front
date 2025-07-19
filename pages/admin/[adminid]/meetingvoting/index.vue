@@ -158,7 +158,7 @@ const addMeeting = () => {
 }
 
 const showInfo = (row: Meeting) => {
-  router.push(`/admin/${route.params.adminid}/meetingvoting/${row.id}/edite`);
+  router.push(`/admin/${route.params.adminid}/meetingvoting/${row.id}/edit`);
 }
 
 const deleteRow = async (row: Meeting) => {
