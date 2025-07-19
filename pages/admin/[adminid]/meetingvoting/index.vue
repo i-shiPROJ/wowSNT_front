@@ -12,8 +12,8 @@
               <template #body>
                 <div>
                   <span>Голосование от 24.06.2024</span>
-                  <div class="statistik-block fc fc-row fc-justify-space-b fc-justify-center ">
-                    <div class="detail-voiting fc fc-row">
+                  <div class="statistik-block fc fc-row fc-justify-space-b fc-justify-center fc-wrap">
+                    <div class="detail-voiting fc fc-row m-10">
                       <div class="icon-border fc fc-align-center fc-justify-center">
                         <wow-icon :size="25" type="mdi" :path="$mdi.mdiCheck" />
                       </div>
@@ -23,7 +23,7 @@
                       </div>
                     </div>
 
-                    <div class="detail-voiting fc fc-row">
+                    <div class="detail-voiting fc fc-row m-10">
                       <div class="icon-border fc fc-align-center fc-justify-center">
                         <wow-icon :size="30" type="mdi" :path="$mdi.mdiChartLine" />
                       </div>
@@ -33,7 +33,7 @@
                       </div>
                     </div>
 
-                    <div class="detail-voiting fc fc-row">
+                    <div class="detail-voiting fc fc-row m-10">
                       <div class="icon-border fc fc-align-center fc-justify-center">
                         <wow-icon :size="30" type="mdi" :path="$mdi.mdiClockOutline" />
                       </div>
