@@ -54,6 +54,7 @@ const mapRoutes = new Map([
   ['participant', 'Участники'],
   ['districts', 'Районы'],
   ['staffunit', 'Перечень должностей'],
+  ['edit', 'Редактирование'],
 ])
 
 const getNamebreadcrumb = (key: string) => {
