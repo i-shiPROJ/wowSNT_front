@@ -3,13 +3,15 @@
     <div class="name-page"><b>{{ props.namePage }} </b></div>
     <div class="breadcrumb fc fc-row fc-align-content-center">
       <el-breadcrumb :separator-icon="ArrowRight">
-        <el-breadcrumb-item v-for="item in tree">{{ item }}</el-breadcrumb-item>
+        <el-breadcrumb-item v-for="(item, index) in tree">
+          <span class="link" @click="toUrl(item, index)">{{ getNamebreadcrumb(item) }}</span>
+        </el-breadcrumb-item>
       </el-breadcrumb>
-      <el-tooltip content="На уровень вверх" placement="bottom-end" effect="light">
+      <!--       <el-tooltip content="На уровень вверх" placement="bottom-end" effect="light">
         <div class="cursor-up" @click="toUp">
           <wow-icon :size="21" type="mdi" :path="$mdi.mdiArrowUp" />
         </div>
-      </el-tooltip>
+      </el-tooltip> -->
 
     </div>
   </div>
@@ -32,13 +34,49 @@ onMounted(() => {
 })
 
 const tree = computed(() => {
-  return router.currentRoute.value.fullPath.split('/').filter(item => item !== '')
+  let parts = router.currentRoute.value.fullPath.split('/').filter(item => item !== '');
+
+  parts.splice(1, 1);
+  return parts;
 });
 
-const toUp = () => {
-  navigateTo({ path: router.currentRoute.value.path.split('/').slice(0, -1).join('/') })
+// const toUp = () => {
+//   navigateTo({ path: router.currentRoute.value.path.split('/').slice(0, -1).join('/') })
+// }
+
+const mapRoutes = new Map([
+  ['admin', 'Рабочий стол'],
+  ['meetingvoting', 'Собрания и голосования'],
+  ['solution', 'Заявки на вступление'],
+  ['messages', 'Обращения содоводов'],
+  ['settings', 'Настройки ст'],
+  ['allLands', 'Участки'],
+  ['participant', 'Участники'],
+  ['districts', 'Районы'],
+  ['staffunit', 'Перечень должностей'],
+])
+
+const getNamebreadcrumb = (key: string) => {
+  return mapRoutes.get(key) ? mapRoutes.get(key) : key;
 }
 
+const toUrl = (key: string, index: number) => {
+  index++;
+
+  let arrayUrl = router.currentRoute.value.fullPath.split('/').filter(item => item !== '');
+
+  function joinUntilKey(arr: string[], key: string) {
+    // const idx = arr.lastIndexOf(key);
+    const idx = index;
+    if (idx > 0) {
+      return arr.slice(0, idx + 1).join('/');
+    }
+    return '';
+  }
+
+  router.push(`/${joinUntilKey(arrayUrl, key)}`);
+
+}
 </script>
 
 <style lang="less" scoped>
@@ -52,6 +90,10 @@ const toUp = () => {
   }
 
   .breadcrumb {
+    .link {
+      cursor: pointer;
+    }
+
     .cursor-up {
       margin-left: 5px;
       position: relative;

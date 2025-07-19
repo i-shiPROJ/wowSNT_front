@@ -132,7 +132,7 @@
                 </div>
               </template>
               <template #footer>
-                <div class="fc fc-col">
+                <div class="fc fc-col wow-w-100">
                   <div><span>Варианты ответов:</span></div>
                   <div>
                     <div v-for="(voting, voitindex) in item.votingOptions" :id="`${index} ${voitindex}`"
