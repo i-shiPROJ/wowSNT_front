@@ -1,6 +1,7 @@
 <template>
   <div class="fc fc-row">
-    <div v-for="file in props.files" class="fc fc-row block-file" @click="downloadFile(file.originalName)">
+    <div v-for="file in props.files" class="fc fc-row block-file"
+      @click="downloadFile(file.originalName || getFileNameString(file.fileName))">
 
       <el-tooltip :content="`Cкачать - ${file.originalName}`" placement="bottom-end" effect="light">
         <div class="icon-fv fc fc-justify-center">
@@ -8,13 +9,13 @@
         </div>
       </el-tooltip>
 
-      <div class="fc fc-col">
+      <div class="fc fc-col blockText">
         <el-tooltip :content="file.originalName" placement="bottom-end" effect="light">
           <div class="label-fv">
             {{ file.originalName }}
           </div>
         </el-tooltip>
-        <div>{{ file.fileSize }}</div>
+        <div class="file-size tc-dark-gray-3">{{ getfilesize(file.fileSize) }}</div>
       </div>
 
 
@@ -65,6 +66,22 @@ const getIcoExtension = (originalName: string = '') => {
       return mdiFile;
   }
 }
+
+const getFileNameString = (fileName: { name: string | null; extension: string | null }): string => {
+  if (!fileName.name || !fileName.extension) return '';
+  return `${fileName.name}.${fileName.extension}`;
+}
+
+const getfilesize = (size: number) => {
+  if (size === 0) return '0 Б';
+
+  const units = ['Б', 'КБ', 'МБ', 'ГБ'];
+  const k = 1024;
+  const i = Math.floor(Math.log(size) / Math.log(k));
+
+  return parseFloat((size / Math.pow(k, i)).toFixed(2)) + ' ' + units[i];
+}
+
 // TODO добавить отображение размера файла
 const downloadFile = async (filename: string) => {
   try {
@@ -93,7 +110,7 @@ const getUrlDownload = (type: string, filename: string) => {
       return `${useRuntimeConfig().public.baseURL}/register-request/file/${props.folder}?filename=${filename}`
       break;
     case 'meeting':
-      return `${useRuntimeConfig().public.baseURL}//meeting/file/{${filename}}`
+      return `${useRuntimeConfig().public.baseURL}/meeting/file/${props.folder}?filename=${filename}`
       break;
 
     default:
@@ -114,17 +131,25 @@ const getUrlDownload = (type: string, filename: string) => {
   margin: 5px;
   padding: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.icon {
-  // font-size: 1rem;
+  .blockText{
+    width: 100%;
+  }
 
-}
+  .icon-fv {
+    width: 50px;
+  }
 
-.label-fv {
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  .label-fv {
+    // width: calc(100% - 50px);
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .file-size {
+    font-size: 0.8rem;
+  }
 }
 </style>

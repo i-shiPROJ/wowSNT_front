@@ -121,7 +121,8 @@
               </template>
               <template #body>
                 <div class="fc fc-col">
-              <Wow-file-viewer :files="dataMeeting.files" typeUrl="meeting"/>
+                  <Wow-file-viewer :files="dataMeeting.files" :folder="dataMeeting.id?.toString()"
+                    typeUrl="meeting" />
                 </div>
               </template>
               <template #footer>
@@ -382,6 +383,9 @@ const saveMeeting = async () => {
         message: 'Сохранено',
         type: 'success',
       });
+
+      router.push(`/admin/${route.params.adminid}/meetingvoting/${route.params.meetingid}`);
+
     }
 
   } catch (error: any) {
