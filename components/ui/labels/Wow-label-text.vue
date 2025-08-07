@@ -22,7 +22,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: 'coral'
+    default: 'blue'
   }
 });
 </script>
@@ -32,14 +32,17 @@ const props = defineProps({
   padding: 10px 0;
 
   .area-naming-st {
-    padding: 10px;
+    padding: 0px 4px;
+    margin: 5px 5px;
 
     &.coral {
       border-left: 4px solid #F56C6C;
+      border-radius: 7px;
     }
 
     &.blue {
       border-left: 4px solid #337ecc;
+      border-radius: 7px;
     }
   }
 }
