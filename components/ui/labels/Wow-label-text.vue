@@ -41,7 +41,7 @@ const props = defineProps({
     }
 
     &.blue {
-      border-left: 4px solid #337ecc;
+      border-left: 4px solid #409EFF;
       border-radius: 7px;
     }
   }

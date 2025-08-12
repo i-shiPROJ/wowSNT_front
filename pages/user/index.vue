@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <NuxtLayout name="user">
+    <template #main>
 
     <el-row class="wow-user">
 
@@ -143,15 +144,13 @@
       </el-col>
     </el-row>
 
-  </div>
-
-
-
+  </template>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: 'user'
+useHead({
+  title: 'Рабочий стол'
 })
 
 import { useRouter } from 'vue-router';

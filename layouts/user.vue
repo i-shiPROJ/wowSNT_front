@@ -31,7 +31,7 @@
           <div v-else></div>
 
           <div class="header-right">
-            <!-- <wow-bell /> -->
+            <wow-bell />
 
             <!--             <div class="iconBlock">
               <div class="greenIndicator">
@@ -46,7 +46,14 @@
 
         <div class="wrapper">
           <main class="main">
-            <slot />
+            <slot name="main" />
+            <!-- <div class="fc fc-row fc-wrap fc-justify-space-b">
+              <wow-card-col v-for="(item, index) in items" :key="index" :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
+                <template #header>Header {{ item }}</template>
+                <template #body>Body {{ item }}</template>
+              </wow-card-col>
+            </div> -->
+
           </main>
 
           <footer class="footer fc fc-row fc-justify-space-a fc-align-center">
@@ -68,18 +75,28 @@
 
 <script lang="ts" setup>
 import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
-import { v6 as uuidv6 } from 'uuid';
-import { mdiChartBar, mdiMonitorDashboard, mdiHomeAccount , mdiMenu } from '@mdi/js';
-
-//import { menuObject } from '~/pages/user/menuObject';
-import { useUserStore } from '@/stores/userInfo'
+import { menuObject } from '~/pages/admin/menuObject';
+import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
-import type { Personinfo } from '~/interface/Personinfo.interface';
+import { mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox, mdiMessageReplyTextOutline, mdiCogOutline, mdiCardAccountDetailsOutline, mdiCashRegister, 
+  mdiAccountGroup, mdiCitySwitch,
+  mdiSafeSquareOutline, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu, mdiLeak } from '@mdi/js';
 
-const userInfoStore = useUserStore()
+
+import type { Memberships } from '~/interface/Memberships.interface';
+import type { Personinfo } from '~/interface/Personinfo.interface';
+import { v6 as uuidv6 } from 'uuid';
+
+import { useRouter } from 'vue-router';
+import mdi from '~/plugins/mdi';
+const router = useRouter();
+const route = useRoute();
+
+const userInfoStore = useUserStore();
 const mobileStore = useMobileStore();
 
-onBeforeMount(async()=>{
+
+onBeforeMount(async () => {
   await getUserInfo();
 })
 
@@ -89,7 +106,7 @@ const getUserInfo = async () => {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
     })
-    
+
     userInfoStore.setUser(data);
   } catch (error) {
     console.error("Error in getUserInfo:", error);
@@ -98,10 +115,8 @@ const getUserInfo = async () => {
   }
 }
 
-
 const isMobile = ref(false);
 const drawerVisible = ref(false);
-const items = 100;
 
 const toggleMenu = () => {
   settingsWowPanel.show = !settingsWowPanel.show; // Переключение состояния видимости
@@ -128,12 +143,119 @@ const handleClickOutside = (event: MouseEvent) => {
     drawerVisible.value = false; // Закрыть меню, если кликнули вне
   }
 };
+//reactiveObjectMenu
+
+
+let objectMenu: Array<MenuSettings> = reactive(menuObject);
 
 onMounted(() => {
+
   checkMobile();
   window.addEventListener('resize', checkMobile);
   document.addEventListener('click', handleClickOutside); // Добавляем обработчик клика
+  setMenu();
 });
+
+
+interface MenuSettings {
+  type: string;
+  id: string;
+  settings: {
+    active?: boolean;
+    name: string;
+    icon?: string;
+    tooltip?: string;
+    url?: string;
+    functions?: {
+      setActiveMenuItem: (id: any) => void;
+    };
+  };
+}
+
+const setMenu = () => {
+  const getArraySTRole_p = () => {
+    // Возвращаем первую найденную запись для управления СНТ, где есть роль
+    const currentId = Number(route.params.adminid);
+    return userInfoStore.currentUser.memberships
+      ? userInfoStore.currentUser.memberships.find((item: Memberships) =>
+        item.role?.code === 'ROLE_P' && item.snt?.id === currentId
+      )
+      : null;
+  };
+
+  const setActiveMenuItem = (id: string) => {
+    let urlNavigate: string = '';
+
+    objectMenu.forEach(item => {
+      if (item.id === id && item.settings.url) {
+        urlNavigate = item.settings.url;
+      }
+    });
+
+    if (urlNavigate) {
+      navigateTo(urlNavigate);
+    }
+  };
+
+  const activeMenu = (id: string) => {
+    return id === router.currentRoute.value.name ? true : false;
+  };
+
+  objectMenu.length = 0;
+  const membership = getArraySTRole_p(); // Получаем первую запись
+
+  objectMenu.push(
+    {
+      type: 'labelGroup',
+      id: 'SntLabelRemove0',
+      settings: {
+        name: membership ? membership.snt.title : 'Нет роли', // Используем имя роли, если запись найдена
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'user',
+      settings: {
+        active: activeMenu('user'),
+        name: 'Рабочий стол',
+        icon: mdiNetworkPos,
+        tooltip: 'Стол с основными виджетами',
+        url: `/user`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    {
+      type: 'menuBtn',
+      id: 'user-edit-user',
+      settings: {
+        active: activeMenu('user-edit-user'),
+        name: 'Профиль',
+        icon: mdiCheckboxMarkedCircleAutoOutline,
+        url: `/user/edit-user`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    
+    {
+      type: 'menuBtn',
+      id: 'user-meetingvoting',
+      settings: {
+        active: activeMenu('user-meetingvoting'),
+        name: 'Собрания и голосование',
+        icon: mdiLeak,
+        url: `/user/meetingvoting`,
+        functions: {
+          setActiveMenuItem
+        }
+      },
+    },
+    
+  );
+}
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', checkMobile);
@@ -141,92 +263,7 @@ onBeforeUnmount(() => {
 });
 
 
-//reactiveObjectMenu
-const setActiveMenuItem = (id: string) => {
-  menuObject.forEach(item => {
-    item.settings.active = (item.id === id);
-    if (item.settings.active && item.settings.url) {
-      navigateTo(item.settings.url);
-      //router.replace(item.settings.url);
-    }
-  });
-}
 
-
-const menuObject = reactive([
-  {
-    type: 'menuBtn',
-    id: uuidv6(),
-    settings: {
-      active: true,
-      name: 'Главная',
-      icon: mdiMonitorDashboard,
-      tooltip: '',
-      url: '/user',
-      functions: {
-        setActiveMenuItem
-      }
-    },
-  },
-  {
-    type: 'menuBtn',
-    id: uuidv6(),
-    settings: {
-      active: false,
-      name: 'Профиль',
-      icon: mdiHomeAccount,
-      tooltip: '',
-      url: '/user/edit-user',
-      functions: {
-        setActiveMenuItem
-      }
-    },
-  },
-  /* {
-    type: 'labelGroup',
-    id: uuidv6(),
-    settings: {
-      name: 'СТ Краснодаргорстрой',
-      tooltip: 'Tooltip-1',
-    },
-  },
-  {
-    type: 'menuBtn',
-    id: uuidv6(),
-    settings: {
-      active: false,
-      name: '4 первомайская улица дом 20',
-      icon: mdiMonitorDashboard,
-      tooltip: 'Tooltip-2',
-      url: '/user/house/1232',
-      functions: {
-        setActiveMenuItem
-      }
-    },
-  },
-  {
-    type: 'labelGroup',
-    id: uuidv6(),
-    settings: {
-      name: 'СТ Невеликое озеро багета',
-      tooltip: 'Tooltip-3'
-    },
-  },
-  {
-    type: 'menuBtn',
-    id: uuidv6(),
-    settings: {
-      active: false,
-      name: 'Центральный проезд Хорошёвского Серебряного Бора дом 20 корпус 1',
-      icon: mdiChartBar,
-      tooltip: 'Tooltip-4',
-      functions: {
-        setActiveMenuItem
-      }
-    },
-  }, */
-
-]);
 
 </script>
 
@@ -254,7 +291,7 @@ const menuObject = reactive([
 
   .aside {
     height: 100%;
-
+    overflow-y: auto;
     .logo {
       height: 70px;
     }
