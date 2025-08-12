@@ -35,8 +35,9 @@ onMounted(() => {
 
 const tree = computed(() => {
   let parts = router.currentRoute.value.fullPath.split('/').filter(item => item !== '');
-
-  parts.splice(1, 1);
+  if (typeof parts[1] === 'number') {
+    parts.splice(1, 1);
+  }
   return parts;
 });
 
@@ -46,6 +47,7 @@ const tree = computed(() => {
 
 const mapRoutes = new Map([
   ['admin', 'Рабочий стол'],
+  ['user', 'Рабочий стол'],
   ['meetingvoting', 'Собрания и голосования'],
   ['solution', 'Заявки на вступление'],
   ['messages', 'Обращения содоводов'],
@@ -62,6 +64,7 @@ const getNamebreadcrumb = (key: string) => {
 }
 
 const toUrl = (key: string, index: number) => {
+  let parts = router.currentRoute.value.fullPath.split('/').filter(item => item !== '');
   index++;
 
   let arrayUrl = router.currentRoute.value.fullPath.split('/').filter(item => item !== '');
@@ -70,11 +73,10 @@ const toUrl = (key: string, index: number) => {
     // const idx = arr.lastIndexOf(key);
     const idx = index;
     if (idx > 0) {
-      return arr.slice(0, idx + 1).join('/');
+      return arr.slice(0, typeof parts[1] === 'number' ? idx + 1 : idx).join('/');
     }
     return '';
   }
-
   router.push(`/${joinUntilKey(arrayUrl, key)}`);
 
 }

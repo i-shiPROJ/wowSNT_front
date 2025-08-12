@@ -32,7 +32,7 @@
                 <div class="fc fc-col">
                   <el-row>
                     <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-                      <wow-label-text label="Дата и время собрания:" color="coral">
+                      <wow-label-text label="Дата и время собрания:"  >
                         <template #body>
                           <el-date-picker v-model="dataMeeting.meetingDate" type="datetime" format="YYYY-MM-DD HH:mm"
                             value-format="YYYY-MM-DDTHH:mm:ssZ" style="width: 100%;" />
@@ -41,7 +41,7 @@
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-                      <wow-label-text label="Дата начала голосования:" color="coral">
+                      <wow-label-text label="Дата начала голосования:"  >
                         <template #body>
                           <el-date-picker v-model="dataMeeting.votingStartDate" type="datetime"
                             format="YYYY-MM-DD HH:mm" value-format="YYYY-MM-DDTHH:mm:ssZ" style="width: 100%;" />
@@ -50,7 +50,7 @@
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-                      <wow-label-text label="Дата окончания голосования:" color="coral">
+                      <wow-label-text label="Дата окончания голосования:"  >
                         <template #body>
                           <el-date-picker v-model="dataMeeting.votingEndDate" type="datetime" format="YYYY-MM-DD HH:mm"
                             value-format="YYYY-MM-DDTHH:mm:ssZ" style="width: 100%;" />
@@ -59,14 +59,14 @@
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-                      <wow-label-text label="Место:" color="coral">
+                      <wow-label-text label="Место:"  >
                         <template #body>
                           <el-input v-model="dataMeeting.venue" />
                         </template>
                       </wow-label-text>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-                      <wow-label-text label="Номер протокола:" color="coral">
+                      <wow-label-text label="Номер протокола:"  >
                         <template #body>
                           <el-input v-model="dataMeeting.protocolNum" />
                         </template>
@@ -77,7 +77,7 @@
 
                   <el-row>
                     <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-                      <wow-label-text label="Порядок проведения собрания" color="coral">
+                      <wow-label-text label="Порядок проведения собрания"  >
                         <template #body>
                           <el-select-v2 @click.stop v-model="dataMeeting.meetingTypeCode"
                             placeholder="порядок роведения собрания:" :options="typesCodes.meetingTypeCode"
@@ -86,7 +86,7 @@
                       </wow-label-text>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-                      <wow-label-text label="Тип собрания:" color="coral">
+                      <wow-label-text label="Тип собрания:"  >
                         <template #body>
                           <el-select-v2 @click.stop v-model="dataMeeting.votingFormCode" placeholder="Тип собрания:"
                             :options="typesCodes.votingFormCode" filterable />
@@ -94,7 +94,7 @@
                       </wow-label-text>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-                      <wow-label-text label="Доступность собрания:" color="coral">
+                      <wow-label-text label="Доступность собрания:"  >
                         <template #body>
                           <el-select-v2 @click.stop v-model="dataMeeting.votingTypeCode"
                             placeholder="доступность собрания:" :options="typesCodes.votingTypeCode" filterable />
@@ -121,7 +121,8 @@
               </template>
               <template #body>
                 <div class="fc fc-col">
-              <Wow-file-viewer :files="dataMeeting.files" typeUrl="meeting"/>
+                  <Wow-file-viewer :files="dataMeeting.files" :folder="dataMeeting.id?.toString()"
+                    typeUrl="meeting" delete @removeFile="removeFile"/>
                 </div>
               </template>
               <template #footer>
@@ -267,6 +268,12 @@ onMounted(async () => {
   getAllOptions();
 });
 
+const removeFile = (id:number)=>{
+  // dataMeeting.files =dataMeeting.files.filter((item) ) 
+  dataMeeting.files = dataMeeting.files.filter(item => item.id !== id)
+  console.log('fuck', id);
+}
+
 const getCurrentMeeting = async () => {
   const data = await $fetch<Meeting>(`meeting/${route.params.meetingid}`, {
     baseURL: useRuntimeConfig().public.baseURL,
@@ -382,6 +389,9 @@ const saveMeeting = async () => {
         message: 'Сохранено',
         type: 'success',
       });
+
+      router.push(`/admin/${route.params.adminid}/meetingvoting/${route.params.meetingid}`);
+
     }
 
   } catch (error: any) {

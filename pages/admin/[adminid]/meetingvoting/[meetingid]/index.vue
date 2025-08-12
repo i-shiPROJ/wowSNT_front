@@ -25,25 +25,25 @@
                 <div class="fc fc-col">
                   <el-row>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                      <wow-label-text label="Дата собрания:" :text="dataMeeting.meetingDate" color="coral" />
+                      <wow-label-text label="Дата собрания:" :text="dataMeeting.meetingDate"   />
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                      <wow-label-text label="Тип собрания:" :text="dataMeeting.meetingTypeCode" color="coral" />
+                      <wow-label-text label="Тип собрания:" :text="dataMeeting.meetingTypeCode"   />
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                      <wow-label-text label="Место:" :text="dataMeeting.venue" color="coral" />
+                      <wow-label-text label="Место:" :text="dataMeeting.venue"   />
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                       <wow-label-text label="Дата начала голосования:" :text="dataMeeting.votingStartDate"
-                        color="coral" />
+                          />
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                       <wow-label-text label="Дата окончания голосования:" :text="dataMeeting.votingEndDate"
-                        color="coral" />
+                          />
                     </el-col>
 
                   </el-row>
@@ -61,10 +61,13 @@
             <wow-card>
               <template #header><b>Приложения к голосованию:</b></template>
               <template #header-options>
-                <div> </div>
+                
               </template>
               <template #body>
-                
+                <div class="fc fc-col">
+                  <Wow-file-viewer :files="dataMeeting.files" :folder="dataMeeting.id?.toString()"
+                    typeUrl="meeting"/>
+                </div>
               </template>
             </wow-card>
           </el-col>
