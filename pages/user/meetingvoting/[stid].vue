@@ -154,18 +154,32 @@ const sendQuestion = async () => {
   try {
     const valid = await votingForm.value.validate();
     if (valid) {
-      console.log('send', meeting);
-      const modelSend = bulletin.votingItems.map((item, index) => ({
-        "id": '',
-        "personId": '',
-        "votingItemId": item.votingItemId,
-        "votingOptionId": votingFormData.votingResults[index]
-      }));
-      console.log('send', modelSend);
+      sendPost(bulletin);
     }
   } catch (error) {
     console.error('Ошибка валидации:', error);
     ElMessage.error(`Не все ответы выбраны`);
+  }
+}
+
+const sendPost = async (bulletin: Bulletin) => {
+  try {
+    const modelSend = bulletin.votingItems.map((item, index) => ({
+      "id": '',
+      "personId": '',
+      "votingItemId": item.votingItemId,
+      "votingOptionId": votingFormData.votingResults[index]
+    }));
+
+    await $fetch(`/meeting/vote/${route.params.stid}`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'POST',
+      body: JSON.stringify(modelSend),
+    });
+
+  } catch (error) {
+    console.error('Ошибка отправки post:', error);
+    ElMessage.error(`Ошибка сохранения бюллетени`);
   }
 }
 
