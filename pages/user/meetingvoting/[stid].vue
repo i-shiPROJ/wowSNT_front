@@ -6,95 +6,67 @@
         <wow-toppagetitle namePage="Собрания и голосование" />
         <el-row>
 
-          <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
-              <template #header><b>Текущие голосования:</b></template>
+              <template #header><b>Приложения к голосованию:</b></template>
               <template #body>
-                <div>
-                  <span>Голосование от 24.06.2024</span>
-                  <div class="statistik-block fc fc-row fc-justify-space-b fc-justify-center fc-wrap">
-                    <div class="detail-voiting fc fc-row m-10">
-                      <div class="icon-border fc fc-align-center fc-justify-center">
-                        <wow-icon :size="25" type="mdi" :path="$mdi.mdiCheck" />
-                      </div>
-                      <div class="inform-block fc fc-col fc-align-left fc-justify-center">
-                        <div class="size f-w-700">243 чел.</div>
-                        <div class="label">проголосовало</div>
-                      </div>
-                    </div>
-
-                    <div class="detail-voiting fc fc-row m-10">
-                      <div class="icon-border fc fc-align-center fc-justify-center">
-                        <wow-icon :size="30" type="mdi" :path="$mdi.mdiChartLine" />
-                      </div>
-                      <div class="inform-block fc fc-col fc-align-left fc-justify-center">
-                        <div class="size f-w-700">3%</div>
-                        <div class="label">эффективность</div>
-                      </div>
-                    </div>
-
-                    <div class="detail-voiting fc fc-row m-10">
-                      <div class="icon-border fc fc-align-center fc-justify-center">
-                        <wow-icon :size="30" type="mdi" :path="$mdi.mdiClockOutline" />
-                      </div>
-                      <div class="inform-block fc fc-col fc-align-left fc-justify-center">
-                        <div class="size f-w-700">2:30</div>
-                        <div class="label">до конца</div>
-                      </div>
-                    </div>
-                  </div>
+                <div class="fc fc-col">
+                  <Wow-file-viewer :files="meeting.files" :folder="meeting.id?.toString()" typeUrl="meeting" />
                 </div>
               </template>
               <template #footer>
               </template>
             </wow-card>
-          </el-col> -->
+          </el-col>
 
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <wow-card>
-              <template #header><b>Все собрания:</b></template>
+              <template #header><b>Бюллетень:</b></template>
               <template #header-options>
-
               </template>
               <template #body>
-                <el-table :data="meetings?.items" stripe style="width: 100%" class="cur-pointer" @row-click="showInfo">
-                  <el-table-column label="Дата собрания" width="200">
-                    <template #default="scope">
-                      <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="protocolNum" label="Протокол №" width="200" />
-                  <el-table-column prop="venue" label="Место проведения" min-width="200" />
-                  <el-table-column label="Начало" width="200">
-                    <template #default="scope">
-                      <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Конец" width="200">
-                    <template #default="scope">
-                      <span>{{ moment(scope.row.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="" width="70">
-                    <template #default="scope">
-                      <el-tooltip content="Удалить собрание" placement="bottom-end" effect="light">
-                        <el-button type="danger" @click.stop="deleteRow(scope.row)" circle>
-                          <el-icon style="vertical-align: middle">
-                            <wow-icon type="mdi" :path="$mdi.mdiTrashCanOutline" />
-                          </el-icon>
-                        </el-button>
-                      </el-tooltip>
-                    </template>
-                  </el-table-column>
-                </el-table>
+                <el-form ref="votingForm" :model="votingFormData" :rules="votingRules" label-width="0">
+                  <div class="fc fc-col">
+                    <el-row>
 
-                <el-pagination class="mt-20 mb-5" v-model:current-page="currentPage" v-model:page-size="pageSize"
-                  :page-sizes="[10, 50, 100]" layout="sizes, prev, pager, next" :total="meetings?.totalItems || 0"
-                  @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+                      <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+                        <wow-label-text label="Дата начала голосования:">
+                          <template #body>
+                            <span>{{ moment(meeting.votingStartDate).format('YYYY-MM-DD HH:mm') }}</span>
+                          </template>
+                        </wow-label-text>
+                      </el-col>
 
+                      <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+                        <wow-label-text label="Дата окончания голосования:">
+                          <template #body>
+                            <span>{{ moment(meeting.votingEndDate).format('YYYY-MM-DD HH:mm') }}</span>
+                          </template>
+                        </wow-label-text>
+                      </el-col>
+
+                    </el-row>
+
+                    <el-row>
+                      <el-col v-for="(voiting, index) in bulletin.votingItems" :xs="24" :sm="24" :md="24" :lg="11"
+                        :xl="7" class="widget-voit">
+                        <div class="header"><b> {{ voiting.wording }}</b></div>
+                        <el-form-item :prop="`votingResults.${index}`" :rules="votingRules.resultVoting">
+                          <el-radio-group class="wow-w-100" v-model="votingFormData.votingResults[index]"
+                            @change="updateMeetingVoting(index, $event)">
+                            <el-radio v-for="ansver in voiting.votingOptions" :value="ansver.votingOptionId || ''"
+                              border class="ansverTect">
+                              {{ ansver.wording }}
+                            </el-radio>
+                          </el-radio-group>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </el-form>
               </template>
               <template #footer>
-                <!-- <el-button type="primary" @click="openFormLegalInform()">Изменить</el-button> -->
+                <el-button type="primary" @click="sendQuestion()">Отправить бюллетень</el-button>
               </template>
             </wow-card>
           </el-col>
@@ -116,104 +88,129 @@ useHead({
 import { reactive, onMounted, ref } from 'vue';
 import moment from 'moment';
 import type { Meeting } from '~/interface/meeting/Meeting';
-import type { Pagination } from '~/interface/Pagination.interface';
-import { useUserStore } from '@/stores/userInfo';
-const userInfoStore = useUserStore();
+import type { Bulletin } from '~/interface/bulletin/Bulletin';
 
 const router = useRouter();
 const route = useRoute();
 //const currentRoute = router.currentRoute.value;
 
 const confirmDialog = ref();
-const meetings = ref<Pagination<Meeting[]>>();
-const currentPage = ref(1);
-const pageSize = ref(100);
+const meeting = reactive(<Meeting>({} as Meeting));
+const bulletin = reactive(<Bulletin>({} as Bulletin));
+
+const votingForm = ref();
+const votingFormData = reactive({
+  votingResults: [] as (string | number | undefined)[]
+});
+
+const votingRules = {
+  resultVoting: [
+    { required: true, message: 'Пожалуйста, выберите вариант ответа', trigger: 'change' }
+  ]
+};
 
 onMounted(async () => {
-
-  getMeetings();
+  getMeeting();
 })
 
-const getMeetings = async () => {
+const getMeeting = async () => {
   try {
-    meetings.value = await $fetch<Pagination<Meeting[]>>(`meeting/snt/${route.params.adminid}`, {
+    Object.assign(meeting, await $fetch<Meeting>(`meeting/${route.params.stid}`, {
       baseURL: useRuntimeConfig().public.baseURL,
       method: 'GET'
-    });
+    }));
+
+    Object.assign(bulletin, await $fetch<Meeting>(`/meeting/bulletin/${route.params.stid}`, {
+      baseURL: useRuntimeConfig().public.baseURL,
+      method: 'GET'
+    }));
+
+    // Инициализируем массив для валидации
+    votingFormData.votingResults = new Array(meeting.votingItems?.length || 0).fill('');
+
+    // Если уже есть выбранные ответы, копируем их
+    if (meeting.votingItems) {
+      meeting.votingItems.forEach((item, index) => {
+        if (item.resultVoting) {
+          votingFormData.votingResults[index] = item.resultVoting;
+        }
+      });
+    }
   }
   catch (error) {
     console.error(error)
   }
 }
 
-
-const showInfo = (row: Meeting) => {
-  router.push(`/admin/${route.params.adminid}/meetingvoting/${row.id}/edit`);
+const updateMeetingVoting = (index: number, value: any) => {
+  // Обновляем данные в bulletin для совместимости
+  if (bulletin.votingItems && bulletin.votingItems[index]) {
+    bulletin.votingItems[index].resultVoting = value;
+  }
+  console.log('bulletin', bulletin);
 }
 
-const deleteRow = async (row: Meeting) => {
-  confirmDialog.value.title = 'Внимание!'
-  confirmDialog.value.titleBody = `Удалить выбранное собрание?`;
-
-  confirmDialog.value.acceptFunction = async () => {
-    try {
-      await $fetch<Meeting>(`meeting/${row.id}`, {
-        baseURL: useRuntimeConfig().public.baseURL,
-        method: 'DELETE',
-      });
-      getMeetings();
-      confirmDialog.value.showCloseDialog();
-    } catch (error: any) {
-      ElMessage({
-        message: error.data.message,
-        type: 'error',
-      });
-      throw new Error(String(error));
+const sendQuestion = async () => {
+  try {
+    const valid = await votingForm.value.validate();
+    if (valid) {
+      console.log('send', meeting);
+      const modelSend = bulletin.votingItems.map((item, index) => ({
+        "id": '',
+        "personId": '',
+        "votingItemId": item.votingItemId,
+        "votingOptionId": votingFormData.votingResults[index]
+      }));
+      console.log('send', modelSend);
     }
-  };
-
-  confirmDialog.value.showConfirmDialog();
-
+  } catch (error) {
+    console.error('Ошибка валидации:', error);
+    ElMessage.error(`Не все ответы выбраны`);
+  }
 }
 
-
-const handleSizeChange = (newSize: number) => {
-  pageSize.value = newSize;
-  currentPage.value = 1; // сбрасываем на первую страницу
-  getMeetings();
-}
-
-const handleCurrentChange = (newPage: number) => {
-  currentPage.value = newPage;
-  getMeetings();
-}
 
 </script>
 
 <style lang="less" scoped>
-.statistik-block {
-  padding: 5px 30px;
+.widget-voit {
+  cursor: default;
+  width: 100%;
+  min-height: 100px;
+  border: 1px dotted #E0E3EA;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 4px solid #9AA1B7;
+  transition: color 0.9s ease, border-left-color 0.9s ease;
 
-  .detail-voiting {
+  .header {
+    color: #9AA1B7;
+    margin-bottom: 10px;
+    transition: color 0.9s ease;
+  }
 
-    .icon-border {
-      width: 55px;
-      height: 55px;
-      border: 2px solid #F56C6C;
-      border-radius: 50px;
-      color: #F56C6C;
-    }
+  .text {
+    // width: calc(100% - 50px);
+    text-align: end;
+    color: #F56C6C;
+  }
 
-    .inform-block {
-      // height: calc(100% - 1px);
-      padding-left: 20px;
+  .ansverTect {
+    width: 100%;
+    margin: 5px 15px;
+  }
+}
 
-      .size {
-        font-size: 1.8rem;
-      }
+.widget-voit:hover {
+  border-left: 4px solid #dd6f48;
+  color: #F56C6C;
 
-      .label {}
-    }
+  .header {
+    color: #F56C6C;
   }
 }
 </style>

@@ -46,6 +46,7 @@
                 </div>
               </template>
               <template #footer>
+                <el-button type="primary" @click="openFormMeeting(voiting.id)">Голосовать</el-button>
               </template>
             </wow-card>
           </el-col>
@@ -111,6 +112,10 @@ const getArraySTROLE_O = computed(() => {
   //вовзрат массива для отображения своих участков в садоводчестве, где нет даты окончания владения участком
   return userInfoStore.currentUser.areaOwnerships ? userInfoStore.currentUser.areaOwnerships.filter((item: Ownerships) => !item.endDate) : [];
 });
+
+const openFormMeeting = (id:number|null)=>{
+  navigateTo(`/user/meetingvoting/${id}`);
+}
 
 </script>
 

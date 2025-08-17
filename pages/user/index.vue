@@ -185,7 +185,7 @@ const toPageMessage = (id: string) => navigateTo(`/user/page-widgets/message/${i
 const toPagePayment = () => navigateTo(`/user/page-widgets/payment/1`);
 const toPageDocsst = () => navigateTo(`/user/page-widgets/docsst/1`);
 const toPageNews = () => navigateTo(`/user/page-widgets/news/1`);
-const toPageVote = () => navigateTo(`/user/page-widgets/vote/1`);
+const toPageVote = () => navigateTo(`/user/meetingvoting`);
 
 const switchMode = (id: number) => navigateTo(`/admin/${id}`);
 
