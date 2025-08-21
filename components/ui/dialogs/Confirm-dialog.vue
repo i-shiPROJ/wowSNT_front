@@ -15,7 +15,7 @@
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="onDecline">{{ declineLabel }}</el-button>
+        <el-button v-if="!!declineLabel" @click="onDecline">{{ declineLabel }}</el-button>
         <el-button type="primary" @click="acceptFunction">{{ acceptLabel }}</el-button>
       </div>
     </template>

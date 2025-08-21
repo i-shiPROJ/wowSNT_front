@@ -1,36 +1,41 @@
 <template>
   <div class="wow-file-viewer fc fc-row fc-wrap">
-    <div v-for="file in props.files" class="fc fc-row block-file"
-      @click="downloadFile(file.originalName || getFileNameString(file.fileName))">
-
-      <el-tooltip :content="`Cкачать - ${file.originalName}`" placement="bottom-end" effect="light">
-        <div class="icon-fv fc fc-justify-center">
-          <wow-icon type="mdi" :path="getIcoExtension(file.originalName)" :width="50" :height="50" />
-        </div>
-      </el-tooltip>
-
-      <div class="fc fc-col fc-justify-space-b padding-5-0 blockText">
-        <el-tooltip :content="file.originalName" placement="bottom-end" effect="light">
-          <div class="label-fv">
-            <span>
-              {{ file.originalName }}
-            </span>
-
-          </div>
-        </el-tooltip>
-        <div class="file-size tc-dark-gray-3">{{ getfilesize(file.fileSize) }}</div>
-      </div>
-
-      <div v-if="props.delete" class="removebtn fc-align-content-center" @click.stop="removeFile(file.id)">
-        <el-tooltip :content="`Удалить - ${file.originalName}`" placement="bottom-end" effect="light">
-          <div class="icon-remove fc fc-justify-center">
-            <wow-icon type="mdi" :path="mdiDeleteForever" :width="25" :height="25" />
-          </div>
-        </el-tooltip>
-      </div>
-
-
+    <div v-if="props.files?.length == 0">
+      <span>нет файлов для отображения.</span>
     </div>
+
+    <div v-else>
+      <div v-for="file in props.files" class="fc fc-row block-file"
+        @click="downloadFile(file.originalName || getFileNameString(file.fileName))">
+
+        <el-tooltip :content="`Cкачать - ${file.originalName}`" placement="bottom-end" effect="light">
+          <div class="icon-fv fc fc-justify-center">
+            <wow-icon type="mdi" :path="getIcoExtension(file.originalName)" :width="50" :height="50" />
+          </div>
+        </el-tooltip>
+
+        <div class="fc fc-col fc-justify-space-b padding-5-0 blockText">
+          <el-tooltip :content="file.originalName" placement="bottom-end" effect="light">
+            <div class="label-fv">
+              <span>
+                {{ file.originalName }}
+              </span>
+
+            </div>
+          </el-tooltip>
+          <div class="file-size tc-dark-gray-3">{{ getfilesize(file.fileSize) }}</div>
+        </div>
+
+        <div v-if="props.delete" class="removebtn fc-align-content-center" @click.stop="removeFile(file.id)">
+          <el-tooltip :content="`Удалить - ${file.originalName}`" placement="bottom-end" effect="light">
+            <div class="icon-remove fc fc-justify-center">
+              <wow-icon type="mdi" :path="mdiDeleteForever" :width="25" :height="25" />
+            </div>
+          </el-tooltip>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </template>
@@ -123,7 +128,7 @@ const emit = defineEmits<{
 }>();
 
 const removeFile = (id: number) => {
-   emit('removeFile', id)
+  emit('removeFile', id)
 }
 
 const getUrlDownload = (type: string, filename: string) => {

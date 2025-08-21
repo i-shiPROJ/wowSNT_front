@@ -14,7 +14,8 @@ export interface Meeting {
   votingStartDate: string,
   votingEndDate: string,
   votingItems: Voitingitem[],
-  files: Files[]
+  files: Files[],
+  isUsed:boolean
 }
 
 
