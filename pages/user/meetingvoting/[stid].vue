@@ -165,8 +165,8 @@ const sendQuestion = async () => {
 const sendPost = async (bulletin: Bulletin) => {
   try {
     const modelSend = bulletin.votingItems.map((item, index) => ({
-      "id": '',
-      "personId": '',
+      "id": null,
+      "personId": null,
       "votingItemId": item.votingItemId,
       "votingOptionId": votingFormData.votingResults[index]
     }));
@@ -177,10 +177,24 @@ const sendPost = async (bulletin: Bulletin) => {
       body: JSON.stringify(modelSend),
     });
 
+    showGotoMetting();
+
   } catch (error) {
     console.error('Ошибка отправки post:', error);
     ElMessage.error(`Ошибка сохранения бюллетени`);
   }
+}
+
+const showGotoMetting = () => {
+  confirmDialog.value.title = 'Поздравляем!';
+  confirmDialog.value.titleBody = `Вы успешно проголосовали. Нажмите «ОК», чтобы вернуться к списку голосований.`;
+  confirmDialog.value.acceptLabel = 'ОК';
+  confirmDialog.value.declineLabel = '';
+  confirmDialog.value.acceptFunction = async () => {
+    confirmDialog.value.showCloseDialog();
+    navigateTo('/user/meetingvoting');
+  };
+  confirmDialog.value.showConfirmDialog();
 }
 
 

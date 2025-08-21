@@ -1,5 +1,7 @@
-import { ref } from 'vue'
-import type { AuthResponse, LoginCredentials } from '~/types/auth'
+import { ref } from 'vue';
+import type { AuthResponse, LoginCredentials } from '~/types/auth';
+import { useUserStore } from '~/stores/userInfo';
+
 
 export const useAuth = () => {
   const token = ref<string | null>(null)
@@ -12,9 +14,14 @@ export const useAuth = () => {
         method: 'POST',
         body: credentials
       })
-      
-      setTokens(response.token, response.refreshToken)
+
+      await setTokens(response.token, response.refreshToken)
       isAuthenticated.value = true
+
+      // После успешного логина загружаем информацию о пользователе
+      const userStore = useUserStore();
+      await userStore.fetchUserInfo();
+
       return response
     } catch (error) {
       console.error('Login error:', error)
@@ -28,7 +35,7 @@ export const useAuth = () => {
         method: 'POST',
         body: { refreshToken: refreshToken.value }
       })
-      
+
       setTokens(response.token, response.refreshToken)
       return response
     } catch (error) {
@@ -38,7 +45,7 @@ export const useAuth = () => {
     }
   }
 
-  const setTokens = (accessToken: string, refresh: string) => {
+  const setTokens = async (accessToken: string, refresh: string) => {
     token.value = accessToken
     refreshToken.value = refresh
     sessionStorage.setItem('authToken', accessToken)

@@ -1,4 +1,5 @@
 <template>
+  <Suspense>
   <div class="common-layout">
 
     <div class="leftPanel" v-if="!isMobile">
@@ -71,6 +72,7 @@
     </div>
 
   </div>
+</Suspense>
 </template>
 
 <script lang="ts" setup>
@@ -94,11 +96,38 @@ const route = useRoute();
 
 const userInfoStore = useUserStore();
 const mobileStore = useMobileStore();
+// Создаем асинхронную функцию для загрузки данных
+const loadUserData = async () => {
+  const token = sessionStorage.getItem('authToken');
+  if (token && (!userInfoStore.currentUser || Object.keys(userInfoStore.currentUser).length === 0)) {
+    try {
+      await userInfoStore.fetchUserInfo();
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      navigateTo('/auth/SignIn');
+    }
+  }
+};
 
+// Экспортируем функцию для Suspense
+defineExpose({
+  loadUserData
+});
 
-onBeforeMount(async () => {
-  await getUserInfo();
-})
+onMounted(async() => {
+
+checkMobile();
+window.addEventListener('resize', checkMobile);
+document.addEventListener('click', handleClickOutside); // Добавляем обработчик клика
+setMenu();
+
+  // Загружаем данные пользователя
+  await loadUserData();
+});
+
+// onBeforeMount(async () => {
+//   await getUserInfo();
+// })
 
 const getUserInfo = async () => {
   try {
@@ -148,13 +177,7 @@ const handleClickOutside = (event: MouseEvent) => {
 
 let objectMenu: Array<MenuSettings> = reactive(menuObject);
 
-onMounted(() => {
 
-  checkMobile();
-  window.addEventListener('resize', checkMobile);
-  document.addEventListener('click', handleClickOutside); // Добавляем обработчик клика
-  setMenu();
-});
 
 
 interface MenuSettings {

@@ -1,76 +1,78 @@
 <template>
-  <div class="common-layout">
+  <Suspense>
+    <div class="common-layout">
 
-    <div class="leftPanel" v-if="!isMobile">
-      <div class="aside bg-blue_0 ">
-        <div class="logo fc fc-align-center fc-justify-center tc-light-gray-0">wowSNT</div>
-        <wow-tree-menu :objectMenu="menuObject"></wow-tree-menu>
-        <!-- <admin-menu /> -->
-      </div>
-    </div>
-
-    <div class="body bg-light-gray-0">
-      <div class="wow-container tc-gray-0">
-
-        <div v-if="isMobile">
-          <wow-panel v-if="settingsWowPanel.show" title="Навигация" position="left" :settings="settingsWowPanel">
-            <template #body>
-              <wow-tree-menu :objectMenu="menuObject"></wow-tree-menu>
-            </template>
-          </wow-panel>
+      <div class="leftPanel" v-if="!isMobile">
+        <div class="aside bg-blue_0 ">
+          <div class="logo fc fc-align-center fc-justify-center tc-light-gray-0">wowSNT</div>
+          <wow-tree-menu :objectMenu="menuObject"></wow-tree-menu>
+          <!-- <admin-menu /> -->
         </div>
+      </div>
 
-        <header class="header">
+      <div class="body bg-light-gray-0">
+        <div class="wow-container tc-gray-0">
 
           <div v-if="isMobile">
-            <div class="btn-menu" @click="toggleMenu()">
-              <wow-icon type="mdi" :path="$mdi.mdiMenu" :size="40" />
-            </div>
+            <wow-panel v-if="settingsWowPanel.show" title="Навигация" position="left" :settings="settingsWowPanel">
+              <template #body>
+                <wow-tree-menu :objectMenu="menuObject"></wow-tree-menu>
+              </template>
+            </wow-panel>
           </div>
 
-          <div v-else></div>
+          <header class="header">
 
-          <div class="header-right">
-            <wow-bell />
+            <div v-if="isMobile">
+              <div class="btn-menu" @click="toggleMenu()">
+                <wow-icon type="mdi" :path="$mdi.mdiMenu" :size="40" />
+              </div>
+            </div>
 
-            <!--             <div class="iconBlock">
+            <div v-else></div>
+
+            <div class="header-right">
+              <wow-bell />
+
+              <!--             <div class="iconBlock">
               <div class="greenIndicator">
                 <div class="blinking-circle"></div>
               </div>
               <wow-icon type="mdi" :path="$mdi.mdiChatOutline" />
             </div>
             -->
-            <wow-userIcon />
-          </div>
-        </header>
+              <wow-userIcon />
+            </div>
+          </header>
 
-        <div class="wrapper">
-          <main class="main">
-            <slot name="main" />
-            <!-- <div class="fc fc-row fc-wrap fc-justify-space-b">
+          <div class="wrapper">
+            <main class="main">
+              <slot name="main" />
+              <!-- <div class="fc fc-row fc-wrap fc-justify-space-b">
               <wow-card-col v-for="(item, index) in items" :key="index" :xs="1" :sm="2" :md="3" :lg="4" :xl="5">
                 <template #header>Header {{ item }}</template>
                 <template #body>Body {{ item }}</template>
               </wow-card-col>
             </div> -->
 
-          </main>
+            </main>
 
-          <footer class="footer fc fc-row fc-justify-space-a fc-align-center">
-            <div>{{ new Date().getFullYear() }}©</div>
-            <div>i-shiPROJ</div>
-            <div>about support</div>
-            <!--           <el-row class=""  style="width: 100%;" justify="center" :align="'middle'">
+            <footer class="footer fc fc-row fc-justify-space-a fc-align-center">
+              <div>{{ new Date().getFullYear() }}©</div>
+              <div>i-shiPROJ</div>
+              <div>about support</div>
+              <!--           <el-row class=""  style="width: 100%;" justify="center" :align="'middle'">
             <el-col class=" tc-dark-gray-4 f-w-900" :xs="22" :sm="7" :md="6" :lg="5" :xl="4">
 
             </el-col>
           </el-row> -->
-          </footer>
+            </footer>
+          </div>
         </div>
       </div>
-    </div>
 
-  </div>
+    </div>
+  </Suspense>
 </template>
 
 <script lang="ts" setup>
@@ -78,9 +80,11 @@ import { toRefs, reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue
 import { menuObject } from '~/pages/admin/menuObject';
 import { useUserStore } from '~/stores/userInfo';
 import { useMobileStore } from '~/stores/mobileInfo';
-import { mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox, mdiMessageReplyTextOutline, mdiCogOutline, mdiCardAccountDetailsOutline, mdiCashRegister, 
+import {
+  mdiNetworkPos, mdiCheckboxMarkedCircleAutoOutline, mdiTextureBox, mdiMessageReplyTextOutline, mdiCogOutline, mdiCardAccountDetailsOutline, mdiCashRegister,
   mdiAccountGroup, mdiCitySwitch,
-  mdiSafeSquareOutline, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu, mdiLeak } from '@mdi/js';
+  mdiSafeSquareOutline, mdiTreeOutline, mdiChartBar, mdiMonitorDashboard, mdiMenu, mdiLeak
+} from '@mdi/js';
 
 
 import type { Memberships } from '~/interface/Memberships.interface';
@@ -95,10 +99,37 @@ const route = useRoute();
 const userInfoStore = useUserStore();
 const mobileStore = useMobileStore();
 
+// Создаем асинхронную функцию для загрузки данных
+const loadUserData = async () => {
+  const token = sessionStorage.getItem('authToken');
+  if (token && (!userInfoStore.currentUser || Object.keys(userInfoStore.currentUser).length === 0)) {
+    try {
+      await userInfoStore.fetchUserInfo();
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      navigateTo('/auth/SignIn');
+    }
+  }
+};
 
-onBeforeMount(async () => {
-  await getUserInfo();
-})
+// Экспортируем функцию для Suspense
+defineExpose({
+  loadUserData
+});
+
+onMounted(async () => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+  document.addEventListener('click', handleClickOutside);
+  setMenu();
+
+  // Загружаем данные пользователя
+  await loadUserData();
+});
+
+// onBeforeMount(async () => {
+//   await getUserInfo();
+// })
 
 const getUserInfo = async () => {
   try {
@@ -148,13 +179,7 @@ const handleClickOutside = (event: MouseEvent) => {
 
 let objectMenu: Array<MenuSettings> = reactive(menuObject);
 
-onMounted(() => {
 
-  checkMobile();
-  window.addEventListener('resize', checkMobile);
-  document.addEventListener('click', handleClickOutside); // Добавляем обработчик клика
-  setMenu();
-});
 
 
 interface MenuSettings {
@@ -239,7 +264,7 @@ const setMenu = () => {
         }
       },
     },
-    
+
     {
       type: 'menuBtn',
       id: 'user-meetingvoting',
@@ -253,7 +278,7 @@ const setMenu = () => {
         }
       },
     },
-    
+
   );
 }
 
@@ -292,6 +317,7 @@ onBeforeUnmount(() => {
   .aside {
     height: 100%;
     overflow-y: auto;
+
     .logo {
       height: 70px;
     }
